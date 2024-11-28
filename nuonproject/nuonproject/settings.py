@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # 追加アプリ
+    'guide.apps.GuideConfig'
 ]
 
 MIDDLEWARE = [
