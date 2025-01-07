@@ -50,7 +50,7 @@
               <label for="password" style="margin-right: 45px;">パスワード</label>
               <input type="password" id="password" name="password" required minlength="4" maxlength="8" size="10" style="width: 300px;" />
               <h6>
-                ※パスワードを忘れた方は <a href="#">こちら</a>
+                ※パスワードを忘れた方は <a href="{% url 'accounts:PasswordEmail' %}">こちら</a>
               </h6>
             </div>
             <div style="text-align: left; margin-left: 300px; margin-top: 20px;">

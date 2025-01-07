@@ -8,7 +8,7 @@ urlpatterns = [
     path(
         "sinin/",
         views.SinInView.as_view(),
-        name="sinin"
+        name="Sinin"
     ),
     path(
         "passworddone/",
