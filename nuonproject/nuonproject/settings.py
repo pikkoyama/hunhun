@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     # 追加アプリ
     'guide.apps.GuideConfig',
     'manager.apps.ManagerConfig',
-    'accounts.apps.AccountsConfig'
+    'accounts.apps.AccountsConfig',
+    'tourists.apps.TouristsConfig'
 ]
 
 MIDDLEWARE = [
