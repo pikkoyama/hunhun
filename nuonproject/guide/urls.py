@@ -4,7 +4,14 @@ from . import views
 
 app_name = 'guide'
 
-urlpatterns = [
-    path('', views.IndexView.as_view(), name='index'),
-]
 # -----------------------------------------------------/
+# 1/8小山-----------------------------------------------
+urlpatterns = [
+    path('caselist/', views.CaseListView.as_view(), name='caselist'),
+    path('caseRegistration/', views.CaseRegistrationView.as_view(), name='caseregistration'),
+    path('ExampleView/', views.ExampleViewView.as_view(), name='exampleview'),
+    path('GuidancePinDelete/', views.GuidancePinDeleteView.as_view(), name='guidancepindelete'),
+    path('GuideTop/', views.GuideTopView.as_view(), name='guidetop'),
+    path('TourSearch/', views.TourSearchView.as_view(), name='toursearch'),
+]
+# ---------------------------------------------------------
