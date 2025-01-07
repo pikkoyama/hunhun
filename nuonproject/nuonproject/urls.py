@@ -16,13 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from accounts import views
+
+app_name = 'guidesupport'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     # guideのパス
-    path('', include('guide.urls')),
+    path('guide/', include('guide.urls')),
 # 1/7 小山
     # accountsのパス
     path('accounts/',include('accounts.urls')),
+# 直接サインインページに行くためのパス
+    path('', views.SinInView.as_view(), name='sinin')
 ]

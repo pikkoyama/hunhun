@@ -6,7 +6,7 @@ app_name = 'accounts'
 
 urlpatterns = [
     path(
-        "sinin",
+        "sinin/",
         views.SinInView.as_view(),
         name="sinin"
     ),
