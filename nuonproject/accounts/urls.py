@@ -1,11 +1,14 @@
 # 小山 1/7-------------------------------------------
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 app_name = 'accounts'
 
 urlpatterns = [
-    path('', views.LoginView.as_view(), name='login'),
-    path('')
+    path(
+        "sinin",
+        views.SinInView.as_view(),
+        name="sinin"
+    ),
 ]
 # -----------------------------------------------------/

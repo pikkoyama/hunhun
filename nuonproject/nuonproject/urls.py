@@ -22,4 +22,7 @@ urlpatterns = [
 
     # guideのパス
     path('', include('guide.urls')),
+# 1/7 小山
+    # accountsのパス
+    path('accounts/',include('accounts.urls')),
 ]
