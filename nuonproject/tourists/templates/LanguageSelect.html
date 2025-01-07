@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+    <html lang="ja">
+        <head>
+            <meta charset="UTF-8">
+            <title>言語選択画面</title>
+            <style>
+                .btn-next {
+                    background-color: green; 
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    margin: 4px 2px;
+                    cursor: pointer;
+                    border-radius: 12px; /* 角を丸く */
+                }
+            </style>
+        </head>
+        <body>
+            <h1>| 案内言語の選択</h1>
+            <h3>Please select the guidance language.</h3>
+            <form method="post">
+                {% csrf_token %}
+                <label>
+                    <input type="radio" name="language" value="ja"> 日本語
+                </label><br>
+                <label>
+                    <input type="radio" name="language" value="en"> English
+                </label><br>
+                <label>
+                    <input type="radio" name="language" value="zh"> 中文（簡体字）
+                </label><br>
+                <label>
+                    <input type="radio" name="language" value="zh-TW"> 中文（繁體字）
+                </label><br>
+                <label>
+                    <input type="radio" name="language" value="ko"> 한국어
+                </label><br>
+
+                <!-- 他の言語オプションを追加 -->
+                <button type="submit" class="btn-next">次へ</button>
+            </form>
+        </body>
+    </html>

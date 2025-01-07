@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>ツアー客用マップ画面</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sidebar-v2@0.4.0/css/leaflet-sidebar.min.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sidebar-v2@0.4.0/js/leaflet-sidebar.min.js"></script>
+        <style>
+            #map {
+                height: 600px;
+                width: 100%;
+            }
+            h1 {
+                text-align: center; /* 中央揃え */
+            }
+            .sidebar-tabs ul li a {
+                background-color: #45a049; /* ボタンの背景色を変更 */
+                color: white; /* ボタンのテキスト色を変更 */
+            }
+            .sidebar-tabs ul li a:hover {
+                background-color: #45a049; /* ホバー時の背景色を変更 */
+            }
+        </style>
+    </head>
+    <body>
+        <h1>今回のツアーマップ</h1>
+        <div id="sidebar" class="sidebar collapsed">
+            <div class="sidebar-tabs">
+                <ul role="tablist">
+                    <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
+                </ul>
+            </div>
+            <div class="sidebar-content">
+                <div class="sidebar-pane" id="home">
+                    <h1 class="sidebar-header">ピンの一覧<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                    <ol id="pin-list">
+                        <!-- ピンのリストがここに表示されます -->
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div id="map"></div>
+        <script>
+            var map = L.map('map').setView([35.0116, 135.7681], 13); // 京都の緯度経度とズームレベルを設定
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            var sidebar = L.control.sidebar('sidebar').addTo(map);
+
+            var pins = [
+                { name: '私のお家', coords: [35.958992, 139.636291] },
+                { name: '大原学園大宮校', coords: [35.9065, 139.6233] },
+                // 他のピンを追加
+            ];
+
+            pins.forEach(function(pin) {
+                var marker = L.marker(pin.coords).addTo(map)
+                    .bindPopup(pin.name);
+
+                var li = document.createElement('li');
+                li.textContent = pin.name;
+                li.onclick = function() {
+                    map.setView(pin.coords, 13);
+                    marker.openPopup();
+                };
+                document.getElementById('pin-list').appendChild(li);
+            });
+        </script>
+    </body>
+</html>
