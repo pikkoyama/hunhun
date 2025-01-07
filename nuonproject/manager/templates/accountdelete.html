@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!--12/5小山-->
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アカウントの削除</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        .content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section label {
+            font-weight: bold;
+        }
+        .section p {
+            margin: 10px 0 0;
+        }
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        .back-button {
+            background-color: #007BFF;
+            color: white;
+        }
+        .delete-button {
+            background-color: #FF6347;
+            color: white;
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        .delete-button:hover {
+            background-color: #e24d2d;
+        }
+        /* ボタンをページ下部に固定 */
+        .footer-buttons {
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <h1>アカウントの削除</h1>
+        <h3>以下の内容を削除します</h3>
+        <!-- タイトルセクション -->
+        <div class="section">
+            <label for="title">社員番号:</label>
+            <p id="title">ここに社員番号を表示</p>
+        </div>
+        
+        <!-- カテゴリーセクション -->
+        <div class="section">
+            <label for="category">名前:</label>
+            <p id="category">ここに名前を表示</p>
+        </div>
+        
+    </div>
+
+    <!-- 下部のボタン -->
+    <div class="footer-buttons">
+        <button class="button back-button" onclick="window.scrollTo(0, 0);">戻る</button>
+        <button class="button delete-button" onclick="alert('削除処理が実行されます');">削除</button>
+    </div>
+</body>
+</html>
