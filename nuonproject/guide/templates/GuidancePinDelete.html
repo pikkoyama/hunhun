@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+    <html lang="ja">
+        <head>
+            <meta charset="UTF-8">
+            <title>案内ピン削除画面</title>
+            <style>
+                .btn-back {
+                    background-color: blue;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    margin: 4px 2px;
+                    cursor: pointer;
+                    border-radius: 12px; /* 角を丸く */
+                }
+                .btn-delete {
+                    background-color: red;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    margin: 4px 2px;
+                    cursor: pointer;
+                    border-radius: 12px; 
+                }
+            </style>
+        </head>
+        <body>
+            <h1>| 案内ピンの削除</h1>
+            <h3>こちらの内容を削除してもよろしいですか？</h3>
+            <form method="post">
+                {% csrf_token %}
+                <button type="button" class="btn-back">戻る</button>
+                <button type="button" class="btn-delete">削除</button>
+            </form>
+        </body>
+    </html>
