@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ツアー検索・登録画面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .search-section {
+            flex: 3;
+        }
+        .search-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            margin-left: 330px; /* 左右位置を調整 */
+        }
+        .search-group label {
+          margin-bottom: 5px; /* ラベルと入力欄の間の余白を設定 */
+        }
+
+        .search-group input {
+            width: 300px;
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .search-group button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .search-group button:hover {
+            background-color: #0056b3;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .result-item button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .result-item button:hover {
+            background-color: #0056b3;
+        }
+        .register-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .register-button {
+            padding: 10px 20px;
+            background-color: #ffc107;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .register-button:hover {
+            background-color: #e0a800;
+        }
+
+        .divider {
+          border-top: 2px solid #000000; /* 黒色の線 */
+          width: 100%; /* 幅を100%に設定 */
+          margin: 20px 0; /* 上下に余白を追加 */
+        }
+    </style>
+</head>
+<body>
+
+      <!-- 上部に色付きのバー -->
+      <div class="top-bar">
+        <h3>ツアー検索画面</h3>
+      </div>
+  
+      <!-- 水平線 -->
+      <div class="divider"></div>
+
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-group">
+                <label for="tour-name">ツアー名で検索:</label>
+                <input type="text" id="tour-name" name="tour-name">
+                <button type="button">検索</button>
+            </div>
+            <div class="search-group">
+                <label for="tour-number">番号で検索:</label>
+                <input type="text" id="tour-number" name="tour-number">
+                <button type="button">検索</button>
+            </div>
+            <div class="results">
+                <div class="result-item">
+                    <span>検索結果1</span>
+                    <button type="button">変更</button>
+                </div>
+                <div class="result-item">
+                    <span>検索結果2</span>
+                    <button type="button">変更</button>
+                </div>
+                <div class="result-item">
+                    <span>検索結果3</span>
+                    <button type="button">変更</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Section -->
+        <div class="register-section">
+            <h2>ツアーの登録</h2>
+            <button href="#" class="register-button">登録</button>
+        </div>
+    </div>
+</body>
+</html>

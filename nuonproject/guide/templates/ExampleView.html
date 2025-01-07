@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事例閲覧画面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            margin: 20px;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            margin-left: 200px;
+        }
+
+        .search-container input {
+            width: 300px;
+            height: 30px;
+            font-size: 14px;
+        }
+
+        .search-container button {
+            height: 34px;
+            margin-left: 5px;
+            font-size: 14px;
+        }
+
+        .comment-container {
+            border: 1px solid #000;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            max-width: 1000px; /* 必要に応じて変更 */
+            margin-left: 60px;
+        }
+
+        .comment-container .qa {
+            margin: 5px 0;
+        }
+
+        .comment-container .qa span {
+            display: block;
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .comment-container .qa .answer {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .comment-container .qa .change-button {
+            margin-top: 10px;
+        }
+
+        .divider {
+            border-top: 2px solid #000000; /* 黒色の線 */
+            width: 100%; /* 幅を100%に設定 */
+            margin: 20px 0; /* 上下に余白を追加 */
+        }
+
+        /* 認可ボタンと削除ボタンのスタイル */
+        .comment-container .qa .action-buttons button {
+            margin-right: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+
+        /* 認可ボタンが押された状態のスタイル */
+        .approved {
+            background-color:rgb(255, 0, 0); /* 緑色 */
+            color: white;
+        }
+
+    </style>
+    <script>
+        function toggleAnswer(event) {
+            const answer = event.currentTarget.nextElementSibling;
+            if (answer.style.display === "none" || !answer.style.display) {
+                answer.style.display = "block";
+            } else {
+                answer.style.display = "none";
+            }
+        }
+    </script>
+</head>
+<body>
+
+          <!-- 上部に色付きのバー -->
+          <div class="top-bar">
+            <h3>事例閲覧画面</h3>
+          </div>
+      
+          <!-- 水平線 -->
+          <div class="divider"></div>
+          
+    <div class="search-container">
+        <input type="text" placeholder="検索...">
+        <button>検索</button>
+        <button>ソート</button>
+    </div>
+
+    <div class="comment-container">
+        <div class="qa">
+            <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
+            <div class="answer">
+                ここに回答が表示されます
+                <button class="change-button">変更</button>
+            </div>
+            <div class="action-buttons">
+                <button onclick="toggleApproval(this)">認可</button>
+                <button onclick="deleteComment(this)">削除</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="comment-container">
+        <div class="qa">
+            <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
+            <div class="answer">
+                ここに回答が表示されます
+                <button class="change-button">変更</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="comment-container">
+        <div class="qa">
+            <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
+            <div class="answer">
+                ここに回答が表示されます
+                <button class="change-button">変更</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="comment-container">
+        <div class="qa">
+            <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
+            <div class="answer">
+                ここに回答が表示されますyoooooooooo
+                <button class="change-button">変更</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
