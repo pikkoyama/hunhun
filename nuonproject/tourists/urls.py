@@ -1,8 +1,8 @@
-# 小山 1/7-------------------------------------------
+# あづーま
 from django.urls import path, include
 from . import views
 
-app_name = 'accounts'
+app_name = 'tourists'
 
 urlpatterns = [
     path(
