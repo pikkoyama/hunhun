@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 追加アプリ
-    'guide.apps.GuideConfig'
+    'guide.apps.GuideConfig',
+    'manager.apps.ManagerConfig',
+    'accounts.apps.AccountsConfig'
 ]
 
 MIDDLEWARE = [
