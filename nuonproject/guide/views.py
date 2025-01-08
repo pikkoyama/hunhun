@@ -45,3 +45,6 @@ class TourRegistrationView(TemplateView):
 class PasswordChangeView(TemplateView):
     # あづーま
     template_name = "PasswordChange.html"
+
+class CaseRegistConfirmationView(TemplateView):
+    template_name = "CaseRegistConfirmation.html"

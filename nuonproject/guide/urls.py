@@ -18,5 +18,6 @@ urlpatterns = [
     path("InformationPinRegistration/",views.InformationPinRegistrationView.as_view(),name="InformationPinRegistration"),
     path("TourRegistration/",views.TourRegistrationView.as_view(),name="TourRegistration"),
     path("PasswordChange/",views.PasswordChangeView.as_view(),name="PasswordChange"),
+    path("CaseRegistConfirmation/",views.CaseRegistConfirmationView.as_view(),name="CaseRegistConfirmation")
 ]
 # ---------------------------------------------------------
