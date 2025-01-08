@@ -29,4 +29,19 @@ class GuideTopView(TemplateView):
 class TourSearchView(TemplateView):
 
     template_name = 'TourSearch.html'
-    
+
+class InformationPinChangeView(TemplateView):
+    # あづーま
+    template_name = "InformationPinChange.html"
+
+class InformationPinRegistrationView(TemplateView):
+    # あづーま
+    template_name = "InformationPinRegistration.html"
+
+class TourRegistrationView(TemplateView):
+    # あづーま
+    template_name = "TourRegistration.html"
+
+class PasswordChangeView(TemplateView):
+    # あづーま
+    template_name = "PasswordChange.html"
