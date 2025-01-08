@@ -1,3 +1,10 @@
 from django.shortcuts import render
 
-# Create your views here.
+# 清原 1/8--------------------------------
+from django.views.generic.base import TemplateView
+
+class AdminTopView(TemplateView):
+
+    template_name = 'AdminTop.html'
+
+# ------------------------------------------/
