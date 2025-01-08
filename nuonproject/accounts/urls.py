@@ -8,7 +8,17 @@ urlpatterns = [
     path(
         "sinin/",
         views.SinInView.as_view(),
-        name="sinin"
+        name="Sinin"
+    ),
+    path(
+        "passworddone/",
+        views.PasswordDoneView.as_view(),
+        name="PasswordDone"
+    ),
+    path(
+        "passwordemail/",
+        views.PasswordEmailView.as_view(),
+        name="PasswordEmail"
     ),
 ]
 # -----------------------------------------------------/

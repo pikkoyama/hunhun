@@ -29,5 +29,7 @@ urlpatterns = [
     # accountsのパス
     path('accounts/',include('accounts.urls')),
 # 直接サインインページに行くためのパス
-    path('', views.SinInView.as_view(), name='sinin')
+    path('', views.SinInView.as_view(), name='sinin'),
+# 1/8 あづ
+    path('tourists/',include('tourists.urls'))
 ]

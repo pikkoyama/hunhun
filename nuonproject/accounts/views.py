@@ -14,4 +14,11 @@ class SinInView(LoginView):
     # def get_success_url(self):
     #     return reverse_lazy('main:index')
 
+class PasswordDoneView(TemplateView):
+    # ねぎしマサキンTV
+    template_name = "PasswordDone.html"
+
+class PasswordEmailView(TemplateView):
+    # ねぎしマサキンTV
+    template_name = "PasswordEmail.html"
 # ------------------------------------------/

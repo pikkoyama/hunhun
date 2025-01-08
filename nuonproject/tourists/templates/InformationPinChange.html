@@ -1,0 +1,153 @@
+<!-- 14_案内ピン変更画面 -->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>案内ピン変更</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            text-align: left;
+            font-size: 14px;
+            color: #555;
+        }
+
+        input[type="text"], input[type="file"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .file-upload-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        #image-preview {
+            width: 160px;
+            height: 160px;
+            margin-right: 15px;
+            background-color: #f0f0f0;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            object-fit: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #aaa;
+        }
+
+        #image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 200px;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+    
+    </style>
+</head>
+<body>
+
+    <form action="/update_pin" method="POST" enctype="multipart/form-data">
+        <h1>案内ピン変更</h1>
+
+        <!-- 画像プレビュー -->
+        <div id="image-preview">
+            画像を選択してください
+        </div>
+        <label for="image">画像:</label>
+        <!-- ファイル選択ボタン -->
+        <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
+        
+        <br>
+        
+        <label for="address">住所:</label>
+        <input type="text" id="address" name="address" required value="現在の住所"><br>
+
+        <label for="description">説明 (100文字以上700文字以内):</label>
+        <textarea id="description" name="description" required minlength="100" maxlength="700">現在の説明</textarea><br>
+
+        <button type="submit">変更</button>
+    </form>
+
+    <script>
+        // 画像のプレビューを表示するための関数
+        function previewImage(event) {
+            const reader = new FileReader();
+            const imagePreview = document.getElementById('image-preview');
+
+            reader.onload = function() {
+                imagePreview.style.backgroundImage = 'url(' + reader.result + ')';
+                imagePreview.textContent = '';  // "画像を選択してください" のテキストを消す
+            }
+
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+
+</body>
+</html>
