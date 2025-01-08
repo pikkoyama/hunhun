@@ -18,4 +18,12 @@ class PasswordChangeView(TemplateView):
 class TourRegistrationView(TemplateView):
     # あづーま
     template_name = "TourRegistration.html"
+
+class TourmapView(TemplateView):
+    # ねぎしま
+    template_name = "Tourmap.html"
+
+class LanguageSelectView(TemplateView):
+    # ねぎしまさ
+    template_name = "LanguageSelect.html"
 # ------------------------------------------/

@@ -24,6 +24,16 @@ urlpatterns = [
         "TourRegistration/",
         views.TourRegistrationView.as_view(),
         name="TourRegistration"
-    )
+    ),
+    path(
+        "Tourmap/",
+        views.TourmapView.as_view(),
+        name="Tourmap"
+    ),
+    path(
+        "LanguageSelect/",
+        views.LanguageSelectView.as_view(),
+        name="LanguageSelect"
+    ),
 ]
 # -----------------------------------------------------/
