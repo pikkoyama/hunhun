@@ -86,8 +86,8 @@
 
     <!-- 下部のボタン -->
     <div class="footer-buttons">
-        <button class="button back-button" onclick="window.scrollTo(0, 0);">戻る</button>
-        <button class="button delete-button" onclick="alert('削除処理が実行されます');">削除</button>
+        <button class="button back-button" onclick="{% url 'manager:AdminViewAccount' %}">戻る</button>
+        <button class="button delete-button" onclick="{% url 'manager:AdminViewAccount' %}">削除</button>
     </div>
 </body>
 </html>

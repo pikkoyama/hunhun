@@ -147,8 +147,8 @@
             </div>
             <p class="error-message" id="password-error"></p>
 
-            <button type="submit" class="submit-button">アカウント作成</button>
-            <button type="button" class="back-button" onclick="goBack()">戻る</button>
+            <button type="button" class="submit-button" onclick="location.href='{% url 'manager:AdminTop' %}';">アカウント作成</button>
+            <button type="button" class="back-button" onclick="location.href='{% url 'manager:AdminTop' %}';">戻る</button>
         </form>
     </div>
 
