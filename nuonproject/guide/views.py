@@ -29,3 +29,4 @@ class GuideTopView(TemplateView):
 class TourSearchView(TemplateView):
 
     template_name = 'TourSearch.html'
+    
