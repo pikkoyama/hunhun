@@ -38,3 +38,8 @@
 
 # class Category(models.Model):
 #      category_name = models.CharField(verbose_name="カテゴリ名",max_length=50)
+
+#      class Meta:
+#          verbose_name_plural = 'カテゴリ名'
+#      def __str__(self):
+#         return f"{self.category_name}"
