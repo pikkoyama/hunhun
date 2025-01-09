@@ -1,12 +1,13 @@
 <!-- 11 事例登録確認画面 -->
 <!DOCTYPE html>
-<!--12/19小山-->
+<!-- 12/19 小山 -->
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>事例登録確認</title>
     <style>
+        /* スタイルはそのまま */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -74,26 +75,26 @@
         <!-- タイトルセクション -->
         <div class="section">
             <label for="title">タイトル:</label>
-            <p id="title">ここにタイトルを表示</p>
+            <p>{{ title }}</p>  <!-- ビューから渡されたデータを表示 -->
         </div>
         
         <!-- カテゴリーセクション -->
         <div class="section">
             <label for="category">カテゴリ―:</label>
-            <p id="category">ここにカテゴリーを表示</p>
+            <p>{{ category }}</p>  <!-- ビューから渡されたデータを表示 -->
         </div>
 
         <!-- 本文セクション -->
         <div class="section">
             <label for="content">本文:</label>
-            <p id="content">ここに本文を表示</p>
+            <p>{{ content }}</p>  <!-- ビューから渡されたデータを表示 -->
         </div>
         
     </div>
 
     <!-- 下部のボタン -->
     <div class="footer-buttons">
-        <button class="button back-button" onclick="window.scrollTo(0, 0);">戻る</button>
+        <button class="button back-button" onclick="window.location.href='http://127.0.0.1:8000/guide/caseRegistration/';">戻る</button>
         <button class="button delete-button" onclick="alert('登録処理が実行されます');">登録</button>
     </div>
 </body>

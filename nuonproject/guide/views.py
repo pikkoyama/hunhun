@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.urls import reverse
+from django import forms
+from django.views.generic.edit import FormView
 
 # 小山 11/28--------------------------------
 from django.views.generic.base import TemplateView
@@ -8,10 +11,40 @@ class CaseListView(TemplateView):
     template_name = 'CaseList.html'
 
 # ------------------------------------------/
-    
-class CaseRegistrationView(TemplateView):
 
+# フォームをビュー内で直接定義
+class CaseForm(forms.Form):
+    title = forms.CharField(max_length=100, label='タイトル')
+    category = forms.ChoiceField(
+        choices=[('category1', 'カテゴリ1'), ('category2', 'カテゴリ2'), ('category3', 'カテゴリ3')],
+        label='カテゴリ'
+    )
+    content = forms.CharField(widget=forms.Textarea, label='本文')
+
+# フォーム送信後の処理とリダイレクトを行うクラスベースビュー
+class CaseRegistrationView(FormView):
     template_name = 'CaseRegistration.html'
+    form_class = CaseForm  # 直接定義したフォームクラスを使用
+
+    # フォームが正常に送信された場合の処理
+    def form_valid(self, form):
+        # フォームのデータを処理（例：データベースへの保存など）
+        title = form.cleaned_data['title']
+        category = form.cleaned_data['category']
+        content = form.cleaned_data['content']
+        
+        # ここでデータを保存することができます（例：モデルを使ってDB保存）
+        return render(self.request, 'CaseRegistConfirmation.html', {
+            'title': title,
+            'category': category,
+            'content': content
+        })
+
+
+
+    # フォーム送信後のリダイレクト先URLを指定
+    def get_success_url(self):
+        return reverse('guide:CaseRegistConfirmation')  # 登録成功後のページにリダイレクト
 
 
 class ExampleViewView(TemplateView):

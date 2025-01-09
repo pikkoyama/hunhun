@@ -73,12 +73,21 @@
         ガイドトップページ
     </header>
     <div class="container">
-        <div class="button">事例の登録</div>
-        <div class="button">
+        <!-- 事例の登録ボタン -->
+        <div class="button" onclick="window.location.href='http://127.0.0.1:8000/guide/caseRegistration/';">
+            事例の登録
+        </div>
+
+        <!-- マップ閲覧ボタン -->
+        <div class="button" onclick="window.location.href='http://127.0.0.1:8000/guide/ExampleView/';">
             マップ閲覧<br>
             <span>※該当ツアーの登録・選択を行ってください</span>
         </div>
-        <div class="button">事例閲覧・変更</div>
+
+        <!-- 事例閲覧・変更ボタン -->
+        <div class="button" onclick="window.location.href='http://127.0.0.1:8000/guide/caselist/';">
+            事例閲覧・変更
+        </div>
     </div>
 </body>
 </html>
