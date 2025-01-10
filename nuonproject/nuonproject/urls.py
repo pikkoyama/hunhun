@@ -31,5 +31,7 @@ urlpatterns = [
 # 直接サインインページに行くためのパス
     path('', views.SinInView.as_view(), name='sinin'),
 # 1/8 あづ
-    path('tourists/',include('tourists.urls'))
+    path('tourists/',include('tourists.urls')),
+
+    path('manager/',include('manager.urls'))
 ]

@@ -9,37 +9,37 @@ urlpatterns = [
     path(
         "admintop/",
         views.AdminTopView.as_view(),
-        name="admintop"
+        name="AdminTop"
     ),
 
     path(
         "adminview/",
         views.AdminViewView.as_view(),
-        name="adminviewaccount"
+        name="AdminViewAccount"
     ),
 
     path(
         "admincreate/",
         views.AdminCreateView.as_view(),
-        name="admincreateaccount"
+        name="AdminCreateAccount"
     ),
 
     path(
         "adminsuccess/",
         views.AdminSuccessView.as_view(),
-        name="admintransmissioncomp"
+        name="AdminTransmissionComp"
     ),
 
     path(
         "casedelete/",
         views.CaseDeleteView.as_view(),
-        name="casedelete"
+        name="CaseDelete"
     ),
 
     path(
         "accountdelete/",
         views.AccountDeleteView.as_view(),
-        name="accountdelete"
+        name="AccountDelete"
     ),
 
 
