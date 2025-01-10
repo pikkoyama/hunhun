@@ -1,198 +1,156 @@
-<!-- 7 都道府県選択 -->
+<!-- 9 事例閲覧画面 -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>都道府県選択</title>
+    <title>事例閲覧画面</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 0;
-            margin-bottom: 20px;
-        }
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
-        .region {
+            line-height: 1.5;
             margin: 20px;
-            text-align: left;
         }
-        .region h2 {
-            margin-bottom: 15px;
-            color: #333;
+
+        .search-container {
+            margin-bottom: 20px;
+            margin-left: 200px;
         }
-        .prefecture-button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            margin: 5px;
+
+        .search-container input {
+            width: 300px;
+            height: 30px;
+            font-size: 14px;
+        }
+
+        .search-container button {
+            height: 34px;
+            margin-left: 5px;
+            font-size: 14px;
+        }
+
+        .comment-container {
+            border: 1px solid #000;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 20px;
+            max-width: 1000px; /* 必要に応じて変更 */
+            margin-left: 60px;
+        }
+
+        .comment-container .qa {
+            margin: 5px 0;
+        }
+
+        .comment-container .qa span {
+            display: block;
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-        .prefecture-button:hover {
-            background-color: #45a049;
+
+        .comment-container .qa .answer {
+            display: none;
+            margin-top: 10px;
         }
-        .prefecture-button.selected {
-            background-color: #ff9800;
+
+        .comment-container .qa .change-button {
+            margin-top: 10px;
         }
-        .prefecture-button:disabled {
-            background-color: #ddd;
-            cursor: not-allowed;
+
+        .divider {
+            border-top: 2px solid #000000; /* 黒色の線 */
+            width: 100%; /* 幅を100%に設定 */
+            margin: 20px 0; /* 上下に余白を追加 */
         }
-        .decide-button {
-            background-color: #2196F3;
+
+        /* 認可ボタンと削除ボタンのスタイル */
+        .comment-container .qa .action-buttons button {
+            margin-right: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+
+        /* 認可ボタンが押された状態のスタイル */
+        .approved {
+            background-color:rgb(255, 0, 0); /* 緑色 */
             color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
         }
-        .decide-button:hover {
-            background-color: #1976D2;
-        }
+
     </style>
-</head>
-<body>
-    <header>
-        <h1>都道府県を選択してください</h1>
-    </header>
-    <div class="container">
-        <!-- 北海道地方 -->
-        <div class="region">
-            <h2>北海道地方</h2>
-            <button class="prefecture-button" onclick="selectPrefecture('北海道', this)">北海道</button>
-        </div>
-        
-        <!-- 東北地方 -->
-        <div class="region">
-            <h2>東北地方</h2>
-            <button class="prefecture-button" onclick="selectPrefecture('青森県', this)">青森県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('岩手県', this)">岩手県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('宮城県', this)">宮城県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('秋田県', this)">秋田県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('山形県', this)">山形県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('福島県', this)">福島県</button>
-        </div>
-        
-        <!-- 関東地方 -->
-        <div class="region">
-            <h2>関東地方</h2>
-            <button class="prefecture-button" onclick="selectPrefecture('茨城県', this)">茨城県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('栃木県', this)">栃木県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('群馬県', this)">群馬県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('埼玉県', this)">埼玉県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('千葉県', this)">千葉県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('東京都', this)">東京都</button>
-            <button class="prefecture-button" onclick="selectPrefecture('神奈川県', this)">神奈川県</button>
-        </div>
-        
-        <!-- 中部地方 -->
-        <div class="region">
-            <h2>中部地方</h2>
-            <button class="prefecture-button" onclick="selectPrefecture('新潟県', this)">新潟県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('富山県', this)">富山県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('石川県', this)">石川県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('福井県', this)">福井県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('山梨県', this)">山梨県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('長野県', this)">長野県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('岐阜県', this)">岐阜県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('静岡県', this)">静岡県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('愛知県', this)">愛知県</button>
-        </div>
-        
-        <!-- 近畿地方 -->
-        <div class="region">
-            <h2>近畿地方</h2>
-            <button class="prefecture-button" onclick="selectPrefecture('三重県', this)">三重県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('滋賀県', this)">滋賀県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('京都府', this)">京都府</button>
-            <button class="prefecture-button" onclick="selectPrefecture('大阪府', this)">大阪府</button>
-            <button class="prefecture-button" onclick="selectPrefecture('兵庫県', this)">兵庫県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('奈良県', this)">奈良県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('和歌山県', this)">和歌山県</button>
-        </div>
-        
-        <!-- 中国地方 -->
-        <div class="region">
-            <h2>中国地方</h2>
-            <button class="prefecture-button" onclick="selectPrefecture('鳥取県', this)">鳥取県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('島根県', this)">島根県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('岡山県', this)">岡山県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('広島県', this)">広島県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('山口県', this)">山口県</button>
-        </div>
-        
-        <!-- 四国地方 -->
-        <div class="region">
-            <h2>四国地方</h2>
-            <button class="prefecture-button" onclick="selectPrefecture('徳島県', this)">徳島県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('香川県', this)">香川県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('愛媛県', this)">愛媛県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('高知県', this)">高知県</button>
-        </div>
-        
-        <!-- 九州地方 -->
-        <div class="region">
-            <h2>九州地方</h2>
-            <button class="prefecture-button" onclick="selectPrefecture('福岡県', this)">福岡県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('佐賀県', this)">佐賀県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('長崎県', this)">長崎県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('熊本県', this)">熊本県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('大分県', this)">大分県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('宮崎県', this)">宮崎県</button>
-            <button class="prefecture-button" onclick="selectPrefecture('鹿児島県', this)">鹿児島県</button>
-        </div>
-        
-        <!-- 沖縄地方 -->
-        <div class="region">
-            <h2>沖縄地方</h2>
-            <button class="prefecture-button" onclick="selectPrefecture('沖縄県', this)">沖縄県</button>
-        </div>
-    </div>
-
-    <button id="decideBtn" class="decide-button" onclick="window.location.href='http://127.0.0.1:8000/guide/TourSearch/';" disabled>決定</button>
-
     <script>
-        let selectedPrefecture = null;
-
-        function selectPrefecture(prefecture, button) {
-            // 既に選択されている場合、色を元に戻す
-            if (selectedPrefecture) {
-                selectedPrefecture.classList.remove('selected');
-            }
-            
-            // 新しい都道府県を選択
-            button.classList.add('selected');
-            selectedPrefecture = button;
-
-            // 決定ボタンを有効化
-            document.getElementById('decideBtn').disabled = false;
-        }
-
-        function confirmSelection() {
-            if (selectedPrefecture) {
-                alert(selectedPrefecture.innerText + 'が選択されました');
+        function toggleAnswer(event) {
+            const answer = event.currentTarget.nextElementSibling;
+            if (answer.style.display === "none" || !answer.style.display) {
+                answer.style.display = "block";
+            } else {
+                answer.style.display = "none";
             }
         }
     </script>
+</head>
+<body>
+
+          <!-- 上部に色付きのバー -->
+          <div class="top-bar">
+            <h3>事例閲覧画面</h3>
+          </div>
+      
+          <!-- 水平線 -->
+          <div class="divider"></div>
+          
+    <div class="search-container">
+        <input type="text" placeholder="検索...">
+        <button>検索</button>
+        <button>ソート</button>
+    </div>
+
+    <div class="comment-container">
+        <div class="qa">
+            <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
+            <div class="answer">
+                ここに回答が表示されます
+                <button class="change-button">変更</button>
+            </div>
+            <div class="action-buttons">
+                <button onclick="toggleApproval(this)">認可</button>
+                <button onclick="deleteComment(this)">削除</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="comment-container">
+        <div class="qa">
+            <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
+            <div class="answer">
+                ここに回答が表示されます
+                <button class="change-button">変更</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="comment-container">
+        <div class="qa">
+            <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
+            <div class="answer">
+                ここに回答が表示されます
+                <button class="change-button">変更</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="comment-container">
+        <div class="qa">
+            <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
+            <div class="answer">
+                ここに回答が表示されますyoooooooooo
+                <button class="change-button">変更</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
