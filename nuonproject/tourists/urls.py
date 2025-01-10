@@ -6,12 +6,12 @@ app_name = 'tourists'
 
 urlpatterns = [
     path(
-        "Tourmap/",
+        "tourmap/",
         views.TourmapView.as_view(),
         name="Tourmap"
     ),
     path(
-        "LanguageSelect/",
+        "languageselect/",
         views.LanguageSelectView.as_view(),
         name="LanguageSelect"
     ),
