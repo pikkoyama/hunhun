@@ -1,3 +1,4 @@
+# ※使わないモデルず消すな
 # from django.db import models
 
 # # 1/8 岩本 --------------------------------------------
@@ -19,12 +20,12 @@
 # USERNAME_FIELD = 'number' #標準のユーザー名を「number」にする
 # REQUIRED_FIELDS = ['email','name']
  
-# # class Sort(models.Model):
-# #      sort_name = models.CharField(max_length=20)
+# class Sort(models.Model):
+#      sort_name = models.CharField(verbose_name="種類名",max_length=10)
 
 # class Case(models.Model):
 #      case_number = models.CharField(verbose_name= "事例番号",max_length=20,primary_key=True)
-#      number = models.ForeignKey(CustomUser,verbose_name= "社員番号",on_delete=models.CASCADE)
+#      number = models.ForeignKey(CustomUser,verbose_name= "社員番号",on_delete=models.DO_NOTHING)
 #      title = models.CharField(verbose_name="タイトル", max_length=30)
 #      category = models.IntegerField(verbose_name="カテゴリ")
 #      main = models.CharField(verbose_name="本文",max_length=300)
@@ -37,7 +38,7 @@
 #         return f"{self.case_number}({self.number}) - {self.title}"
 
 # class Category(models.Model):
-#      category_name = models.CharField(verbose_name="カテゴリ名",max_length=50)
+#      category_name = models.CharField(verbose_name="カテゴリ名",max_length=10)
 
 #      class Meta:
 #          verbose_name_plural = 'カテゴリ名'
