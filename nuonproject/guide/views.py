@@ -2,13 +2,20 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 from django.views.generic.edit import FormView
+from .models import Case
 
-# 小山 11/28--------------------------------
+# 小山 1/10--------------------------------
 from django.views.generic.base import TemplateView
-
+# 事例一覧を表示するビュー
 class CaseListView(TemplateView):
-
-    template_name = 'CaseList.html'
+    # 事例のデータをhtmlに渡す関数
+    def caselist(request):
+        # Caseテーブルのすべてのレコードを取得
+        caselist = Case.objects.all() 
+        # requestでcaselistをCaseList.htmlに渡す
+        return render(request, 'CaseList.html', {'caselist': caselist})
+    
+    # template_name = "CaseList.html"
 
 # ------------------------------------------/
 
@@ -47,9 +54,9 @@ class CaseRegistrationView(FormView):
         return reverse('guide:CaseRegistConfirmation')  # 登録成功後のページにリダイレクト
 
 
-class ExampleViewView(TemplateView):
+class SelectPrefView(TemplateView):
 
-    template_name = 'ExampleView.html'
+    template_name = 'SelectPref.html'
 
 class GuidancePinDeleteView(TemplateView):
 

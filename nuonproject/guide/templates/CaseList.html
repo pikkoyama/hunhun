@@ -151,6 +151,17 @@
             </div>
         </div>
     </div>
+<!-- caselistに入っているデータをcaseに繰り返し入れる -->
+    {% for case in caselist %}
+                
+                <tr>
+                    <!-- 項目を表示 -->
+                    <td>{{ case.case_number }}</td>
+                    <td>{{ case.number }}</td>
+                    <td>{{ case.title }}</td>
+                </tr>
+          
+    {% endfor %}
 
 </body>
 </html>
