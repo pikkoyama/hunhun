@@ -1,74 +1,179 @@
 <!DOCTYPE html>
 <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <title>ツアー客用マップ画面</title>
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sidebar-v2@0.4.0/css/leaflet-sidebar.min.css" />
-        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sidebar-v2@0.4.0/js/leaflet-sidebar.min.js"></script>
-        <style>
-            #map {
-                height: 600px;
-                width: 100%;
-            }
-            h1 {
-                text-align: center; /* 中央揃え */
-            }
-            .sidebar-tabs ul li a {
-                background-color: #45a049; /* ボタンの背景色を変更 */
-                color: white; /* ボタンのテキスト色を変更 */
-            }
-            .sidebar-tabs ul li a:hover {
-                background-color: #45a049; /* ホバー時の背景色を変更 */
-            }
-        </style>
-    </head>
-    <body>
-        <h1>今回のツアーマップ</h1>
-        <div id="sidebar" class="sidebar collapsed">
-            <div class="sidebar-tabs">
-                <ul role="tablist">
-                    <li><a href="#home" role="tab"><i class="fa fa-bars"></i></a></li>
-                </ul>
-            </div>
-            <div class="sidebar-content">
-                <div class="sidebar-pane" id="home">
-                    <h1 class="sidebar-header">ピンの一覧<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
-                    <ol id="pin-list">
-                        <!-- ピンのリストがここに表示されます -->
-                    </ol>
-                </div>
+<head>
+    <meta charset="UTF-8">
+    <title>ツアー客用マップ画面</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sidebar-v2@0.4.0/css/leaflet-sidebar.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sidebar-v2@0.4.0/js/leaflet-sidebar.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #e0f7fa, #80deea);
+            color: #333;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 20px auto;
+            padding: 20px;
+            display: inline-block;
+            background: linear-gradient(to right, #00796b, #26a69a);
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        h1:hover {
+            transform: scale(1.05);
+        }
+
+        h1::before,
+        h1::after {
+            content: "\f041"; /* ピンマークのアイコン (Font Awesome) */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: white;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        h1::before {
+            left: -40px;
+        }
+
+        h1::after {
+            right: -40px;
+        }
+
+        #map {
+            height: 600px;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar-tabs ul li a {
+            background-color: #00897b;
+            color: white;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .sidebar-tabs ul li a:hover {
+            background-color: #004d40;
+            transform: scale(1.1);
+        }
+
+        .sidebar-content {
+            background: #e0f2f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #pin-list {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+
+        #pin-list li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #80cbc4;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #pin-list li:hover {
+            background: #004d40;
+            transform: scale(1.05);
+        }
+
+        .sidebar-header {
+            background: #004d40;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="map-title">今回のツアーマップ</h1>
+    <div id="sidebar" class="sidebar collapsed">
+        <div class="sidebar-tabs">
+            <ul role="tablist">
+                <li><a href="#home" role="tab"><i class="fas fa-bars"></i></a></li>
+            </ul>
+        </div>
+        <div class="sidebar-content">
+            <div class="sidebar-pane" id="home">
+                <h1 class="sidebar-header">ピンの一覧<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <ol id="pin-list">
+                    <!-- ピンのリストがここに表示されます -->
+                </ol>
             </div>
         </div>
-        <div id="map"></div>
-        <script>
-            var map = L.map('map').setView([35.0116, 135.7681], 13); // 京都の緯度経度とズームレベルを設定
+    </div>
+    <div id="map"></div>
+    <script>
+        // 初期位置の設定
+        var initialView = [35.0116, 135.7681]; // 京都
+        var initialZoom = 13;
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
+        // 地図の初期化
+        var map = L.map('map').setView(initialView, initialZoom);
 
-            var sidebar = L.control.sidebar('sidebar').addTo(map);
+        // タイルレイヤーの追加
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-            var pins = [
-                { name: '私のお家', coords: [35.958992, 139.636291] },
-                { name: '大原学園大宮校', coords: [35.9065, 139.6233] },
-                // 他のピンを追加
-            ];
+        // サイドバーの追加
+        var sidebar = L.control.sidebar('sidebar').addTo(map);
 
-            pins.forEach(function(pin) {
-                var marker = L.marker(pin.coords).addTo(map)
-                    .bindPopup(pin.name);
+        // ピンの情報
+        var pins = [
+            { name: '私のお家', coords: [35.958992, 139.636291] },
+            { name: '大原学園大宮校', coords: [35.9065, 139.6233] }
+        ];
 
-                var li = document.createElement('li');
-                li.textContent = pin.name;
-                li.onclick = function() {
-                    map.setView(pin.coords, 13);
-                    marker.openPopup();
-                };
-                document.getElementById('pin-list').appendChild(li);
-            });
-        </script>
-    </body>
+        // ピンを地図とリストに追加
+        pins.forEach(function(pin) {
+            var marker = L.marker(pin.coords).addTo(map)
+                .bindPopup(pin.name);
+
+            var li = document.createElement('li');
+            li.textContent = pin.name;
+            li.onclick = function() {
+                map.setView(pin.coords, 13);
+                marker.openPopup();
+            };
+            document.getElementById('pin-list').appendChild(li);
+        });
+
+        // タイトルをクリックしたとき、初期位置に戻る処理
+        document.getElementById('map-title').onclick = function() {
+            map.setView(initialView, initialZoom);
+        };
+    </script>
+</body>
 </html>
