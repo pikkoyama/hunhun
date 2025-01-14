@@ -33,16 +33,14 @@
                 <h1>| 事例の登録</h1>
                 <label for="title">タイトル:</label>
                 <input type="text" id="title" name="title" required><br><br>
-                {% for case in caselist %}
                 <label for="category">カテゴリ:</label>
                 <select id="category" name="category" required>
                     <option value="">選択してください</option>
 
-                    <option value="{{case.category}}">{{case.category}}</option>
+                    <option value="category1">カテゴリ1</option>
                     <option value="category2">カテゴリ2</option>
                     <option value="category3">カテゴリ3</option>
                 </select><br><br>
-                {% endfor %}
 
                 <label for="content">本文:</label>
                 <textarea id="content" name="content" rows="10" cols="50" required></textarea><br><br>
