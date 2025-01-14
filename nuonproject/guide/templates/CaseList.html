@@ -107,46 +107,31 @@
         <button>検索</button>
         <button>ソート</button>
     </div>
+    {% for case in caselist %}
 
     <div class="comment-container">
         <div class="qa">
-            <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
+        <tr>
+            <strong>Q.<td>{{ case.case_number }}</td></strong> <span onclick="toggleAnswer(event)"><td>{{ case.title}}</td></span>
             <div class="answer">
-                ここに回答が表示されます
+                <td>{{ case.main }}</td>
                 <button class="change-button">変更</button>
             </div>
             <div class="action-buttons">
                 <button onclick="toggleApproval(this)">認可</button>
                 <button onclick="deleteComment(this)">削除</button>
             </div>
+        </tr>
         </div>
     </div>
+
+    {% endfor %}
 
     <div class="comment-container">
         <div class="qa">
             <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
             <div class="answer">
                 ここに回答が表示されます
-                <button class="change-button">変更</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="comment-container">
-        <div class="qa">
-            <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
-            <div class="answer">
-                ここに回答が表示されます
-                <button class="change-button">変更</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="comment-container">
-        <div class="qa">
-            <strong>Q.</strong> <span onclick="toggleAnswer(event)">ここに質問が表示されます</span>
-            <div class="answer">
-                ここに回答が表示されますyoooooooooo
                 <button class="change-button">変更</button>
             </div>
         </div>
