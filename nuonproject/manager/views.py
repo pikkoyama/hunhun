@@ -30,8 +30,6 @@ class AccountDeleteView(TemplateView):
 class admin_dashboardView(TemplateView):
     template_name = "AdminTop.html"
 
-class homeView(TemplateView):
-    template_name = "GuideTop.html"
 
 
 # ------------------------------------------/

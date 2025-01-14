@@ -1,7 +1,8 @@
 # 小山 1/7-------------------------------------------
 from django.urls import path
 from . import views
-from manager.views import admin_dashboardView,homeView
+from manager.views import admin_dashboardView
+from guide.views import homeView
 
 app_name = 'accounts'
 

@@ -7,6 +7,12 @@ from django.contrib.auth.views import LoginView
 from django.urls import path
 from django.shortcuts import redirect
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
+
+
 # class SinInView(LoginView):
     # forms.py で定義したフォームスクラス
     # form_class = LogInForm
