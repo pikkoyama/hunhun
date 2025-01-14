@@ -27,5 +27,11 @@ class AccountDeleteView(TemplateView):
     # さくちゃんTV
     template_name = "AccountDelete.html"
 
+class admin_dashboardView(TemplateView):
+    template_name = "AdminTop.html"
+
+class homeView(TemplateView):
+    template_name = "GuideTop.html"
+
 
 # ------------------------------------------/

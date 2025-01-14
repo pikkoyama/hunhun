@@ -42,13 +42,15 @@
         <!-- 左右に余白offset-2を入れる -->
         <div class="col offset-2">
           <form method="post">
-            <div class="form-group" style="margin-bottom: 30px;">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <!--<div class="form-group" style="margin-bottom: 30px;">
               <label for="emp_id" style="margin-right: 40px;">社員番号</label>
               <input type="text" id="emp_id" name="emp_id" required minlength="4" maxlength="8" size="10" style="width: 300px;" />
             </div>
             <div class="form-group" style="margin-bottom: 30px;">
               <label for="password" style="margin-right: 45px;">パスワード</label>
-              <input type="password" id="password" name="password" required minlength="4" maxlength="8" size="10" style="width: 300px;" />
+              <input type="password" id="password" name="password" required minlength="4" maxlength="8" size="10" style="width: 300px;" />-->
               <h6>
                 ※パスワードを忘れた方は <a href="{% url 'accounts:PasswordEmail' %}">こちら</a>
               </h6>
