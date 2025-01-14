@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
-from django import forms
+from .forms import CaseRegistrationForm
 from django.views.generic.edit import FormView
 from .models import Case
 
@@ -19,19 +19,19 @@ class CaseListView(TemplateView):
 
 # ------------------------------------------/
 
-# フォームをビュー内で直接定義
-class CaseForm(forms.Form):
-    title = forms.CharField(max_length=100, label='タイトル')
-    category = forms.ChoiceField(
-        choices=[('category1', 'カテゴリ1'), ('category2', 'カテゴリ2'), ('category3', 'カテゴリ3')],
-        label='カテゴリ'
-    )
-    content = forms.CharField(widget=forms.Textarea, label='本文')
+# # フォームをビュー内で直接定義
+# class CaseForm(forms.Form):
+#     title = forms.CharField(max_length=100, label='タイトル')
+#     category = forms.ChoiceField(
+#         choices=[('category1', 'カテゴリ1'), ('category2', 'カテゴリ2'), ('category3', 'カテゴリ3')],
+#         label='カテゴリ'
+#     )
+#     content = forms.CharField(widget=forms.Textarea, label='本文')
 
 # フォーム送信後の処理とリダイレクトを行うクラスベースビュー
 class CaseRegistrationView(FormView):
     template_name = 'CaseRegistration.html'
-    form_class = CaseForm  # 直接定義したフォームクラスを使用
+    form_class = CaseRegistrationForm  # 直接定義したフォームクラスを使用
 
     # フォームが正常に送信された場合の処理
     def form_valid(self, form):
@@ -62,9 +62,9 @@ class GuidancePinDeleteView(TemplateView):
 
     template_name = 'GuidancePinDelete.html'
 
-class GuideTopView(TemplateView):
+# class GuideTopView(TemplateView):
 
-    template_name = 'GuideTop.html'
+    # template_name = 'GuideTop.html'
 
 class TourSearchView(TemplateView):
 
@@ -88,3 +88,6 @@ class PasswordChangeView(TemplateView):
 
 class CaseRegistConfirmationView(TemplateView):
     template_name = "CaseRegistConfirmation.html"
+
+class homeView(TemplateView):
+    template_name = 'GuideTop.html'
