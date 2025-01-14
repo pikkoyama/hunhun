@@ -34,9 +34,11 @@ class SinInView(LoginView):
     template_name = "Sinin.html"
     def form_valid(self, form):
         # ログイン後のリダイレクト先を管理者か一般ユーザーかで変更
-        if self.request.user.is_superuser:
+        if self.request.user.is_superuser == True:
+            print(self.request.user.is_superuser)
             return redirect('accounts:admin_dashboard')  # 管理者用のダッシュボードにリダイレクト
         else:
+            print(self.request.user.is_superuser)
             return redirect('accounts:home')  
 # ------------------------------------------/
 
