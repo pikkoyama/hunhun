@@ -36,15 +36,17 @@ class CaseRegistrationView(FormView):
     # フォームが正常に送信された場合の処理
     def form_valid(self, form):
         # フォームのデータを処理（例：データベースへの保存など）
+        number = form.cleaned_data['number']
         title = form.cleaned_data['title']
         category = form.cleaned_data['category']
-        content = form.cleaned_data['content']
+        post_date = form.cleaned_data['post_date']
         
         # ここでデータを保存することができます（例：モデルを使ってDB保存）
         return render(self.request, 'CaseRegistConfirmation.html', {
+            'number': number,
             'title': title,
             'category': category,
-            'content': content
+            'post_date': post_date
         })
 
 
