@@ -119,7 +119,7 @@
             </div>
             <div class="action-buttons">
                 <button onclick="toggleApproval(this)">認可</button>
-                <button onclick="deleteComment(this)">削除</button>
+                <button>削除</button>
             </div>
         </tr>
         </div>
@@ -137,7 +137,7 @@
         </div>
     </div>
 <!-- caselistに入っているデータをcaseに繰り返し入れる -->
-    {% for case in caselist %}
+    {% comment %} {% for case in caselist %}
                 
                 <tr>
                     <!-- 項目を表示 -->
@@ -146,7 +146,7 @@
                     <td>{{ case.title }}</td>
                 </tr>
           
-    {% endfor %}
+    {% endfor %} {% endcomment %}
 
 </body>
 </html>
