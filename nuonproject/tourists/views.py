@@ -1,13 +1,12 @@
-from django.shortcuts import render
-
-# 我妻1/8--------------------------------
-from django.views.generic.base import TemplateView
-
-class TourmapView(TemplateView):
-    # ねぎしま
-    template_name = "Tourmap.html"
+from django.views.generic import TemplateView
 
 class LanguageSelectView(TemplateView):
-    # ねぎしまさ
-    template_name = "LanguageSelect.html"
-# ------------------------------------------/
+    template_name = 'LanguageSelect.html'
+
+class TourmapView(TemplateView):
+    template_name = 'Tourmap.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['language'] = self.request.GET.get('language', 'ja')
+        return context
