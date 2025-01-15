@@ -32,16 +32,33 @@ class PasswordEmailView(TemplateView):
 
 class SinInView(LoginView):
     template_name = "Sinin.html"
-    def form_valid(self, form):
-        # ログイン後のリダイレクト先を管理者か一般ユーザーかで変更
-        if self.request.user.is_superuser == True:
-            print(self.request.user.is_superuser)
-            return redirect('accounts:admin_dashboard')  # 管理者用のダッシュボードにリダイレクト
-        else:
-            print(self.request.user.is_superuser)
-            return redirect('accounts:home')  
-# ------------------------------------------/
 
+    def dispatch(self, request, *args, **kwargs):
+        # すでにログイン済みの場合
+        if request.user.is_authenticated:
+            if request.user.is_superuser:
+                return redirect('accounts:admin_dashboard')  # 管理者用画面
+            else:
+                return redirect('accounts:home')  # 一般ユーザー画面
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_success_url(self):
+        print("=================================================")
+        print('is_superuser:',self.request.user.is_superuser)
+        print('username:',self.request.user.username)       
+        print("=================================================")
+        # ログイン成功時のリダイレクト先を設定
+        if self.request.user.is_superuser:
+            return reverse_lazy('accounts:admin_dashboard')  # 管理者用ダッシュボード
+        else:
+            return reverse_lazy('accounts:home')  # 一般ユーザー画
+# ------------------------------------------/
+from django.contrib.auth.views import LogoutView
+from django.urls import reverse_lazy
+
+class CustomLogoutView(LogoutView):
+    # ログアウト後のリダイレクト先を指定
+    next_page = reverse_lazy('accounts:Sinin')  
 # def admin_dashboard(request):
 #     return render(request, 'manager/AdminTop.html')
 
