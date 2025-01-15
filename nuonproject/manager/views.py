@@ -47,6 +47,25 @@ class AccountDeleteView(TemplateView):
 class admin_dashboardView(TemplateView):
     template_name = "AdminTop.html"
 
+# ねぎし
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from guide.models import CustomUser
+
+@login_required
+def guide_account_list(request):
+    """ガイドアカウント一覧を表示するビュー"""
+    guides = CustomUser.objects.filter(admin=False)  # 管理者ではないユーザーを表示
+    return render(request, 'AdminViewAccount.html', {'guides': guides})
+
+@login_required
+def delete_guide_account(request, guide_id):
+    """ガイドアカウントを削除するビュー"""
+    guide = get_object_or_404(CustomUser, number=guide_id)
+    guide.delete()
+    return redirect('manager:guide_account_list')
+
+
 
 
 # ------------------------------------------/
