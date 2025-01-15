@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import random
+from django.utils import timezone
 
 # 1/8小山---------------------------
 
@@ -99,7 +100,7 @@ class Case(models.Model):
      title = models.CharField(verbose_name="タイトル", max_length=30)
      category = models.ForeignKey(Category,verbose_name="カテゴリ",on_delete=models.CASCADE)
      main = models.CharField(verbose_name="本文",max_length=300)
-     post_date = models.DateTimeField(verbose_name="投稿日",max_length=20)
+     post_date = models.DateField(verbose_name="投稿日",default=timezone.now)
      authonrization = models.BooleanField(verbose_name="認可済",max_length=20,default=False)
 
      class Meta:

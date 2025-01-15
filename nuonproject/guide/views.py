@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.urls import reverse
 from .forms import CaseRegistrationForm
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, CreateView
 from .models import Case
+from django.urls import reverse_lazy
 
 # 小山 1/10--------------------------------
 from django.views.generic.base import TemplateView
@@ -29,31 +30,30 @@ class CaseListView(TemplateView):
 #     content = forms.CharField(widget=forms.Textarea, label='本文')
 
 # フォーム送信後の処理とリダイレクトを行うクラスベースビュー
-class CaseRegistrationView(FormView):
+class CaseRegistrationView(CreateView):
     template_name = 'CaseRegistration.html'
     form_class = CaseRegistrationForm  # 直接定義したフォームクラスを使用
+    success_url = reverse_lazy('CaseRegistrationConfirmation')
 
-    # フォームが正常に送信された場合の処理
+        # フォームが正常に送信された場合の処理
     def form_valid(self, form):
-        # フォームのデータを処理（例：データベースへの保存など）
-        number = form.cleaned_data['number']
-        title = form.cleaned_data['title']
-        category = form.cleaned_data['category']
-        post_date = form.cleaned_data['post_date']
+        # form オブジェクトのフィールドの値をデータベースに保存
+        case = form.save()
+        self.object = case
+        # 戻り値
+        return super().form_valid(form)
         
         # ここでデータを保存することができます（例：モデルを使ってDB保存）
-        return render(self.request, 'CaseRegistConfirmation.html', {
-            'number': number,
-            'title': title,
-            'category': category,
-            'post_date': post_date
-        })
+        # return render(self.request, 'CaseRegistConfirmation.html', {
+        #     'number': number,
+        #     'title': title,
+        #     'category': category,
+        #     'post_date': post_date
+    # })
 
-
-
-    # フォーム送信後のリダイレクト先URLを指定
-    def get_success_url(self):
-        return reverse('guide:CaseRegistConfirmation')  # 登録成功後のページにリダイレクト
+    # # フォーム送信後のリダイレクト先URLを指定
+    # def get_success_url(self):
+    #     return reverse('guide:CaseRegistConfirmation')  # 登録成功後のページにリダイレクト
 
 
 class SelectPrefView(TemplateView):
