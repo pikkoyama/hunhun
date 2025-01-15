@@ -1,4 +1,4 @@
-# 小山 1/7-------------------------------------------
+# 小山　おやま 1/7-------------------------------------------
 from django.urls import path
 from . import views
 from manager.views import admin_dashboardView

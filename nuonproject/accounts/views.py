@@ -61,6 +61,7 @@ class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('accounts:Sinin')  
 # def admin_dashboard(request):
 #     return render(request, 'manager/AdminTop.html')
+# あーずま
 
 # def home(request):
 #     return render(request, 'guide/GuideTop.html')
