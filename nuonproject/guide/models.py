@@ -75,12 +75,13 @@ class Information_pin(models.Model):
     # id項目は自動生成で対応
     explanation   = models.CharField(verbose_name="説明",max_length=700)
     address = models.CharField(verbose_name="住所", max_length=50)
+    place = models.CharField(verbose_name="場所", max_length=30, default="unknown")
 
     # モデルが参照されたときの設定
     class Meta:
         verbose_name_plural = "説明"
     def __str__(self) -> str:
-        return f"{self.explanation[:10]}"
+        return f"{self.explanation[:10]}:{self.place[:10]}"
         
 # カテゴリモデル
 class Category(models.Model):
