@@ -11,30 +11,15 @@ from django.forms.widgets import CheckboxSelectMultiple, EmailInput
 # バリデーション用のライブラリをインポート
 from django.forms import ValidationError
 from django.views.generic.edit import CreateView
+from django import forms 
+from .models import Category
 
 #########################################################
 # 1/14 小山
 ###事例登録のフォームを定義
-class CaseRegistrationForm(CreateView):
-    '''CaseRegistrationForm のサブクラス
-    '''
-    class Meta:
-        '''CaseRegistrationForm のインナークラス
-        Attributes:
-            model:連携するUserモデル
-            fileds:フォームで使用するフィールド
-        '''
-        # 連携するモデルを設定
-        model = Case
-        # フォームで使用するフィールドを設定（画面設計を参照）
-        # 社員番号 タイトル カテゴリー 本文 
-        fields = ("number", "title", "category", "post_date")
-        
-                # エラーメッセージを指定
-        error_messages = {
-            "title": {
-                # emailが未入力の時のエラーメッセージ
-                "required": "このフィールドを入力してください",
-                
-            }
-        }
+class CaseRegistrationForm(forms.Form):
+   category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),  # Categoryモデルから全てのカテゴリを取得
+        empty_label="カテゴリを選択",      # 最初に空の選択肢を表示（オプション）
+        required=True                    # 必須項目にする（オプション）
+    )

@@ -27,23 +27,22 @@
         </style>
     </head>
     <body>
+
         <div class="form-container">
             <form method="post">
                 {% csrf_token %}
                 <h1>| 事例の登録</h1>
-                <label for="title">タイトル:</label>
-                <input type="text" id="title" name="title" required><br><br>
-                <label for="category">カテゴリ:</label>
-                <select id="category" name="category" required>
-                    <option value="">選択してください</option>
+                <label for="number">事例番号:</label>
+                 {{form.number}}<br><br>
 
-                    <option value="category1">カテゴリ1</option>
-                    <option value="category2">カテゴリ2</option>
-                    <option value="category3">カテゴリ3</option>
-                </select><br><br>
+                <label for="title">タイトル:</label>
+                 {{form.title}}<br><br>
+
+                <label for="category">カテゴリ:</label>
+                 {{form.category}}<br><br>
 
                 <label for="content">本文:</label>
-                <textarea id="content" name="content" rows="10" cols="50" required></textarea><br><br>
+                 {{form.main}}<br><br>
 
                 <button type="submit" class="btn-next">登録</button>
             </form>
