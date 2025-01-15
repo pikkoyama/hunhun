@@ -10,11 +10,12 @@ from guide.models import Case
 from django.forms.widgets import CheckboxSelectMultiple, EmailInput
 # バリデーション用のライブラリをインポート
 from django.forms import ValidationError
+from django.views.generic.edit import CreateView
 
 #########################################################
 # 1/14 小山
 ###事例登録のフォームを定義
-class CaseRegistrationForm():
+class CaseRegistrationForm(CreateView):
     '''CaseRegistrationForm のサブクラス
     '''
     class Meta:
