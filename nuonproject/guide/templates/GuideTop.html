@@ -71,7 +71,12 @@
 <body>
     <header>
         ガイドトップページ
-        <a href="{% url 'accounts:logout' %}">ログアウト</a>
+
+        <form method="post" action="{% url 'accounts:logout' %}">
+            {% csrf_token %}
+        <button type="submit">ログアウト</button>
+        </form>
+        <!--<a href="{% url 'accounts:logout' %}">ログアウト</a>-->
     </header>
     <div class="container">
         <!-- 事例の登録ボタン -->
