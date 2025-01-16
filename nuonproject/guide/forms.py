@@ -27,6 +27,7 @@ class CaseRegistrationForm(forms.ModelForm):
 
     # 必要に応じてフィールドのウィジェットやラベルを設定できます
    case_number = forms.CharField(max_length=30, label='事例番号')
+   #  
    number = forms.CharField(max_length=8,widget=forms.TextInput(attrs={'type':'text'}),label="社員番号" )
    title = forms.CharField(max_length=30, label='タイトル')
    category = forms.ModelChoiceField(queryset=Category.objects.all(), label='カテゴリ', empty_label="カテゴリを選択")
