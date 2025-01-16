@@ -73,24 +73,21 @@
         <h1>事例の登録</h1>
         <h3>以下の内容で登録します</h3>
         <!-- タイトルセクション -->
-        <div class="section">
-            <label for="title">タイトル:</label>
-            <p>{{ title }}</p>  <!-- ビューから渡されたデータを表示 -->
-        </div>
-        
-        <!-- カテゴリーセクション -->
-        <div class="section">
-            <label for="category">カテゴリ―:</label>
-            <p>{{ category }}</p>  <!-- ビューから渡されたデータを表示 -->
-        </div>
-
-        <!-- 本文セクション -->
-        <div class="section">
-            <label for="content">本文:</label>
-            <p>{{ content }}</p>  <!-- ビューから渡されたデータを表示 -->
-        </div>
+        <form method="post">
+            {% csrf_token %}
+            <h2>確認ページ</h2>
+            
+            <p><strong>事例番号:</strong> {{ form_data.case_number }}</p>
+            <p><strong>社員番号:</strong> {{ form_data.number }}</p>
+            <p><strong>タイトル:</strong> {{ form_data.title }}</p>
+            <p><strong>カテゴリ:</strong> {{ form_data.category }}</p>
+            <p><strong>本文:</strong> {{ form_data.main }}</p>
+            <p><strong>投稿日:</strong> {{ form_data.post_date }}</p>
         
     </div>
+
+        <button type="submit">登録する</button>
+        </form>
 
     <!-- 下部のボタン -->
     <div class="footer-buttons">

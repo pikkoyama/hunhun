@@ -13,7 +13,7 @@ from django.forms import ValidationError
 from django.views.generic.edit import CreateView
 from django import forms 
 from .models import Category
-from guide.models import Case
+from guide.models import Case, CustomUser
 from django.utils import timezone
 
 #########################################################
@@ -27,20 +27,17 @@ class CaseRegistrationForm(forms.ModelForm):
 
     # 必要に応じてフィールドのウィジェットやラベルを設定できます
    case_number = forms.CharField(max_length=30, label='事例番号')
-   #  デフォルトにしたい@小山
-   number = forms.CharField(max_length=8,widget=forms.TextInput(attrs={'type':'text'}),label="社員番号" )
+   number = forms.ModelChoiceField(queryset=CustomUser.objects.all(), label="社員番号", empty_label="社員番号を選択")
    title = forms.CharField(max_length=30, label='タイトル')
    category = forms.ModelChoiceField(queryset=Category.objects.all(), label='カテゴリ', empty_label="カテゴリを選択")
    main = forms.CharField(widget=forms.Textarea, label='本文')
    post_date = forms.DateField(initial=timezone.now, widget=forms.DateInput(attrs={'type': 'date'}), label="投稿日")
 
-# デフォルト
-#    def __init__(self, *args, **kwargs):
-#         # 現在のログインユーザーを取得
-#         user = kwargs.get('user')  # ビューから渡されるユーザー情報
+   def __init__(self, *args, **kwargs):
+        # 'user' を kwargs から取得
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
 
-#         super().__init__(*args, **kwargs)
-
-#         # ユーザーが存在する場合、社員番号を自動で入力
-#         if user:
-#             self.fields['number'].initial = user.profile.employee_number  # ユーザーの社員番号を設定
+        # ログインユーザーが存在する場合、そのユーザーを初期値として設定
+        if user:
+            self.fields['number'].initial = user  # ユーザーのインスタンスを初期値として設定

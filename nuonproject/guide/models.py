@@ -12,10 +12,7 @@ def random_num():
 
 # カスタムユーザーモデル
 class CustomUser(AbstractUser):
-    number = models.BigIntegerField(verbose_name="社員番号",
-                                         primary_key=True,
-                                         default=random_num # 乱数関数
-                                         )
+    number = models.CharField(max_length=8,verbose_name="社員番号",primary_key=True,default=random_num )# 乱数関数
     username = models.CharField(verbose_name="氏名", max_length=20)
     # passwordは標準の機能を利用
     password = models.CharField(verbose_name="パスワード", max_length=256)
