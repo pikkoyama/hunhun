@@ -28,7 +28,7 @@ class CustomUser(AbstractUser):
         verbose_name_plural = "カスタムユーザー"
     def __str__(self):
         return f"{self.username}({self.number})"
-    
+       
 
 # 種類モデル
 class Sort(models.Model):
