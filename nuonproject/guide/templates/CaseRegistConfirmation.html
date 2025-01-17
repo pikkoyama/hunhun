@@ -85,14 +85,11 @@
             <p><strong>投稿日:</strong> {{ form_data.post_date }}</p>
         
     </div>
-
-        <button type="submit">登録する</button>
         </form>
 
     <!-- 下部のボタン -->
     <div class="footer-buttons">
-        <button class="button back-button" onclick="window.location.href='{% url 'guide:caseregistration' %}';">戻る</button>
-        <button class="button delete-button" onclick="alert('登録処理が実行されます');">登録</button>
+        <button class="button back-button" onclick="window.location.href='{% url 'guide:guidetop' %}';">トップページに戻る</button>
     </div>
 </body>
 </html>

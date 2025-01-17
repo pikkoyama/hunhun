@@ -72,9 +72,9 @@ class GuidancePinDeleteView(TemplateView):
 
     template_name = 'GuidancePinDelete.html'
 
-# class GuideTopView(TemplateView):
+class GuideTopView(TemplateView):
 
-    # template_name = 'GuideTop.html'
+    template_name = 'GuideTop.html'
 
 class TourSearchView(TemplateView):
 
