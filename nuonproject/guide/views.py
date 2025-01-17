@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from .forms import CaseRegistrationForm
 from django.views.generic.edit import FormView, CreateView
-from django.views.generic import View
 from .models import Case
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
@@ -23,69 +22,48 @@ class CaseListView(TemplateView):
 
 # ------------------------------------------/
 
+# # フォームをビュー内で直接定義
+# class CaseForm(forms.Form):
+#     title = forms.CharField(max_length=100, label='タイトル')
+#     category = forms.ChoiceField(
+#         choices=[('category1', 'カテゴリ1'), ('category2', 'カテゴリ2'), ('category3', 'カテゴリ3')],
+#         label='カテゴリ'
+#     )
+#     content = forms.CharField(widget=forms.Textarea, label='本文')
+
 # フォーム送信後の処理とリダイレクトを行うクラスベースビュー
 class CaseRegistrationView(FormView):
     template_name = 'CaseRegistration.html'
     form_class = CaseRegistrationForm  # 直接定義したフォームクラスを使用
     success_url = reverse_lazy('guide:caseregistconfirmation')
 
-    print("----------test1--------------------")
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # 現在のログインユーザーをフォームに渡す
+        return kwargs
 
     def form_valid(self, form):
-        print("----------test2--------------------")
-        # ログイン中のユーザーのIDをセッションに保存
-        user = self.request.user
-        self.request.session['user_pk'] = user.pk  # ユーザーIDを保存
-
-        # フォームデータをセッションに保存
-        self.request.session['form_data'] = form.cleaned_data
-        return redirect(self.success_url)
-
-# 事例登録確認画面表示ビュー
-class CaseRegistConfirmationView(View):
-    def get(self, request, *args, **kwargs):
-        # セッションからフォームデータとユーザーIDを取得
-        form_data = request.session.get('form_data', None)
-        user_pk = request.session.get('user_pk', None)
+        # フォームが有効な場合の処理
+        case = form.save(commit=False)
+        case.user = self.request.user  # ユーザーを関連付け
+        case.save()
+        return super().form_valid(form)
         
-        if form_data and user_pk:
-            # ユーザーIDを使ってユーザーオブジェクトを取得
-            User = get_user_model()
-            print(User)
-            user = User.objects.get(id=user_pk)
-            
-            return render(request, 'GuideTop.html', {
-                'form_data': form_data,
-                'user': user  # ユーザー情報もテンプレートに渡す
-            })
-        
-    def post(self, request, *args, **kwargs):
-        form_data = request.session.get('form_data', None)
-        user_pk = request.session.get('user_pk', None)
+        # ここでデータを保存することができます（例：モデルを使ってDB保存）
+        # return render(self.request, 'CaseRegistConfirmation.html', {
+        #     'number': number,
+        #     'title': title,
+        #     'category': category,
+        #     'post_date': post_date
+    # })
 
-        if form_data and user_pk:
-            # ユーザーpkを使ってユーザーオブジェクトを取得
-            User = get_user_model()
-            user = User.objects.get(pk=user_pk)
+    # # フォーム送信後のリダイレクト先URLを指定
+    # def get_success_url(self):
+    #     return reverse('guide:CaseRegistConfirmation')  # 登録成功後のページにリダイレクト
 
-            # データベースに登録
-            case = Case.objects.create(
-                case_number=form_data['case_number'],
-                number=form_data['number'],
-                title=form_data['title'],
-                category=form_data['category'],
-                main=form_data['main'],
-                post_date=form_data['post_date'],
-                user=user  # ユーザーオブジェクトを関連付け
-            )
+class CaseRegistConfirmationView(TemplateView):
+    template_name = "CaseRegistConfirmation.html"
 
-            # セッションからデータを削除
-            del request.session['form_data']
-            del request.session['user_pk']
-
-            return redirect('guidetop')  # 完了ページにリダイレクト
-        return redirect('caseregistration')
-    
 class SelectPrefView(TemplateView):
 
     template_name = 'SelectPref.html'
@@ -117,8 +95,6 @@ class TourRegistrationView(TemplateView):
 class PasswordChangeView(TemplateView):
     # あづーま
     template_name = "PasswordChange.html"
-
-
 
 class homeView(TemplateView):
     template_name = 'GuideTop.html'
