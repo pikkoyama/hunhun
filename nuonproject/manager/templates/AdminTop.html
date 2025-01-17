@@ -85,6 +85,43 @@
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
             transform: translateY(-3px);
         }
+        
+        /* メッセージのスタイル */
+        .alert-message {
+            background-color: #aee1f2; /* 薄水色に設定 */
+            color: black;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            position: fixed;
+            bottom: 0; /* 画面下部に配置 */
+            left: 0;   /* 画面の左端から開始 */
+            width: 100%; /* 画面全体の幅に合わせる */
+            display: none;  /* 初期状態では非表示 */
+            opacity: 0;
+            animation: fadeInOut 6s forwards; /* フェードイン・フェードアウト */
+        }
+
+        /* フェードイン・フェードアウトアニメーション */
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                bottom: -50px; /* 初期位置を画面外に設定 */
+            }
+            10% {
+                opacity: 1;
+                bottom: 0;  /* 画面の下に表示 */
+            }
+            80% {
+                opacity: 1;
+                bottom: 0;  /* メッセージは下部に固定 */
+            }
+            100% {
+                opacity: 0;
+                bottom: -50px;  /* メッセージが下にフェードアウト */
+            }
+        }
     </style>
 </head>
 <body>
@@ -110,5 +147,22 @@
             <a href="{% url 'manager:guide_account_list' %}" class="button">ガイドアカウント閲覧・削除</a>
         </div>
     </div>
+
+    <!-- フラッシュメッセージの表示 -->
+    {% if messages %}
+        <div class="alert-message" id="alertMessage">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+
+        <script>
+            // ページが読み込まれたときにメッセージを表示
+            window.onload = function() {
+                var message = document.getElementById("alertMessage");
+                message.style.display = "block";  // メッセージを表示
+            };
+        </script>
+    {% endif %}
 </body>
 </html>

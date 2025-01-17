@@ -3,9 +3,11 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from guide.models import CustomUser
 from .forms import AccountCreationForm
+from django.contrib import messages
 
 # 清原 1/8--------------------------------
 from django.views.generic.base import TemplateView
+from django.shortcuts import render, redirect
 
 class AdminTopView(TemplateView):
 
@@ -24,12 +26,15 @@ class AdminCreateView(CreateView):
     
     # フォームが保存された後、パスワードをハッシュ化して保存する
     def form_valid(self, form):
+        # アカウント作成の後、フラッシュメッセージを設定
+        messages.success(self.request, 'アカウントが作成されました。')
         # 通常の保存処理を行う前にパスワードをハッシュ化
         password = form.cleaned_data.get('password')
         account = form.save(commit=False)  # 保存しない状態でインスタンスを取得
         account.set_password(password)  # パスワードをハッシュ化
         account.save()  # 保存
         return super().form_valid(form)
+
 # --------------------------------
 
 class AdminSuccessView(TemplateView):
