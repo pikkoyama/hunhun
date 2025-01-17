@@ -176,40 +176,9 @@
         // サイドバーの追加
         var sidebar = L.control.sidebar('sidebar').addTo(map);
 
-        // ピンの情報
-        var pins = [
-            { names: {
-                "ja": "私のお家",
-                "en": "My Home",
-                "zh": "我的家",
-                "zh-TW": "我的家",
-                "ko": "내 집"
-            }, coords: [35.958992, 139.636291], descriptions: {
-                "ja": "ここは私のお家です。",
-                "en": "This is my home.",
-                "zh": "这是我的家。",
-                "zh-TW": "這是我的家。",
-                "ko": "여기는 내 집입니다。"
-            }},
-            { names: {
-                "ja": "大原学園大宮校",
-                "en": "Ohara Gakuen Omiya School",
-                "zh": "大原学园大宫校",
-                "zh-TW": "大原學園大宮校",
-                "ko": "오하라 학원 오미야 학교"
-            }, coords: [35.9065, 139.6233], descriptions: {
-                "ja": "ここは大原学園大宮校です。",
-                "en": "This is Ohara Gakuen Omiya School.",
-                "zh": "这是大原学园大宫校。",
-                "zh-TW": "這是大原學園大宮校。",
-                "ko": "여기는 오하라 학원 오미야 학교입니다。"
-            }}
-        ];
-
         // URLパラメータから言語を取得
         var urlParams = new URLSearchParams(window.location.search);
         var language = urlParams.get('language') || 'ja'; // デフォルトは日本語
-
 
         // 言語に基づいてテキストを変更
         var texts = {
@@ -239,64 +208,85 @@
         document.getElementById('map-title').textContent = texts[language].mapTitle;
         document.getElementById('pin-header').textContent = texts[language].pinHeader;
 
-        // ピンの情報を更新
-        var pinList = document.getElementById('pin-list');
-        pinList.innerHTML = ''; // 既存のピンをクリア
-
-        pins.forEach(function(pin, index) {
-            var marker = L.marker(pin.coords).addTo(map)
-                .bindPopup('<b>' + pin.names[language] );
-
-            var li = document.createElement('li');
-            li.textContent = (index + 1) + '. ' + pin.names[language];
-
-            // 逆三角形のボタンを追加
-            var toggleButton = document.createElement('button');
-            toggleButton.textContent = '▼';
-            toggleButton.className = 'toggle-description';
-            toggleButton.onclick = function() {
-                var description = this.nextElementSibling;
-                if (description.style.display === 'none' || description.style.display === '') {
-                    description.style.display = 'block';
-                } else {
-                    description.style.display = 'none';
+        // ピンの情報を取得して表示
+        {% comment %} fetch('/api/pins/') {% endcomment %}// ピンの情報を取得して表示
+        fetch("{% url 'tourists:get_pins' %}")
+            .then(response => {
+                console.log(`api実行`);
+                if (!response.ok) {
+                    console.error(`HTTPエラー: ${response.status} - ${response.statusText}`);
+                    throw new Error('Network response was not ok');
                 }
-            };
+                return response.json();
+            })
+            .then(pins => {
+                var pinList = document.getElementById('pin-list');
+                console.log(`既存のピンをクリア`);
+                pinList.innerHTML = '';  // 既存のピンをクリア
 
-            var description = document.createElement('div');
-            description.className = 'description';
-            description.textContent = pin.descriptions[language];
+                pins.forEach(function(pin, index) {
+                    console.log(`pin.latitude:`, pin.latitude);
+                    console.log(`pin.longitude:`, pin.longitude);
+                    
+                    // 修正：pin.latitude または pin.longitude が null または undefined の場合にスキップ
+                    if (pin.latitude != null && pin.longitude != null) {  // null チェック
+                        console.log(`TRUE`);
+                        
+                        // マーカーを追加
+                        var marker = L.marker([pin.latitude, pin.longitude]).addTo(map)
+                            .bindPopup('<b>' + pin.place + '</b><br>' + pin["explanation_" + language]);
 
-            // 読み上げボタンを追加
-            var speakButton = document.createElement('button');
-            speakButton.textContent = '🔊';
-            speakButton.className = 'speak-button';
-            speakButton.onclick = function() {
-                var utterance = new SpeechSynthesisUtterance(pin.descriptions[language]);
-                utterance.lang = language;
-                speechSynthesis.speak(utterance);
-            };
+                        var li = document.createElement('li');
+                        li.textContent = (index + 1) + '. ' + pin.place;
 
-            li.appendChild(toggleButton);
-            li.appendChild(description);
-            li.appendChild(speakButton);
-            pinList.appendChild(li);
+                        var toggleButton = document.createElement('button');
+                        toggleButton.textContent = '▼';
+                        toggleButton.className = 'toggle-description';
+                        toggleButton.onclick = function() {
+                            var description = this.nextElementSibling;
+                            description.style.display = description.style.display === 'none' ? 'block' : 'none';
+                        };
 
-            li.onclick = function() {
-                map.setView(pin.coords, 13);
-                marker.openPopup();
-            };
-        });
+                        var description = document.createElement('div');
+                        description.className = 'description';
+                        description.textContent = pin["explanation_" + language];
+
+                        var speakButton = document.createElement('button');
+                        speakButton.textContent = '🔊';
+                        speakButton.className = 'speak-button';
+                        speakButton.onclick = function() {
+                            var utterance = new SpeechSynthesisUtterance(pin["explanation_" + language]);
+                            utterance.lang = language;
+                            speechSynthesis.speak(utterance);
+                        };
+
+                        li.appendChild(toggleButton);
+                        li.appendChild(description);
+                        li.appendChild(speakButton);
+                        pinList.appendChild(li);
+
+                        li.onclick = function() {
+                            map.setView([pin.latitude, pin.longitude], 13);
+                            marker.openPopup();
+                        };
+                    } else {
+                        console.log(`ピンの座標が無効です。latitude: ${pin.latitude}, longitude: ${pin.longitude}`);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching pins:', error);  // エラーメッセージをブラウザログに表示
+            });
 
         // タイトルをクリックしたとき、初期位置に戻る処理
         document.getElementById('map-title').onclick = function() {
             map.setView(initialView, initialZoom);
         };
 
-        {% comment %} // ポップアップを閉じる関数
+        // ポップアップを閉じる関数
         function closePopup() {
             map.closePopup();
-        } {% endcomment %}
+        }
     </script>
 </body>
 </html>
