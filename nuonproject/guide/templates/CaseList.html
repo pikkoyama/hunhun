@@ -73,6 +73,12 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        /* 認可された事例に適用するスタイル */
+        .comment-container.authorized {
+            background-color: #e0ffe0; /* 背景色を薄い緑に変更 */
+            border-color: #4CAF50; /* 境界線色を緑に */
+        }
+
         .comment-container .qa strong {
             display: block;
             font-size: 16px;
@@ -137,15 +143,44 @@
         }
     </style>
     <script>
-        function toggleAnswer(event) {
-            const answer = event.currentTarget.nextElementSibling;
-            if (answer.style.display === "none" || !answer.style.display) {
-                answer.style.display = "block";
-            } else {
-                answer.style.display = "none";
-            }
+        function toggleAuthorization(caseId, button) {
+            console.log('リクエスト送信中: ', caseId);  // ここで送信するIDを確認
+        
+            fetch("/guide/authorize_case/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}",  // CSRFトークンを正しくセット
+                },
+                body: JSON.stringify({ case_id: caseId }),  // case_idをJSON形式で送信
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('サーバーレスポンス: ', data);  // サーバーレスポンスを表示
+        
+                if (data.status === "success") {
+                    const container = button.closest(".comment-container");
+                    if (data.authorization_status) {
+                        // 認可された場合
+                        container.classList.add("authorized");
+                        button.textContent = "認可解除";  // ボタンテキストを変更
+                    } else {
+                        // 認可解除された場合
+                        container.classList.remove("authorized");
+                        button.textContent = "認可";  // ボタンテキストを戻す
+                    }
+                } else {
+                    alert("認可に失敗しました: " + (data.message || "不明なエラー"));
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("サーバーエラーが発生しました。");
+            });
         }
+        
     </script>
+    
 </head>
 <body>
     <div class="top-bar">
@@ -161,22 +196,24 @@
     </div>
 
     {% for case in caselist %}
-    <div class="comment-container">
-        <div class="qa">
-            <strong>Q. {{ case.case_number }}</strong>
-            <span onclick="toggleAnswer(event)">{{ case.title }}</span>
-            <div class="answer">
-                {{ case.main }}
-            </div>
-            {% if user.is_superuser %}
-            <div class="action-buttons">
-                <button>認可</button>
-                <button>削除</button>
-            </div>
-            {% endif %}
+<div class="comment-container {% if case.authonrization %}authorized{% endif %}">
+    <div class="qa">
+        <strong>Q. {{ case.case_number }}</strong>
+        <span onclick="toggleAnswer(event)">{{ case.title }}</span>
+        <div class="answer">
+            {{ case.main }}
         </div>
+        {% if user.is_superuser %}
+        <div class="action-buttons">
+            <button onclick="toggleAuthorization('{{ case.case_number }}', this)">
+                {% if case.authonrization %}認可解除{% else %}認可{% endif %}
+            </button>
+            
+        </div>
+        {% endif %}
     </div>
-    {% endfor %}
+</div>
+{% endfor %}
     <a href="#">戻る</a>
 </body>
 </html>

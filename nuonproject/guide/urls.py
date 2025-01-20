@@ -1,6 +1,8 @@
 # 小山 11/28-------------------------------------------
 from django.urls import path
 from . import views
+from django.urls import path
+from .views import AuthorizeCaseView
 
 app_name = 'guide'
 
@@ -18,6 +20,8 @@ urlpatterns = [
     path("Informationpinregistration/",views.InformationPinRegistrationView.as_view(),name="informationpinregistration"),
     path("tourregistration/",views.TourRegistrationView.as_view(),name="tourregistration"),
     path("passwordchange/",views.PasswordChangeView.as_view(),name="passwordchange"),
-    path("caseregistconfirmation/",views.CaseRegistConfirmationView.as_view(),name="caseregistconfirmation")
+    path("caseregistconfirmation/",views.CaseRegistConfirmationView.as_view(),name="caseregistconfirmation"),
+    # 根岸
+    path('authorize_case/', AuthorizeCaseView.as_view(), name='authorize_case'),
 ]
 # ---------------------------------------------------------

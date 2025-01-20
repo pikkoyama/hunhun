@@ -7,6 +7,12 @@ from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 
+# 根岸
+from django.http import JsonResponse
+from django.views import View
+from .models import Case
+import json
+
 # 小山 1/10--------------------------------
 from django.views.generic.base import TemplateView
 # 事例一覧を表示するビュー
@@ -98,3 +104,31 @@ class PasswordChangeView(TemplateView):
 
 class homeView(TemplateView):
     template_name = 'GuideTop.html'
+
+# 根岸
+class AuthorizeCaseView(View):
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return JsonResponse({"status": "error", "message": "Permission denied"})
+
+        try:
+            data = json.loads(request.body)  # JSONを解析
+            case_id = data.get("case_id")
+            print("受け取ったcase_id:", case_id)
+
+            if not case_id:
+                return JsonResponse({"status": "error", "message": "Case ID is missing"})
+
+            case = Case.objects.get(case_number=case_id)
+            case.authonrization = not case.authonrization
+            case.save()
+
+            return JsonResponse({
+                "status": "success",
+                "authorization_status": case.authonrization
+            })
+
+        except json.JSONDecodeError:
+            return JsonResponse({"status": "error", "message": "Invalid JSON format"})
+        except Case.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Case not found"})
