@@ -214,6 +214,8 @@
     </div>
 </div>
 {% endfor %}
-    <a href="{% url 'guide:AdminTop' %}">戻る</a>
+<a href="{% if user.is_superuser %}{% url 'manager:AdminTop' %}{% else %}{% url 'guide:guidetop' %}{% endif %}">
+    戻る
+</a>
 </body>
 </html>
