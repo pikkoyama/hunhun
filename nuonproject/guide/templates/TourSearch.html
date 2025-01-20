@@ -47,13 +47,18 @@
             margin-top: 20px;
         }
         .result-item {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 50px 1fr auto; /* 固定幅の列を指定 */
             align-items: center;
             margin-bottom: 10px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            gap: 10px; /* 各要素間の余白 */
+        }
+        .result-item label:nth-child(2) {
+            text-align: left; /* テキストを左寄せ */
+            margin-left: -30px; /* 必要に応じて微調整 */
         }
         .result-item button {
             padding: 5px 10px;
@@ -122,8 +127,7 @@
             {% for tour in tourlist %}
             <div class="results">
                 <div class="result-item">
-                    <strong>{{ tour.id }}</strong>
-                    <span>{{ tour.tour_name }}</span>
+                    <strong>{{ tour.id }}</strong><label>{{ tour.tour_name }}</label>
                     <button type="button">変更</button>
                 </div>
             </div>
