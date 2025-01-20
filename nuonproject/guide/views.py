@@ -70,9 +70,9 @@ class CaseRegistrationView(FormView):
 class CaseRegistConfirmationView(TemplateView):
     template_name = "CaseRegistConfirmation.html"
 
-class SelectPrefView(TemplateView):
+# class SelectPrefView(TemplateView):
 
-    template_name = 'SelectPref.html'
+#     template_name = 'SelectPref.html'
 
 class GuidancePinDeleteView(TemplateView):
 
