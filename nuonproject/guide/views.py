@@ -82,14 +82,17 @@ class GuideTopView(TemplateView):
     template_name = 'GuideTop.html'
 # 個やア　1/20
 class TourSearchView(TemplateView):
-
-     def tourlist(request):
-        # Caseテーブルのすべてのレコードを取得
-        tourlist = Tour.objects.all() 
-        # requestでcaselistをCaseList.htmlに渡す
-        return render(request, 'TourSearch.html', {'tourlist': tourlist})
-
+     
      template_name = 'TourSearch.html'
+
+     def get_context_data(self, **kwargs):
+        # 親クラスのget_context_dataを呼び出す
+        context = super().get_context_data(**kwargs)
+        # Tourテーブルのすべてのレコードを取得してcontextに追加
+        context['tourlist'] = Tour.objects.all()
+        return context
+
+    #  template_name = 'TourSearch.html'
 
 class InformationPinChangeView(TemplateView):
     # あづーま
