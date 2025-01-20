@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from .forms import CaseRegistrationForm
 from django.views.generic.edit import FormView, CreateView
-from .models import Case
+from .models import Case, Tour
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
@@ -10,7 +10,6 @@ from django.shortcuts import redirect
 # 根岸
 from django.http import JsonResponse
 from django.views import View
-from .models import Case
 import json
 
 # 小山 1/10--------------------------------
@@ -81,10 +80,16 @@ class GuidancePinDeleteView(TemplateView):
 class GuideTopView(TemplateView):
 
     template_name = 'GuideTop.html'
-
+# 個やア　1/20
 class TourSearchView(TemplateView):
 
-    template_name = 'TourSearch.html'
+     def tourlist(request):
+        # Caseテーブルのすべてのレコードを取得
+        tourlist = Tour.objects.all() 
+        # requestでcaselistをCaseList.htmlに渡す
+        return render(request, 'TourSearch.html', {'tourlist': tourlist})
+
+    # template_name = 'TourSearch.html'
 
 class InformationPinChangeView(TemplateView):
     # あづーま
