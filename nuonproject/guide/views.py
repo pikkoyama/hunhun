@@ -82,7 +82,7 @@ class GuideTopView(TemplateView):
     template_name = 'GuideTop.html'
 # 個やア　1/20
 class TourSearchView(TemplateView):
-     
+    #  とりあえずツアー一覧表示
      template_name = 'TourSearch.html'
 
      def get_context_data(self, **kwargs):
@@ -93,6 +93,25 @@ class TourSearchView(TemplateView):
         return context
 
     #  template_name = 'TourSearch.html'
+     
+class TourRegistrationView(TemplateView):
+    # 小山
+    template_name = "TourRegistration.html"
+    
+    form_class = TourRegistrationForm  # 直接定義したフォームクラスを使用
+    success_url = reverse_lazy('guide:toursearch')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # 現在のログインユーザーをフォームに渡す
+        return kwargs
+
+    def form_valid(self, form):
+        # フォームが有効な場合の処理
+        tour = form.save(commit=False)
+        case.user = self.request.user  # ユーザーを関連付け
+        case.save()
+        return super().form_valid(form)
 
 class InformationPinChangeView(TemplateView):
     # あづーま
@@ -102,9 +121,7 @@ class InformationPinRegistrationView(TemplateView):
     # あづーま
     template_name = "InformationPinRegistration.html"
 
-class TourRegistrationView(TemplateView):
-    # あづーま
-    template_name = "TourRegistration.html"
+
 
 class PasswordChangeView(TemplateView):
     # あづーま
