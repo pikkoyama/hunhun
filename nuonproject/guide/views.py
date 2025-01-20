@@ -89,7 +89,7 @@ class TourSearchView(TemplateView):
         # requestでcaselistをCaseList.htmlに渡す
         return render(request, 'TourSearch.html', {'tourlist': tourlist})
 
-    # template_name = 'TourSearch.html'
+     template_name = 'TourSearch.html'
 
 class InformationPinChangeView(TemplateView):
     # あづーま
