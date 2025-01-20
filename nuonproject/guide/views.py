@@ -105,7 +105,7 @@ class PasswordChangeView(TemplateView):
 class homeView(TemplateView):
     template_name = 'GuideTop.html'
 
-# 根岸
+# 根岸 1/20
 class AuthorizeCaseView(View):
     def post(self, request, *args, **kwargs):
         if not request.user.is_superuser:
