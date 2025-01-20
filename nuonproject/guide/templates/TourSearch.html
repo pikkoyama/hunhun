@@ -104,26 +104,26 @@
         <!-- Search Section -->
         <div class="search-section">
             <div class="search-group">
-                <label for="tour-name">ツアー名で検索:</label>
-                <input type="text" id="tour-name" name="tour-name">
-                <button type="button">検索</button>
+                <form method="post" action="/search-by-name/">
+                    {% csrf_token %}
+                    <label for="tour-name">ツアー名で検索:</label>
+                    <input type="text" id="tour-name" name="tour-name">
+                    <button type="button">検索</button>
+                </form>
             </div>
             <div class="search-group">
-                <label for="tour-number">番号で検索:</label>
-                <input type="text" id="tour-number" name="tour-number">
-                <button type="button">検索</button>
+                <form method="post" action="/search-by-number/">
+                    {% csrf_token %}
+                    <label for="tour-number">番号で検索:</label>
+                    <input type="text" id="tour-number" name="tour-number">
+                    <button type="button">検索</button>
+                </form>
             </div>
+            {% for tour in tourlist %}
             <div class="results">
                 <div class="result-item">
-                    <span>検索結果1</span>
-                    <button type="button">変更</button>
-                </div>
-                <div class="result-item">
-                    <span>検索結果2</span>
-                    <button type="button">変更</button>
-                </div>
-                <div class="result-item">
-                    <span>検索結果3</span>
+                    <strong>{{ tour.id }}</strong>
+                    <span>{{ tour.tour_name }}</span>
                     <button type="button">変更</button>
                 </div>
             </div>
