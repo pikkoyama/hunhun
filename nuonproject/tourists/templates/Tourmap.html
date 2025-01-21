@@ -1,3 +1,4 @@
+ {% comment %}  さくちゃん1/14  {% endcomment %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -209,6 +210,7 @@
         document.getElementById('map-title').textContent = texts[language].mapTitle;
         document.getElementById('pin-header').textContent = texts[language].pinHeader;
 
+{% comment %}  さくちゃん1/21  {% endcomment %}
         // ピンの情報を取得して表示
         {% comment %} fetch('/api/pins/') {% endcomment %}// ピンの情報を取得して表示
         fetch("{% url 'tourists:get_pins' %}")
@@ -221,24 +223,22 @@
                 return response.json();
             })
             .then(pins => {
+                console.log('取得したピン:', pins);  // 追加
                 var pinList = document.getElementById('pin-list');
                 console.log(`既存のピンをクリア`);
                 pinList.innerHTML = '';  // 既存のピンをクリア
 
                 pins.forEach(function(pin, index) {
-                    console.log(`pin.latitude:`, pin.latitude);
-                    console.log(`pin.longitude:`, pin.longitude);
+                    console.log(`pin:`, pin);
+                    console.log(`place_${language}:`, pin["place_" + language]);
+                    console.log(`explanation_${language}:`, pin["explanation_" + language]);
                     
-                    // 修正：pin.latitude または pin.longitude が null または undefined の場合にスキップ
-                    if (pin.latitude != null && pin.longitude != null) {  // null チェック
-                        console.log(`TRUE`);
-                        
-                        // マーカーを追加
+                    if (pin.latitude != null && pin.longitude != null) {
                         var marker = L.marker([pin.latitude, pin.longitude]).addTo(map)
-                            .bindPopup('<b>' + pin.place + '</b><br>' + pin["explanation_" + language]);
+                            .bindPopup('<b>' + pin["place_" + language] + '</b>');  // ピンのポップアップに場所の名前を表示
 
                         var li = document.createElement('li');
-                        li.textContent = (index + 1) + '. ' + pin.place;
+                        li.textContent = (index + 1) + '. ' + pin["place_" + language];  // 一覧の数字の横に場所の名前を表示
 
                         var toggleButton = document.createElement('button');
                         toggleButton.textContent = '▼';
@@ -250,13 +250,13 @@
 
                         var description = document.createElement('div');
                         description.className = 'description';
-                        description.textContent = pin["explanation_" + language];
+                        description.textContent = pin["explanation_" + language];  // 説明を表示
 
                         var speakButton = document.createElement('button');
                         speakButton.textContent = '🔊';
                         speakButton.className = 'speak-button';
                         speakButton.onclick = function() {
-                            var utterance = new SpeechSynthesisUtterance(pin["explanation_" + language]);
+                            var utterance = new SpeechSynthesisUtterance(pin["explanation_" + language]);  // 音声再生部分に説明を使用
                             utterance.lang = language;
                             speechSynthesis.speak(utterance);
                         };
@@ -279,11 +279,7 @@
                 console.error('Error fetching pins:', error);  // エラーメッセージをブラウザログに表示
             });
 
-        // タイトルをクリックしたとき、初期位置に戻る処理
-        document.getElementById('map-title').onclick = function() {
-            map.setView(initialView, initialZoom);
-        };
-
+{% comment %}  さくちゃん1/15  {% endcomment %}
         // ポップアップを閉じる関数
         function closePopup() {
             map.closePopup();

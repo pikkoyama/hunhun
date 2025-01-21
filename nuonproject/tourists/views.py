@@ -16,6 +16,7 @@ class TourmapView(TemplateView):
 # さくちゃん1/15
 from django.http import JsonResponse
 from guide.models import Information_pin  # guideアプリからインポート
+import html
 # import requests
 
 def get_pins(request):
@@ -28,7 +29,8 @@ def get_pins(request):
 
     for pin in pins:
         print('========================================================================-')
-        print('pin:',pin)
+        print('pin:', pin)
+
         # ジオコーディング
         geocode_params = {
             'address': pin.address,
@@ -50,31 +52,37 @@ def get_pins(request):
             latitude = None
             longitude = None
 
+
+# さくちゃん 1/20
         # 翻訳処理
         translations = {}
         for target_lang in ['en', 'zh', 'zh-TW', 'ko']:
             translate_params = {
-                'q': pin.explanation,
+                'q': html.escape(pin.explanation),
                 'source': 'ja',
                 'target': target_lang,
                 'key': api_key
             }
             translate_response = requests.get(translate_url, params=translate_params)
             translate_result = translate_response.json()
+            print(f"Translation API Response for {target_lang}:", translate_result)  # 追加
             if 'data' in translate_result and 'translations' in translate_result['data']:
-                translations[target_lang] = translate_result['data']['translations'][0].get('translatedText', '')
+                translations[target_lang] = html.unescape(translate_result['data']['translations'][0].get('translatedText', ''))
             else:
                 print(f"Translation failed for {target_lang}: {translate_result}")
                 translations[target_lang] = ''
 
         pin_data = {
+            "place": pin.place,
+            "place_en": translations['en'],
+            "place_zh": translations['zh'],
+            "place_zh_tw": translations['zh-TW'],
+            "place_ko": translations['ko'],
             "explanation": pin.explanation,
             "explanation_en": translations['en'],
             "explanation_zh": translations['zh'],
             "explanation_zh_tw": translations['zh-TW'],
             "explanation_ko": translations['ko'],
-            "address": pin.address,
-            "place": pin.place,
             "latitude": latitude,
             "longitude": longitude,
         }
