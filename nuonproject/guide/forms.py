@@ -63,4 +63,8 @@ class TourRegistrationForm(forms.ModelForm):
             if user:
                 self.fields['number'].initial = user  # ユーザーのインスタンスを初期値として設定
 
+# あした
+class SearchForm(forms.Form):
+    keyword = forms.CharField(label='キーワード', max_length=100, required=True)
+
       
