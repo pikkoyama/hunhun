@@ -81,7 +81,8 @@
         }
     </style>
 
-    <form action="/submit" method="POST">
+    <form action="" method="POST">
+        {% csrf_token %}
         <label for="name">ツアー名</label>
         <input type="text" id="name" name="name" required><br><br>
 
