@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
-from .forms import CaseRegistrationForm
+from .forms import CaseRegistrationForm, TourRegistrationForm
 from django.views.generic.edit import FormView, CreateView
 from .models import Case, Tour
 from django.urls import reverse_lazy
@@ -109,8 +109,8 @@ class TourRegistrationView(TemplateView):
     def form_valid(self, form):
         # フォームが有効な場合の処理
         tour = form.save(commit=False)
-        case.user = self.request.user  # ユーザーを関連付け
-        case.save()
+        tour.user = self.request.user  # ユーザーを関連付け
+        tour.save()
         return super().form_valid(form)
 
 class InformationPinChangeView(TemplateView):

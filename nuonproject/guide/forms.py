@@ -46,15 +46,13 @@ class TourRegistrationForm(forms.ModelForm):
 # koyama totyuu
     class Meta:
         model = Tour
-        fields = ['tour_name', 'number','location','tour_date','information_pin']  # モデルのフィールドを指定
-# ↓ここから書きましょう
+        fields = ['tour_name', 'number','location','tour_date']  # モデルのフィールドを指定
         
-    case_number = forms.CharField(max_length=30, label='事例番号')
+    tour_name = forms.CharField(max_length=30, label='ツアー番号')
     number = forms.ModelChoiceField(queryset=CustomUser.objects.all(), label="社員番号", empty_label="社員番号を選択")
-    title = forms.CharField(max_length=30, label='タイトル')
-    category = forms.ModelChoiceField(queryset=Category.objects.all(), label='カテゴリ', empty_label="カテゴリを選択")
-    main = forms.CharField(widget=forms.Textarea, label='本文')
-    post_date = forms.DateField(initial=timezone.now, widget=forms.DateInput(attrs={'type': 'date'}), label="投稿日")
+    location = forms.CharField(max_length=30, label='場所')
+    tour_date = forms.DateField(initial=timezone.now, widget=forms.DateInput(attrs={'type': 'date'}), label="ツアー日")
+    
 
     def __init__(self, *args, **kwargs):
             # 'user' を kwargs から取得
