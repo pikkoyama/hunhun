@@ -58,7 +58,7 @@ def get_pins(request):
         translations = {}
         for target_lang in ['en', 'zh', 'zh-TW', 'ko']:
             translate_params = {
-                'q': html.escape(pin.explanation),
+                'q': html.escape(pin.place),
                 'source': 'ja',
                 'target': target_lang,
                 'key': api_key
