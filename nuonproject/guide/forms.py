@@ -62,8 +62,7 @@ class TourRegistrationForm(forms.ModelForm):
             # ログインユーザーが存在する場合、そのユーザーを初期値として設定
             if user:
                 self.fields['number'].initial = user  # ユーザーのインスタンスを初期値として設定
-
-# あした
+#あした
 class SearchForm(forms.Form):
     keyword = forms.CharField(label='キーワード', max_length=100, required=True)
 
