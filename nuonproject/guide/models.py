@@ -4,6 +4,7 @@ import random
 from django.utils import timezone
 
 # 1/8小山---------------------------
+# 1/21小山--------------------------
 
 # カスタムユーザー用
 # 社員番号の採番乱数関数
@@ -56,11 +57,12 @@ class GuidePin(models.Model):
 
 # ツアーモデル
 class Tour(models.Model):
+    tour_number = models.CharField(max_length=8, verbose_name="ツアー番号", primary_key=True, default="00000000")
     number = models.ForeignKey(CustomUser,verbose_name="社員番号",on_delete=models.CASCADE)						
     tour_name = models.CharField(verbose_name="ツアー名", max_length=50)
     location = models.CharField(verbose_name="場所", max_length=4)
     tour_date = models.DateTimeField(verbose_name="ツアー日")
-    information_pin = models.IntegerField(verbose_name="案内ピン")
+    # information_pin_number = models.IntegerField(verbose_name="案内ピン番号")
     
     # ツアーモデルが呼ばれたときの設定
     class Meta:
@@ -70,16 +72,18 @@ class Tour(models.Model):
 
 # 案内ピンモデル
 class Information_pin(models.Model):
-    # id項目は自動生成で対応
-    explanation   = models.CharField(verbose_name="説明",max_length=700)
+    information_pin_id = models.IntegerField(verbose_name="案内ピン番号",default=0, primary_key=True)
+    tour_number = models.ForeignKey(Tour, related_name='information_pin',verbose_name="ツアー番号", on_delete=models.CASCADE)
+    explanation = models.CharField(verbose_name="説明",max_length=700)
     address = models.CharField(verbose_name="住所", max_length=50)
     place = models.CharField(verbose_name="場所", max_length=30, default="unknown")
+
 
     # モデルが参照されたときの設定
     class Meta:
         verbose_name_plural = "説明"
     def __str__(self) -> str:
-        return f"{self.explanation[:10]}:{self.place[:10]}"
+        return f"{self.place[:10]}:{self.explanation[:10]}"
         
 # カテゴリモデル
 class Category(models.Model):
