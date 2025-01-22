@@ -74,6 +74,7 @@ class Tour(models.Model):
 class Information_pin(models.Model):
     information_pin_id = models.IntegerField(verbose_name="案内ピン番号",default=0, primary_key=True)
     tour_number = models.ForeignKey(Tour, related_name='information_pin',verbose_name="ツアー番号", on_delete=models.CASCADE)
+    tour_name = models.CharField(verbose_name="ツアー名",max_length=30)
     explanation = models.CharField(verbose_name="説明",max_length=700)
     address = models.CharField(verbose_name="住所", max_length=50)
     place = models.CharField(verbose_name="場所", max_length=30, default="unknown")
