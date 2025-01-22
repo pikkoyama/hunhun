@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
-from .forms import CaseRegistrationForm, TourRegistrationForm
+from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm
 from django.views.generic.edit import FormView, CreateView
 from .models import Case, Tour
 from django.urls import reverse_lazy
@@ -157,3 +157,22 @@ class AuthorizeCaseView(View):
             return JsonResponse({"status": "error", "message": "Invalid JSON format"})
         except Case.DoesNotExist:
             return JsonResponse({"status": "error", "message": "Case not found"})
+class SearchView(View):
+    def search_view(request):
+        """
+        同じ画面で検索フォームと結果を表示するビュー関数。
+        """
+        posts = None  # 検索結果を格納する変数
+        
+        # POSTリクエストの場合、検索処理を実行
+        if request.method == 'POST':
+            form = SearchForm(request.POST)  # POSTデータをフォームにバインド
+            if form.is_valid():
+                keyword = form.cleaned_data['keyword']  # キーワードを取得
+                # 部分一致でデータをフィルタリング
+                posts = Tour.objects.filter(content__icontains=keyword)
+        else:
+            form = SearchForm()  # 初回アクセス時は空のフォームを表示
+
+        # 検索フォームと結果を同じテンプレートに渡してレンダリング
+        return render(request, 'search.html', {'form': form, 'posts': posts})
