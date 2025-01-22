@@ -81,6 +81,7 @@ class GuideTopView(TemplateView):
 
     template_name = 'GuideTop.html'
 # 個やア　1/20
+#asdf
 class TourSearchView(TemplateView):
     #  とりあえずツアー一覧表示
      template_name = 'TourSearch.html'
@@ -157,6 +158,8 @@ class AuthorizeCaseView(View):
             return JsonResponse({"status": "error", "message": "Invalid JSON format"})
         except Case.DoesNotExist:
             return JsonResponse({"status": "error", "message": "Case not found"})
+        
+################################
 class SearchView(View):
     def search_view(request):
         """
