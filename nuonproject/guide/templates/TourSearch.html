@@ -120,10 +120,23 @@
                 <form method="post" action="/search-by-number/">
                     {% csrf_token %}
                     <label for="tour-number">番号で検索:</label>
-                    <input type="text" id="tour-number" name="tour-number">
+                    {{ form.keyword }}
                     <button type="button">検索</button>
                 </form>
             </div>
+
+            {% if posts %}
+            <h2>検索結果:</h2>
+            <ul>
+                {% for post in posts %}
+                    <li>{{ post.title }}: {{ post.content }}</li>
+                {% endfor %}
+            </ul>
+        {% elif posts is not None %}
+            <!-- 検索結果がない場合のメッセージ -->
+            <p>一致する投稿がありません。</p>
+        {% endif %}
+    
             {% for tour in tourlist %}
             <div class="results">
                 <div class="result-item">
