@@ -112,7 +112,7 @@
                 <form method="post" action="/search-by-name/">
                     {% csrf_token %}
                     <label for="tour-name">ツアー名で検索:</label>
-                    <input type="text" id="tour-name" name="tour-name">
+                    {{ form.keyword }}
                     <button type="button">検索</button>
                 </form>
             </div>
