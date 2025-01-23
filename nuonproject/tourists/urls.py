@@ -5,14 +5,14 @@ from . import views
 app_name = 'tourists'
 
 urlpatterns = [
-    path("tourmap/", 
+    path('tourmap/', 
          views.TourmapView.as_view(), 
-         name="Tourmap"
+         name='Tourmap'
          ),
 
-    path("languageselect/", 
+    path('languageselect/', 
          views.LanguageSelectView.as_view(), 
-         name="LanguageSelect"
+         name='LanguageSelect'
          ),
 
     path('api/pins/', 

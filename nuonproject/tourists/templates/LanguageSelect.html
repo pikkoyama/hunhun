@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang='ja'>
 <head>
-    <meta charset="UTF-8">
+    <meta charset='UTF-8'>
     <title>言語選択画面</title>
     <style>
         body {
@@ -60,28 +60,28 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class='container'>
         <h1>案内言語の選択</h1>
         <h3>Please select the guidance language.</h3>
-        <form method="get" action="{% url 'tourists:Tourmap' %}">
-            <div class="radio-group">
+        <form method='get' action='{% url 'tourists:Tourmap' %}'>
+            <div class='radio-group'>
                 <label>
-                    <input type="radio" name="language" value="ja"> 日本語
+                    <input type='radio' name='language' value='ja'> 日本語
                 </label>
                 <label>
-                    <input type="radio" name="language" value="en"> English
+                    <input type='radio' name='language' value='en'> English
                 </label>
                 <label>
-                    <input type="radio" name="language" value="zh"> 中文（簡体字）
+                    <input type='radio' name='language' value='zh'> 中文（簡体字）
                 </label>
                 <label>
-                    <input type="radio" name="language" value="zh-TW"> 中文（繁體字）
+                    <input type='radio' name='language' value='zh-TW'> 中文（繁體字）
                 </label>
                 <label>
-                    <input type="radio" name="language" value="ko"> 한국어
+                    <input type='radio' name='language' value='ko'> 한국어
                 </label>
             </div>
-            <button type="submit" class="btn-next">次へ</button>
+            <button type='submit' class='btn-next'>次へ</button>
         </form>
     </div>
 </body>

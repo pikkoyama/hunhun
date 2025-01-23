@@ -40,7 +40,7 @@ def get_pins(request):
         geocode_result = geocode_response.json()
 
         # レスポンスをログに記録
-        print("Geocode API Response:", geocode_result)
+        print('Geocode API Response:', geocode_result)
 
         # ジオコーディング結果がOKか確認
         if geocode_result['status'] == 'OK' and 'geometry' in geocode_result['results'][0]:
@@ -66,11 +66,11 @@ def get_pins(request):
             }
             translate_response = requests.get(translate_url, params=translate_params)
             translate_result = translate_response.json()
-            print(f"Translation API Response for {target_lang}:", translate_result)  # 追加
+            print(f'Translation API Response for {target_lang}:', translate_result)  # 追加
             if 'data' in translate_result and 'translations' in translate_result['data']:
                 translations[target_lang] = html.unescape(translate_result['data']['translations'][0].get('translatedText', ''))
             else:
-                print(f"Translation failed for {target_lang}: {translate_result}")
+                print(f'Translation failed for {target_lang}: {translate_result}')
                 translations[target_lang] = ''
 
 
@@ -82,26 +82,26 @@ def get_pins(request):
             }
             translate_response = requests.get(translate_url, params=translate_params)
             translate_result = translate_response.json()
-            print(f"Translation API Response for {target_lang}:", translate_result)  # 追加
+            print(f'Translation API Response for {target_lang}:', translate_result)  # 追加
             if 'data' in translate_result and 'translations' in translate_result['data']:
                 translations_explanation[target_lang] = html.unescape(translate_result['data']['translations'][0].get('translatedText', ''))
             else:
-                print(f"Translation failed for {target_lang}: {translate_result}")
+                print(f'Translation failed for {target_lang}: {translate_result}')
                 translations_explanation[target_lang] = ''
 
         pin_data = {
-            "place_ja": pin.place,
-            "place_en": translations['en'],
-            "place_zh": translations['zh'],
-            "place_zh-TW": translations['zh-TW'],
-            "place_ko": translations['ko'],
-            "explanation_ja": pin.explanation,
-            "explanation_en": translations_explanation['en'],
-            "explanation_zh": translations_explanation['zh'],
-            "explanation_zh-TW": translations_explanation['zh-TW'],
-            "explanation_ko": translations_explanation['ko'],
-            "latitude": latitude,
-            "longitude": longitude,
+            'place_ja': pin.place,
+            'place_en': translations['en'],
+            'place_zh': translations['zh'],
+            'place_zh-TW': translations['zh-TW'],
+            'place_ko': translations['ko'],
+            'explanation_ja': pin.explanation,
+            'explanation_en': translations_explanation['en'],
+            'explanation_zh': translations_explanation['zh'],
+            'explanation_zh-TW': translations_explanation['zh-TW'],
+            'explanation_ko': translations_explanation['ko'],
+            'latitude': latitude,
+            'longitude': longitude,
         }
 
         print(pin_data)  # デバッグ用：APIレスポンスを確認
