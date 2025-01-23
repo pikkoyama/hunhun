@@ -24,6 +24,11 @@
                 align-items: center;
                 height: 100vh;
             }
+
+            .btn-next2 {
+                margin-left: auto; /* 要素を右寄せ */
+            }
+
         </style>
     </head>
     <body>
@@ -51,6 +56,7 @@
                  {{form.main}}<br><br>
 
                 <button type="submit" class="btn-next">登録</button>
+                <a href="{% url 'guide:guidetop' %}" class="btn-next2">戻る</a>
             </form>
         </div>
     </body>
