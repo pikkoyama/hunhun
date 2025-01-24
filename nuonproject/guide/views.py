@@ -141,7 +141,13 @@ class TourRegistrationView(FormView):
         # 保存
         tour.save()
 
+
         return super().form_valid(form)
+    # エラー探し用のコード
+    def form_invalid(self, form):
+        # フォームが無効な場合の処理
+        print("フォームのエラー: ", form.errors)  # エラー内容を出力
+        return super().form_invalid(form)
 
 class InformationPinChangeView(TemplateView):
     # あづーま
