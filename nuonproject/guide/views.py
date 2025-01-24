@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse
 from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm
@@ -207,3 +208,47 @@ class SearchView(View):
 
         # 検索フォームと結果を同じテンプレートに渡してレンダリング
         return render(request, 'search.html', {'form': form, 'posts': posts})
+    
+# ねぎし
+from django.http import HttpResponse
+
+from io import BytesIO
+from django.urls import reverse
+import qrcode
+class QRCodeView(TemplateView):
+    template_name = "qr_code_page.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tour_number = kwargs.get('tour_number')  # URLからツアー番号を取得
+        tour = get_object_or_404(Tour, tour_number=tour_number)
+        context['tour_name'] = tour.tour_name
+        context['tour_number'] = tour.tour_number
+        
+        
+        # ドメイン名を含めてフルURLを生成
+        url = settings.SITE_URL + reverse('tourists:LanguageSelect')
+        # + f"?tour_number={tour_number}"
+        
+        # 生成されたフルURLをログに出力
+        print(f"生成されたQRコード用URL: {url}")
+        
+        # QRコードに渡すURLを設定
+        context['qr_url'] = url
+        
+        return context
+    
+from django.shortcuts import get_object_or_404
+
+class QRCodePageView(TemplateView):
+    template_name = "qr_code_page.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tour_number = kwargs.get("tour_number")
+        tour = get_object_or_404(Tour, tour_number=tour_number)
+
+        # QRコード用のURLを渡す
+        context["qr_url"] = f"https://example.com/tour/{tour_number}/details"
+        context["tour_name"] = tour.tour_name
+        return context

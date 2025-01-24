@@ -141,4 +141,6 @@ EMAIL_PORT = 587                         # SMTPサーバーのポート番号
 EMAIL_HOST_USER = os.environ['EMAIL_ADDRESS']     # Office365のアドレスを入力
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD'] # Office365のパスワードを入力
 EMAIL_USE_TLS = True # SMTP サーバと通信する際に TLS (セキュア) 接続を使う]
+
+SITE_URL = "https://tourguide.com"
  

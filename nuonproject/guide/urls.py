@@ -2,7 +2,7 @@
 from django.urls import path
 from . import views
 from django.urls import path
-from .views import AuthorizeCaseView
+from .views import AuthorizeCaseView, QRCodeView
 
 app_name = 'guide'
 
@@ -26,5 +26,6 @@ urlpatterns = [
     path("caseregistconfirmation/",views.CaseRegistConfirmationView.as_view(),name="caseregistconfirmation"),
     # 根岸
     path('authorize_case/', AuthorizeCaseView.as_view(), name='authorize_case'),
+    path('tour/<str:tour_number>/qr/', QRCodeView.as_view(), name='qr_code_view'),
 ]
 # ---------------------------------------------------------
