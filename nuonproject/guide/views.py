@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm
 from django.views.generic.edit import FormView, CreateView
-from .models import Case, Tour
+from .models import Case, Tour, CustomUser
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
@@ -40,7 +40,7 @@ class CaseListView(TemplateView):
 class CaseRegistrationView(FormView):
     template_name = 'CaseRegistration.html'
     form_class = CaseRegistrationForm  # 直接定義したフォームクラスを使用
-    success_url = reverse_lazy('guide:caseregistconfirmation')
+    success_url = reverse_lazy('guide:guidemap')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -67,7 +67,21 @@ class CaseRegistrationView(FormView):
     #     return reverse('guide:CaseRegistConfirmation')  # 登録成功後のページにリダイレクト
 
 class CaseRegistConfirmationView(TemplateView):
-    template_name = "CaseRegistConfirmation.html"
+    template_name = 'CaseRegistration.html'
+    form_class = CaseRegistrationForm  # 直接定義したフォームクラスを使用
+    success_url = reverse_lazy('guide:caseregistration')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # 現在のログインユーザーをフォームに渡す
+        return kwargs
+
+    def form_valid(self, form):
+        # フォームが有効な場合の処理
+        case = form.save(commit=False)
+        case.user = self.request.user  # ユーザーを関連付け
+        case.save()
+        return super().form_valid(form)
 
 # class SelectPrefView(TemplateView):
 
@@ -80,6 +94,10 @@ class GuidancePinDeleteView(TemplateView):
 class GuideTopView(TemplateView):
 
     template_name = 'GuideTop.html'
+
+class GuideMapView(TemplateView):
+    template_name='GuideMap.html'
+
 # 個やア　1/20
 #asdf
 class TourSearchView(TemplateView):
@@ -95,12 +113,12 @@ class TourSearchView(TemplateView):
 
     #  template_name = 'TourSearch.html'
      
-class TourRegistrationView(TemplateView):
+class TourRegistrationView(FormView):
     # 小山
     template_name = "TourRegistration.html"
     
     form_class = TourRegistrationForm  # 直接定義したフォームクラスを使用
-    success_url = reverse_lazy('guide:toursearch')
+    success_url = reverse_lazy('guide:guidemap')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -108,10 +126,20 @@ class TourRegistrationView(TemplateView):
         return kwargs
 
     def form_valid(self, form):
-        # フォームが有効な場合の処理
+      # フォームが有効な場合の処理
         tour = form.save(commit=False)
-        tour.user = self.request.user  # ユーザーを関連付け
+        
+        # ユーザーを自動的に関連付け（社員番号は不要）
+        tour.user = self.request.user  # ログインユーザーを関連付け
+        tour.number = self.request.user  # `number` フィールドには現在のログインユーザーを設定
+
+        # debug
+        print(f"1{tour.user}---------------------------")
+        print(f"2{tour.number}---------------------------")
+
+        # 保存
         tour.save()
+
         return super().form_valid(form)
 
 class InformationPinChangeView(TemplateView):

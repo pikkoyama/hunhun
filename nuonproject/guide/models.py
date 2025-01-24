@@ -77,7 +77,7 @@ class Information_pin(models.Model):
     tour_name = models.CharField(verbose_name="ツアー名",max_length=30)
     explanation = models.CharField(verbose_name="説明",max_length=700)
     address = models.CharField(verbose_name="住所", max_length=50)
-    place = models.CharField(verbose_name="場所", max_length=30, default="unknown")
+    pref = models.CharField(verbose_name="都道府県", max_length=30, default="unknown")
 
 
     # モデルが参照されたときの設定
