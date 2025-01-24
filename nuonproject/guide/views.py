@@ -225,10 +225,8 @@ class QRCodeView(TemplateView):
         context['tour_name'] = tour.tour_name
         context['tour_number'] = tour.tour_number
         
-        
         # ドメイン名を含めてフルURLを生成
-        url = settings.SITE_URL + reverse('tourists:LanguageSelect')
-        # + f"?tour_number={tour_number}"
+        url = settings.SITE_URL + reverse('tourists:LanguageSelect')+ f"?tour_number={tour_number}"
         
         # 生成されたフルURLをログに出力
         print(f"生成されたQRコード用URL: {url}")
