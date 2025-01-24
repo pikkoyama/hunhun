@@ -1,29 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode
-from django.shortcuts import render, redirect
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.urls import reverse
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth import get_user_model
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_decode
-from django.contrib.auth.models import User
-from django.contrib import messages
-from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
-from django.utils.encoding import force_str
-
-# 小山 1/7--------------------------------
+from django.contrib.auth.views import LoginView
 from django.views.generic.base import TemplateView
 
-from django.contrib.auth.views import LoginView
-from django.shortcuts import redirect
+# 小山 1/7--------------------------------
 
-from django.shortcuts import render, redirect
-from django.contrib import messages
 
 class ChangePasswordView(TemplateView):
     def get(self, request):
@@ -54,8 +43,14 @@ class ChangePasswordView(TemplateView):
             'reset_url': reset_url,
         })
 
-        # メール送信
-        send_mail(subject, message, 'oom2325066@stu.o-hara.ac.jp', [user.email])
+        # HTML形式のメールを送信
+        send_mail(
+            subject,
+            message,
+            'oom2325066@stu.o-hara.ac.jp',  # 送信者のメールアドレス
+            [user.email],  # 受信者のメールアドレス
+            html_message=message  # HTMLメールとして送信
+        )
 
         return redirect('accounts:password_reset_done')
 
@@ -144,7 +139,13 @@ class SinInView(LoginView):
         if self.request.user.is_superuser:
             return reverse_lazy('accounts:admin_dashboard')  # 管理者用ダッシュボード
         else:
-            return reverse_lazy('accounts:home')  # 一般ユーザー画
+            return reverse_lazy('accounts:home')  # 一般ユーザー画面
+
+    # フォームが無効な場合の処理
+    def form_invalid(self, form):
+        # ログイン失敗時のエラーメッセージを表示
+        messages.error(self.request, "社員番号またはパスワードが間違っています。")
+        return super().form_invalid(form)
 # ------------------------------------------/
 from django.contrib.auth.views import LogoutView
 from django.urls import reverse_lazy
