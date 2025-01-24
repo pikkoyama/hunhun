@@ -43,13 +43,14 @@ class CaseRegistrationForm(forms.ModelForm):
             self.fields['number'].initial = user  # ユーザーのインスタンスを初期値として設定
 # ツアー登録用フォーム
 class TourRegistrationForm(forms.ModelForm):
-# koyama totyuu
+# koyama 
     class Meta:
         model = Tour
-        fields = ['tour_name', 'number','location','tour_date']  # モデルのフィールドを指定
+        fields = ['tour_number','tour_name', 'number','location','tour_date']  # モデルのフィールドを指定
         
-    tour_name = forms.CharField(max_length=30, label='ツアー番号')
-    number = forms.ModelChoiceField(queryset=CustomUser.objects.all(), label="社員番号", empty_label="社員番号を選択")
+    tour_number = forms.CharField(max_length=8, label='ツアー番号')
+    tour_name = forms.CharField(max_length=30, label='ツアー名')
+    number = forms.CharField(max_length=8,label="社員番号")
     location = forms.CharField(max_length=30, label='場所')
     tour_date = forms.DateField(initial=timezone.now, widget=forms.DateInput(attrs={'type': 'date'}), label="ツアー日")
     
@@ -58,10 +59,11 @@ class TourRegistrationForm(forms.ModelForm):
             # 'user' を kwargs から取得
             user = kwargs.pop('user', None)
             super().__init__(*args, **kwargs)
-
+            self.fields['number'].widget.attrs['readonly'] = True  # 社員番号は読み取り専用
             # ログインユーザーが存在する場合、そのユーザーを初期値として設定
             if user:
-                self.fields['number'].initial = user  # ユーザーのインスタンスを初期値として設定
+                self.fields['number'].initial = user.number  # ユーザーのインスタンスを初期値として設定
+                
 #################################
 class SearchForm(forms.Form):
     keyword = forms.CharField(label='キーワード', max_length=100,required=True)

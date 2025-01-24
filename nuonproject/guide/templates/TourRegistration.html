@@ -81,16 +81,16 @@
         }
     </style>
 
-    <form action="" method="POST">
+    <form method="post">
         {% csrf_token %}
-        <label for="name">ツアー名</label>
-        <input type="text" id="name" name="name" required><br><br>
-
         <label for="tourNumber">ツアー番号</label>
-        <input type="text" id="tourNumber" name="tourNumber" required><br><br>
+        {{form.tour_number}}<br><br>
 
-        <label for="tourDate">ツアー日</label>
-        <input type="date" id="tourDate" name="tourDate" required><br><br>
+        <label for="number">社員番号</label>
+        {{form.number}}<br><br>
+
+        <label for="tourName">ツアー名</label>
+        {{form.tour_name}}<br><br>
 
         <label for="prefecture">都道府県:</label>
         <select id="prefecture" name="prefecture" required>
@@ -143,6 +143,9 @@
             <option value="鹿児島県">鹿児島県</option>
             <option value="沖縄県">沖縄県</option>
         </select><br><br>
+
+        <label for="tourDate">ツアー日</label>
+        {{form.tour_date}}<br><br>
 
         <button type="submit">登録</button>
     </form>

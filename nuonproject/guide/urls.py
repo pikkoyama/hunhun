@@ -14,6 +14,9 @@ urlpatterns = [
     # path('selectpref/', views.SelectPrefView.as_view(), name='selectpref'),
     path('guidancepindelete/', views.GuidancePinDeleteView.as_view(), name='guidancepindelete'),
     path('guidetop/', views.GuideTopView.as_view(), name='guidetop'),
+    # koyama --------------------
+    path('guidemap/', views.GuideMapView.as_view(), name='guidemap'),
+    # ---------------------------
     path('toursearch/', views.TourSearchView.as_view(), name='toursearch'),
 
     path("Informationpinchange/",views.InformationPinChangeView.as_view(),name="informationpinchange"),
