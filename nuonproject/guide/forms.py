@@ -52,7 +52,7 @@ class TourRegistrationForm(forms.ModelForm):
     tour_name = forms.CharField(max_length=30, label='ツアー名')
     number = forms.CharField(max_length=8,label="社員番号")
     location = forms.CharField(max_length=30, label='場所')
-    tour_date = forms.DateField(initial=timezone.now, widget=forms.DateInput(attrs={'type': 'date'}), label="ツアー日")
+    tour_date = forms.DateTimeField(initial=timezone.now, widget=forms.DateInput(attrs={'type': 'date'}), label="ツアー日")
 
 
     def __init__(self, *args, **kwargs):
@@ -68,7 +68,6 @@ class TourRegistrationForm(forms.ModelForm):
         """社員番号から対応するCustomUserインスタンスを取得"""
         number = self.cleaned_data.get('number')
         print(f"{number}")
-        print(f"{TourRegistrationForm()}")
         
         try:
             return CustomUser.objects.get(number=number)  # 社員番号からインスタンスを取得
