@@ -53,7 +53,7 @@ class TourRegistrationForm(forms.ModelForm):
     number = forms.CharField(max_length=8,label="社員番号")
     location = forms.CharField(max_length=30, label='場所')
     tour_date = forms.DateField(initial=timezone.now, widget=forms.DateInput(attrs={'type': 'date'}), label="ツアー日")
-    
+
 
     def __init__(self, *args, **kwargs):
             # 'user' を kwargs から取得
@@ -63,6 +63,17 @@ class TourRegistrationForm(forms.ModelForm):
             # ログインユーザーが存在する場合、そのユーザーを初期値として設定
             if user:
                 self.fields['number'].initial = user.number  # ユーザーのインスタンスを初期値として設定
+
+    def clean_number(self):
+        """社員番号から対応するCustomUserインスタンスを取得"""
+        number = self.cleaned_data.get('number')
+        print(f"{number}")
+        print(f"{TourRegistrationForm()}")
+        
+        try:
+            return CustomUser.objects.get(number=number)  # 社員番号からインスタンスを取得
+        except CustomUser.DoesNotExist:
+            raise ValidationError("指定された社員番号のユーザーが存在しません。")
                 
 #################################
 class SearchForm(forms.Form):
