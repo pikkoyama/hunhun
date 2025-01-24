@@ -24,6 +24,22 @@
                 align-items: center;
                 height: 100vh;
             }
+
+            .btn-next2 {
+                background-color: green;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                margin: 4px 2px;
+                cursor: pointer;
+                border-radius: 12px;
+                margin-left: 200px; /* 左側に20pxの余白を追加 */
+            }
+
         </style>
     </head>
     <body>
@@ -51,6 +67,7 @@
                  {{form.main}}<br><br>
 
                 <button type="submit" class="btn-next">登録</button>
+                <a href="{% url 'guide:guidetop' %}" class="btn-next2">戻る</a>
             </form>
         </div>
     </body>
