@@ -214,7 +214,7 @@ from django.http import HttpResponse
 
 from io import BytesIO
 from django.urls import reverse
-import qrcode
+# import qrcode
 class QRCodeView(TemplateView):
     template_name = "qr_code_page.html"
 
