@@ -68,7 +68,7 @@ class Tour(models.Model):
     class Meta:
         verbose_name_plural = "ツアー"
     def __str__(self) -> str:
-        return f"{self.tour_name[:10]}({self.tour_date})"
+        return f"{self.tour_number[:10]}"
 
 # 案内ピンモデル
 class Information_pin(models.Model):
