@@ -7,6 +7,7 @@ from .models import Case, Tour, CustomUser
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
+from django.contrib import messages
 
 # 根岸
 from django.http import JsonResponse
@@ -128,6 +129,9 @@ class TourRegistrationView(FormView):
 
     def form_valid(self, form):
       # フォームが有効な場合の処理
+        # ツアー作成の後、フラッシュメッセージを設定
+        messages.success(self.request, 'ツアーが作成されました。')
+        print(messages)
         tour = form.save(commit=False)
         
         # ユーザーを自動的に関連付け（社員番号は不要）
