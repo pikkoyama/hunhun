@@ -10,6 +10,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.views import LoginView
 from django.views.generic.base import TemplateView
+import os
 
 # 小山 1/7--------１------------------------
 
@@ -47,7 +48,7 @@ class ChangePasswordView(TemplateView):
         send_mail(
             subject,
             message,
-            'oom2325066@stu.o-hara.ac.jp',  # 送信者のメールアドレス
+            os.environ['EMAIL_ADDRESS'],  # 送信者のメールアドレス
             [user.email],  # 受信者のメールアドレス
             html_message=message  # HTMLメールとして送信
         )
