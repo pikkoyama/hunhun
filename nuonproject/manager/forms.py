@@ -35,7 +35,7 @@ class AccountCreationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['number'].widget.attrs['readonly'] = True  # 社員番号は読み取り専用
+        # self.fields['number'].widget.attrs['readonly'] = True  # 社員番号は読み取り専用
 
     # パスワードバリデーション
     def clean_password(self):

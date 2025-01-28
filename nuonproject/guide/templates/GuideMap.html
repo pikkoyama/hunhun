@@ -185,7 +185,7 @@
 <body>
     <h1 id="map-title">今回のツアーマップ</h1>
     <!-- koyama -->
-    {% if messages %}
+    {% comment %} {% if messages %}
         <div class="alert-message" id="alertMessage" style="display:none;">
             {% for message in messages %}
                 {{ message }}  <!-- メッセージを表示 -->
@@ -197,7 +197,17 @@
                     message.style.display = "block";  // メッセージを表示
                 };
             </script>
-        {% endif %}
+        {% endif %} {% endcomment %}
+    <!-- エラーメッセージと成功メッセージを表示する部分 -->
+    {% comment %} {% if messages %}
+    <div class="messages">
+      <ul>
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %} {% endcomment %}
     <!-- =========================== -->
     <div id="sidebar" class="sidebar collapsed">
         <div class="sidebar-tabs">
@@ -351,6 +361,22 @@
             }
         }; {% endcomment %}
     </script>
+    <!-- フラッシュメッセージの表示 -->
+    {% if messages %}
+        <div class="alert-message" id="alertMessage">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+
+        <script>
+            // ページが読み込まれたときにメッセージを表示
+            window.onload = function() {
+                var message = document.getElementById("alertMessage");
+                message.style.display = "block";  // メッセージを表示
+            };
+        </script>
+    {% endif %}
 
 </body>
 </html>

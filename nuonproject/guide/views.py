@@ -129,9 +129,6 @@ class TourRegistrationView(FormView):
 
     def form_valid(self, form):
       # フォームが有効な場合の処理
-        # ツアー作成の後、フラッシュメッセージを設定
-        messages.success(self.request, 'ツアーが作成されました。')
-        print(messages)
         tour = form.save(commit=False)
         
         # ユーザーを自動的に関連付け（社員番号は不要）
@@ -145,7 +142,7 @@ class TourRegistrationView(FormView):
         # 保存
         tour.save()
 
-
+        messages.success(self.request, "登録が完了しました")
         return super().form_valid(form)
     # エラー探し用のコード
     def form_invalid(self, form):
