@@ -114,6 +114,12 @@
             background: none;
         }
 
+        .address {
+            font-size: 14px;
+            color: #333;
+            margin-top: 5px;
+        }
+
         .sidebar-header {
             background: #004d40;
             color: white;
@@ -192,6 +198,11 @@
         document.getElementById('map-title').textContent = currentTexts.mapTitle;
         document.getElementById('pin-header').textContent = currentTexts.pinHeader;
 
+        // 初期位置に戻る機能を追加
+        document.getElementById('map-title').onclick = function() {
+            map.setView(initialView, initialZoom);
+        };
+
         // ピンの情報を取得して表示
         fetch("{% url 'tourists:get_pins' %}")
             .then(response => {
@@ -223,7 +234,6 @@
                         // 説明を折りたたむボタンを作成
                         var toggleButton = document.createElement('button');
                         toggleButton.textContent = '▼';
-                        
                         toggleButton.className = 'toggle-description';
                         toggleButton.onclick = function() {
                             var description = this.nextElementSibling;
@@ -232,8 +242,12 @@
 
                         var description = document.createElement('div');
                         description.className = 'description';
-                        console.log('pin["explanation_" + language]:',pin["explanation_" + language])
+                        console.log('pin["explanation_" + language]:', pin["explanation_" + language]);
                         description.textContent = pin["explanation_" + language];  // 説明を表示
+
+                        var address = document.createElement('div');
+                        address.className = 'address';
+                        address.textContent = pin["address_ja"];  // 住所を表示
 
                         var speakButton = document.createElement('button');
                         speakButton.textContent = '🔊';
@@ -245,7 +259,8 @@
                         };
 
                         li.appendChild(toggleButton);
-                        li.appendChild(description);
+                        li.appendChild(address);  // 住所を追加
+                        li.appendChild(description);  // 説明を住所の下に移動
                         li.appendChild(speakButton);
                         pinList.appendChild(li);
 

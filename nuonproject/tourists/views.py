@@ -99,6 +99,7 @@ def get_pins(request):
             'explanation_zh': translations_explanation['zh'],
             'explanation_zh-TW': translations_explanation['zh-TW'],
             'explanation_ko': translations_explanation['ko'],
+            'address_ja': pin.address,
             'latitude': latitude,
             'longitude': longitude,
         }
