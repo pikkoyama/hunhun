@@ -69,22 +69,22 @@ class CaseRegistrationView(FormView):
     # def get_success_url(self):
     #     return reverse('guide:CaseRegistConfirmation')  # 登録成功後のページにリダイレクト
 
-class CaseRegistConfirmationView(TemplateView):
-    template_name = 'CaseRegistration.html'
-    form_class = CaseRegistrationForm  # 直接定義したフォームクラスを使用
-    success_url = reverse_lazy('guide:caseregistration')
+# class CaseRegistConfirmationView(TemplateView):
+#     template_name = 'CaseRegistration.html'
+#     form_class = CaseRegistrationForm  # 直接定義したフォームクラスを使用
+#     success_url = reverse_lazy('guide:caseregistration')
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user  # 現在のログインユーザーをフォームに渡す
-        return kwargs
+#     def get_form_kwargs(self):
+#         kwargs = super().get_form_kwargs()
+#         kwargs['user'] = self.request.user  # 現在のログインユーザーをフォームに渡す
+#         return kwargs
 
-    def form_valid(self, form):
-        # フォームが有効な場合の処理
-        case = form.save(commit=False)
-        case.user = self.request.user  # ユーザーを関連付け
-        case.save()
-        return super().form_valid(form)
+#     def form_valid(self, form):
+#         # フォームが有効な場合の処理
+#         case = form.save(commit=False)
+#         case.user = self.request.user  # ユーザーを関連付け
+#         case.save()
+#         return super().form_valid(form)
 
 # class SelectPrefView(TemplateView):
 

@@ -23,7 +23,7 @@ urlpatterns = [
     path("Informationpinregistration/",views.InformationPinRegistrationView.as_view(),name="informationpinregistration"),
     path("tourregistration/",views.TourRegistrationView.as_view(),name="tourregistration"),
     path("passwordchange/",views.PasswordChangeView.as_view(),name="passwordchange"),
-    path("caseregistconfirmation/",views.CaseRegistConfirmationView.as_view(),name="caseregistconfirmation"),
+    # path("caseregistconfirmation/",views.CaseRegistConfirmationView.as_view(),name="caseregistconfirmation"),
     # 根岸
     path('authorize_case/', AuthorizeCaseView.as_view(), name='authorize_case'),
     path('tour/<str:tour_number>/qr/', QRCodeView.as_view(), name='qr_code_view'),
