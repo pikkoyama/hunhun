@@ -42,7 +42,7 @@ class CaseListView(TemplateView):
 class CaseRegistrationView(FormView):
     template_name = 'CaseRegistration.html'
     form_class = CaseRegistrationForm  # 直接定義したフォームクラスを使用
-    success_url = reverse_lazy('guide:guidemap')
+    success_url = reverse_lazy('guide:guidetop')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -50,6 +50,7 @@ class CaseRegistrationView(FormView):
         return kwargs
 
     def form_valid(self, form):
+        messages.success(self.request, '事例が登録されました')
         # フォームが有効な場合の処理
         case = form.save(commit=False)
         case.user = self.request.user  # ユーザーを関連付け

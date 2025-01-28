@@ -92,6 +92,43 @@
             font-size: 12px;
             color: #555;
         }
+        /* メッセージのスタイル */
+        .alert-message {
+            background-color: #aee1f2; /* 薄水色に設定 */
+            color: black;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999; /* 最前面に表示 */
+            display: none;
+            opacity: 0;
+            animation: fadeInOut 6s forwards;
+        }
+
+        /* フェードイン・フェードアウトアニメーション */
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                bottom: -50px; /* 初期位置を画面外に設定 */
+            }
+            10% {
+                opacity: 1;
+                bottom: 0;  /* 画面の下に表示 */
+            }
+            80% {
+                opacity: 1;
+                bottom: 0;  /* メッセージは下部に固定 */
+            }
+            100% {
+                opacity: 0;
+                bottom: -50px;  /* メッセージが下にフェードアウト */
+            }
+        }
     </style>
 </head>
 <body>
@@ -122,5 +159,20 @@
             事例閲覧・変更
         </div>
     </div>
+    <!-- メッセージ部分 -->
+    {% if messages %}
+        <div class="alert-message" id="alertMessage">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+
+        <script>
+            window.onload = function() {
+                var message = document.getElementById("alertMessage");
+                message.style.display = "block";  // メッセージを表示
+            };
+        </script>
+    {% endif %}
 </body>
 </html>
