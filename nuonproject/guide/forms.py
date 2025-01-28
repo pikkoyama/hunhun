@@ -1,6 +1,7 @@
 # 作成するフォームのインポート
 # signUp用のフォーム：CustomUser
 # logIn用のフォーム：AuthenticationForm
+import re
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 
@@ -73,7 +74,13 @@ class TourRegistrationForm(forms.ModelForm):
             return CustomUser.objects.get(number=number)  # 社員番号からインスタンスを取得
         except CustomUser.DoesNotExist:
             raise ValidationError("指定された社員番号のユーザーが存在しません。")
-                
+        
+    def clean_tour_number(self):
+        data = self.cleaned_data['tour_number']
+        # 正規表現で8桁の数字のみ許可
+        if not re.fullmatch(r'\d{8}', data):
+            raise ValidationError('ツアー番号は8桁の数字で入力してください。')
+        return data
 #################################
 class SearchForm(forms.Form):
     keyword = forms.CharField(label='キーワード', max_length=100,required=True)

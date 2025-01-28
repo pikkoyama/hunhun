@@ -148,8 +148,16 @@ class TourRegistrationView(FormView):
     # エラー探し用のコード
     def form_invalid(self, form):
         # フォームが無効な場合の処理
-        print("フォームのエラー: ", form.errors)  # エラー内容を出力
+        #print("フォームのエラー: ", form.errors)  # エラー内容を出力
         return super().form_invalid(form)
+    
+    def form_invalid(self, form):
+        messages.error(self.request, "ツアー番号が重複しています")
+        return super().form_invalid(form)
+    
+    # def form_invalid(self, form):
+    #     messages.error(self.request, "この日付では登録できません")
+    #     return super().form_invalid(form)
 
 class InformationPinChangeView(TemplateView):
     # あづーま
