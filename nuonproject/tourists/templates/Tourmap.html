@@ -236,18 +236,18 @@
                         toggleButton.textContent = '▼';
                         toggleButton.className = 'toggle-description';
                         toggleButton.onclick = function() {
-                            var description = this.nextElementSibling;
+                            var description = this.nextElementSibling.nextElementSibling;
                             description.style.display = description.style.display === 'none' ? 'block' : 'none';
                         };
+
+                        var address = document.createElement('div');
+                        address.className = 'address';
+                        address.textContent = pin["address_ja"];  // 住所を表示
 
                         var description = document.createElement('div');
                         description.className = 'description';
                         console.log('pin["explanation_" + language]:', pin["explanation_" + language]);
                         description.textContent = pin["explanation_" + language];  // 説明を表示
-
-                        var address = document.createElement('div');
-                        address.className = 'address';
-                        address.textContent = pin["address_ja"];  // 住所を表示
 
                         var speakButton = document.createElement('button');
                         speakButton.textContent = '🔊';
