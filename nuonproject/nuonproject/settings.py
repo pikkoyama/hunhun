@@ -142,5 +142,5 @@ EMAIL_HOST_USER = os.environ['EMAIL_ADDRESS']     # Office365のアドレスを�
 EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD'] # Office365のパスワードを入力
 EMAIL_USE_TLS = True # SMTP サーバと通信する際に TLS (セキュア) 接続を使う]
 
-SITE_URL = "https://tourguide.com"
+SITE_URL = "http://127.0.0.1:8000"
  
