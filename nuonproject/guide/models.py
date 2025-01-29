@@ -77,6 +77,7 @@ class Information_pin(models.Model):
     explanation = models.CharField(verbose_name="説明",max_length=700)
     address = models.CharField(verbose_name="住所", max_length=50)
     place = models.CharField(verbose_name="場所", max_length=30, default="unknown")
+    image = models.ImageField(upload_to='images/',blank=True, verbose_name="画像", default='images/no_image.png')
 
 
     # モデルが参照されたときの設定
