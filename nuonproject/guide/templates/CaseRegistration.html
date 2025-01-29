@@ -1,74 +1,199 @@
-<!-- 10 事例登録-->
 <!DOCTYPE html>
 <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <title>事例の登録</title>
-        <style>
-            .btn-next {
-                background-color: green;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                margin: 4px 2px;
-                cursor: pointer;
-                border-radius: 12px; /* 角を丸く */
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事例の登録</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%; /* 修正: bodyの高さを100%に */
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #4CAF50; /* 緑色のヘッダー */
+            color: white;
+            width: 100%;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1; /* 追加: ヘッダーが他の要素に隠れないようにする */
+        }
+
+        .header-button {
+            background-color: #ffffff;
+            color: #4CAF50;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 8px;
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            transition: background-color 0.3s ease;
+        }
+
+        .header-button:hover {
+            background-color: #e0f7e0;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .form-container input, .form-container select, .form-container textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-container input:focus, .form-container select:focus, .form-container textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+            background-color: #fff;
+        }
+
+        .btn-next {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 8px;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .btn-next:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .alert-message {
+            background-color: #aee1f2;
+            color: black;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 9999;
+            display: none;
+            opacity: 0;
+            animation: fadeInOut 6s forwards;
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                bottom: -50px;
             }
-            .form-container {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
+            10% {
+                opacity: 1;
+                bottom: 0;
             }
-
-            .btn-next2 {
-                background-color: green;
-                color: white;
-                border: none;
-                padding: 10px 20px;
-                text-align: center;
-                text-decoration: none;
-                display: inline-block;
-                font-size: 16px;
-                margin: 4px 2px;
-                cursor: pointer;
-                border-radius: 12px;
-                margin-left: 200px; /* 左側に20pxの余白を追加 */
+            80% {
+                opacity: 1;
+                bottom: 0;
             }
+            100% {
+                opacity: 0;
+                bottom: -50px;
+            }
+        }
 
-        </style>
-    </head>
-    <body>
+    </style>
+</head>
+<body>
+    <header>
+        事例の登録
+        <a href="{% url 'guide:guidetop' %}" class="header-button">戻る</a>
+    </header>
 
-        <div class="form-container">
-            <form method="post">
-                {% csrf_token %}
-                <h1>| 事例の登録</h1>
-                <label for="post_date">投稿日:</label>
-                 {{form.post_date}}<br><br>
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
 
-                <label for="number">社員番号:</label>
-                 {{form.number}}<br><br>
+            <label for="post_date">投稿日:</label>
+            {{ form.post_date }}
 
-                <label for="case_number">事例番号:</label>
-                 {{form.case_number}}<br><br>
+            <label for="number">社員番号:</label>
+            {{ form.number }}
 
-                <label for="title">タイトル:</label>
-                 {{form.title}}<br><br>
+            <label for="case_number">事例番号:</label>
+            {{ form.case_number }}
 
-                <label for="category">カテゴリ:</label>
-                 {{form.category}}<br><br>
+            <label for="title">タイトル:</label>
+            {{ form.title }}
 
-                <label for="content">本文:</label>
-                 {{form.main}}<br><br>
+            <label for="category">カテゴリ:</label>
+            {{ form.category }}
 
-                <button type="submit" class="btn-next">登録</button>
-                <a href="{% url 'guide:guidetop' %}" class="btn-next2">戻る</a>
-            </form>
+            <label for="content">本文:</label>
+            {{ form.main }}
+
+            <button type="submit" class="btn-next">登録</button>
+        </form>
+    </div>
+
+    {% if messages %}
+        <div class="alert-message" id="alertMessage">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
         </div>
-    </body>
+        <script>
+            window.onload = function() {
+                var message = document.getElementById("alertMessage");
+                message.style.display = "block";
+            };
+        </script>
+    {% endif %}
+</body>
 </html>
