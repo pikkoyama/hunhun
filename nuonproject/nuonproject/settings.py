@@ -143,4 +143,10 @@ EMAIL_HOST_PASSWORD = os.environ['EMAIL_PASSWORD'] # Office365のパスワード
 EMAIL_USE_TLS = True # SMTP サーバと通信する際に TLS (セキュア) 接続を使う]
 
 SITE_URL = "http://127.0.0.1:8000"
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static",  # staticフォルダがプロジェクトルートにある場合
+]
+ 
+STATIC_URL = '/static/'
  
