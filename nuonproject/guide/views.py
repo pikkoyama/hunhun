@@ -101,8 +101,7 @@ class GuideTopView(TemplateView):
 class GuideMapView(TemplateView):
     template_name='GuideMap.html'
 
-# 個やア　1/20
-#asdf
+# koyama　1/20
 class TourSearchView(TemplateView):
     #  とりあえずツアー一覧表示
      template_name = 'TourSearch.html'
@@ -158,8 +157,6 @@ class InformationPinChangeView(TemplateView):
 class InformationPinRegistrationView(TemplateView):
     # あづーま
     template_name = "InformationPinRegistration.html"
-
-
 
 class PasswordChangeView(TemplateView):
     # あづーま
