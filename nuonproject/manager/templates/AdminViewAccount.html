@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ガイドアカウント閲覧</title>
+{% extends "base.html" %}
+{% load static %}
+
+{%block title%}ガイドアカウント閲覧{%endblock%}
+{%block css%}
     <style>
         body { 
             font-family: 'Arial', sans-serif; 
@@ -11,15 +10,6 @@
             color: #333; 
             margin: 0; 
             padding: 0; 
-        }
-        header { 
-            background-color: #4CAF50; 
-            color: white; 
-            padding: 15px; 
-            text-align: center; 
-            font-size: 24px; 
-            font-weight: bold; 
-            position: relative;
         }
         .back-button {
             position: absolute;
@@ -53,7 +43,7 @@
             border: 1px solid #ddd; 
         }
         th { 
-            background-color: #4CAF50; 
+            background-color: #ffb6c1; 
             color: white; 
         }
         tr:nth-child(even) { 
@@ -74,12 +64,13 @@
             background-color: #c0392b;
         }
     </style>
-</head>
+    {% endblock %}
+    {% block headertitle %}ガイドアカウント閲覧{% endblock %}
+    {% block backform %}
+    <a href="{% url 'manager:AdminTop' %}" class="back-button">戻る</a>
+    {% endblock %}
+    {% block main %}
 <body>
-    <header>
-        ガイドアカウント閲覧
-        <a href="{% url 'manager:AdminTop' %}" class="back-button">戻る</a>
-    </header>
     <div class="table-container">
         <table>
             <thead>
@@ -116,4 +107,4 @@
         </table>
     </div>
 </body>
-</html>
+{% endblock %}
