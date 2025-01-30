@@ -44,6 +44,7 @@
             </div>-->
             {% block logoutform %}{% endblock %}
             <!--<a href="{% url 'accounts:logout' %}">ログアウト</a>-->
+            {% block backform %}{% endblock %}
         </header>
         {% block main %}{% endblock %}
         {% include "footer.html" %}

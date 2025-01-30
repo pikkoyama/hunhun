@@ -1,11 +1,10 @@
 <!-- 11 事例登録確認画面 -->
-<!DOCTYPE html>
-<!-- 12/19 小山 -->
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>事例登録確認</title>
+{% extends "base.html" %}
+{% load static %}
+
+{%block title%}事例登録確認{%endblock%}
+
+{%block css%}
     <style>
         /* スタイルはそのまま */
         body {
@@ -67,10 +66,11 @@
             text-align: center;
         }
     </style>
-</head>
+{%endblock%}
+{% block headertitle %}事例の登録{% endblock %}
+{%block main%}
 <body>
     <div class="content">
-        <h1>事例の登録</h1>
         <h3>以下の内容で登録します</h3>
         <!-- タイトルセクション -->
         <form method="post">
@@ -92,4 +92,4 @@
         <button class="button back-button" onclick="window.location.href='{% url 'guide:guidetop' %}';">トップページに戻る</button>
     </div>
 </body>
-</html>
+{%endblock%}

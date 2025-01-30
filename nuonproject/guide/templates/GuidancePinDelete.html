@@ -1,9 +1,9 @@
-<!-- 15 案内ピン削除画面 -->
-<!DOCTYPE html>
-    <html lang="ja">
-        <head>
-            <meta charset="UTF-8">
-            <title>案内ピン削除画面</title>
+{% extends "base.html" %}
+{% load static %}
+
+{%block title%}案内ピン削除画面{%endblock%}
+
+{%block css%}
             <style>
                 .btn-back {
                     background-color: blue;
@@ -32,9 +32,10 @@
                     border-radius: 12px; 
                 }
             </style>
-        </head>
+{%endblock%}
+{% block headertitle %}案内ピンの削除{% endblock %}
+{%block main%}
         <body>
-            <h1>| 案内ピンの削除</h1>
             <h3>こちらの内容を削除してもよろしいですか？</h3>
             <form method="post">
                 {% csrf_token %}
@@ -42,4 +43,4 @@
                 <button type="button" class="btn-delete">削除</button>
             </form>
         </body>
-    </html>
+{%endblock%}

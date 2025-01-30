@@ -1,10 +1,10 @@
 <!-- 5 ツアー検索画面 -->
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ツアー検索・登録画面</title>
+{% extends "base.html" %}
+{% load static %}
+
+{%block title%}ツアー検索・登録画面{%endblock%}
+
+{%block css%}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,18 +18,6 @@
             box-sizing: border-box;
         }
 
-        header {
-            background-color: #4CAF50; /* 緑色のヘッダー */
-            color: white;
-            width: 100%;
-            padding: 15px 0;
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1;
-        }
 
         .header-button {
             background-color: #ffffff;
@@ -163,14 +151,11 @@
             font-weight: bold;
         }
     </style>
-</head>
+{%endblock%}
+{% block headertitle %}ツアー検索画面{% endblock %}
+{%block backform%}<a href="{% url 'guide:guidetop' %}" class="header-button">戻る</a>{%endblock%}
+{%block main%}
 <body>
-    <!-- ヘッダー -->
-    <header>
-        ツアー検索画面
-        <a href="{% url 'guide:guidetop' %}" class="header-button">戻る</a>
-    </header>
-
     <div class="container">
         <!-- 検索セクション -->
         <div class="search-section">
@@ -221,4 +206,4 @@
         </div>
     </div>
 </body>
-</html>
+{%endblock%}

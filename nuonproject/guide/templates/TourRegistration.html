@@ -1,14 +1,10 @@
 <!-- 6_ツアー登録画面 -->
+{% extends "base.html" %}
+{% load static %}
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ツアー登録</title>
-</head>
-<body>
-    <title>ツアー登録</title>
+{%block title%}ツアー登録{%endblock%}
+
+{%block css%}
     <style>
         /* 全体のスタイル */
         body {
@@ -93,7 +89,10 @@
             padding-left: 0;        /* 左の余白も消す */
           }
     </style>
-
+{%endblock%}
+{% block headertitle %}ツアー登録{% endblock %}
+{%block main%}
+<body>
     <form method="post">
         {% csrf_token %}
         <label for="tour_number">ツアー番号 ※8桁入力必須</label>
@@ -173,4 +172,4 @@
         <button type="submit">登録</button>
     </form>
 </body>
-</html>
+{%endblock%}

@@ -1,11 +1,10 @@
-<!-- 13_案内ピン登録画面 -->
+{% extends "base.html" %}
+{% load static %}
 
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>案内ピン登録</title>
+{%block title%}案内ピン登録{%endblock%}
+
+{%block css%}
+<!-- 13_案内ピン登録画面 -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -109,12 +108,12 @@
         }
     
     </style>
-</head>
+{%endblock%}
+{% block headertitle %}案内ピン登録{% endblock %}
+{%block main%}
 <body>
 
     <form action="/submit" method="POST" enctype="multipart/form-data">
-        <h1>案内ピン登録</h1>
-
             <!-- 画像プレビュー -->
             <div id="image-preview">
                 画像を選択してください
@@ -150,4 +149,4 @@
     </script>
 
 </body>
-</html>
+{%endblock%}
