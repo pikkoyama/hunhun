@@ -178,6 +178,19 @@
                 alert("サーバーエラーが発生しました。");
             });
         }
+
+        function toggleAnswer(event) {
+            var spanElement = event.target; // クリックされた <span> 要素
+            var answerElement = spanElement.nextElementSibling; // 次の要素（.answer）
+        
+            if (answerElement && answerElement.classList.contains("answer")) {
+                if (answerElement.style.display === "none" || answerElement.style.display === "") {
+                    answerElement.style.display = "block";
+                } else {
+                    answerElement.style.display = "none";
+                }
+            }
+        }
         
     </script>
     
