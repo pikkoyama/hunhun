@@ -1,209 +1,9 @@
-{% comment %} <!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ガイドアカウント作成</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        header {
-            background-color: #4CAF50;
-            color: white;
-            width: 100%;
-            padding: 15px 0;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-container {
-            margin-top: 50px;
-            width: 80%;
-            max-width: 400px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-size: 14px;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        input:invalid {
-            border-color: red;
-        }
-
-        .button-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .submit-button,
-        .random-button,
-        .toggle-password-button,
-        .back-button {
-            padding: 10px;
-            font-size: 16px;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .submit-button {
-            background-color: #4CAF50;
-        }
-
-        .submit-button:hover {
-            background-color: #45a049;
-        }
-
-        .random-button {
-            background-color: #3498db;
-        }
-
-        .random-button:hover {
-            background-color: #2980b9;
-        }
-
-        .toggle-password-button {
-            background-color: #f1c40f;
-        }
-
-        .toggle-password-button:hover {
-            background-color: #d4ac0d;
-        }
-
-        .back-button {
-            background-color: #7f8c8d;
-            margin-top: 10px;
-        }
-
-        .back-button:hover {
-            background-color: #5e6666;
-        }
-
-        .error-message {
-            color: red;
-            font-size: 12px;
-            margin-top: -10px;
-            margin-bottom: 10px;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        ガイドアカウント作成
-    </header>
-    <div class="form-container">
-        <form id="account-form">
-            <label for="employee-id">社員番号</label>
-            <input type="text" id="employee-id" name="employee-id" required placeholder="社員番号を入力してください">
-
-            <label for="name">氏名</label>
-            <input type="text" id="name" name="name" required placeholder="氏名を入力してください">
-
-            <label for="email">メールアドレス</label>
-            <input type="email" id="email" name="email" required placeholder="メールアドレスを入力してください">
-
-            <label for="password">パスワード</label>
-            <div class="button-container">
-                <input type="password" id="password" name="password" required placeholder="パスワードを入力してください">
-                <button type="button" class="random-button" onclick="generateRandomPassword()">ランダム生成</button>
-                <button type="button" class="toggle-password-button" onclick="togglePasswordVisibility()">表示</button>
-            </div>
-            <p class="error-message" id="password-error"></p>
-
-            <button type="button" class="submit-button" onclick="location.href='{% url 'manager:AdminTop' %}';">アカウント作成</button>
-            <button type="button" class="back-button" onclick="location.href='{% url 'manager:AdminTop' %}';">戻る</button>
-        </form>
-    </div>
-
-    <script>
-        const form = document.getElementById('account-form');
-        const passwordInput = document.getElementById('password');
-        const passwordError = document.getElementById('password-error');
-        let isPasswordVisible = false;
-
-        // パスワードバリデーション
-        form.addEventListener('submit', function(event) {
-            const password = passwordInput.value;
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-
-            if (!passwordRegex.test(password)) {
-                event.preventDefault(); // フォーム送信を停止
-                passwordError.textContent = 'パスワードは8文字以上で、英大文字、英小文字、数字を含む必要があります。';
-                passwordInput.focus();
-            } else {
-                passwordError.textContent = ''; // エラーをクリア
-            }
-        });
-
-        // ランダムパスワード生成
-        function generateRandomPassword() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let password = '';
-            for (let i = 0; i < 12; i++) {
-                password += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            passwordInput.value = password;
-        }
-
-        // パスワード表示/非表示切り替え
-        function togglePasswordVisibility() {
-            isPasswordVisible = !isPasswordVisible;
-            passwordInput.type = isPasswordVisible ? 'text' : 'password';
-            document.querySelector('.toggle-password-button').textContent = isPasswordVisible ? '非表示' : '表示';
-        }
-
-        // 戻るボタンの動作
-        function goBack() {
-            window.history.back();
-        }
-    </script>
-</body>
-</html> {% endcomment %}
-
 <!-- 1/15 あづまーと -->
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ガイドアカウント作成</title>
+{% extends "base.html" %}
+{% load static %}
+
+{%block title%}ガイドアカウント作成{%endblock%}
+{%block css%}
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -215,17 +15,6 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-        }
-
-        header {
-            background-color: #4CAF50;
-            color: white;
-            width: 100%;
-            padding: 15px 0;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .form-container {
@@ -323,11 +112,14 @@
             margin-bottom: 10px;
         }
     </style>
-</head>
+    {%endblock%}
+
+    {% block headertitle %}ガイドアカウント作成{% endblock %}
+    {% block backform %}
+    <button type="button" class="back-button" onclick="location.href='{% url 'manager:AdminTop' %}';">戻る</button>
+    {% endblock %}
+    {% block main %}
 <body>
-    <header>
-        ガイドアカウント作成
-    </header>
     <div class="form-container">
         <form method="POST">
             {% csrf_token %}
@@ -362,7 +154,7 @@
             {% endfor %}
 
             <button type="submit" class="submit-button">アカウント作成</button>
-            <button type="button" class="back-button" onclick="location.href='{% url 'manager:AdminTop' %}';">戻る</button>
+            
         </form>
     </div>
 
@@ -388,4 +180,4 @@
         }
     </script>
 </body>
-</html>
+{% endblock %}
