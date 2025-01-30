@@ -18,6 +18,10 @@ from django.contrib import admin
 from django.urls import path, include
 from accounts import views
 
+# 小山
+from django.conf import settings
+from django.conf.urls.static import static
+
 app_name = 'guidesupport'
 
 urlpatterns = [
@@ -35,3 +39,6 @@ urlpatterns = [
 
     path('manager/',include('manager.urls'))
 ]
+# 小山
+# urlpatterns にmediaフォルダのURLパターンを追加（P467）
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

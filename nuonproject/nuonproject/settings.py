@@ -149,4 +149,10 @@ STATICFILES_DIRS = [
 ]
  
 STATIC_URL = '/static/'
+
+# 画像保存
+# mediaフォルダの場所（BASE_DIR以下のmediaを登録）
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# mediaのURLを登録
+MEDIA_URL = '/media/'
  
