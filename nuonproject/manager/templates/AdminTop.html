@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>管理者トップページ</title>
+{% extends "base.html" %}
+{% load static %}
+
+{%block title%}管理者トップページ{%endblock%}
+{%block css%}
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -15,18 +14,6 @@
             flex-direction: column;
             align-items: center;
             height: 100vh;
-        }
-
-        header {
-            background-color: #4CAF50;
-            color: white;
-            width: 100%;
-            padding: 15px 0;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: relative;  /* ログアウトボタンを右側に配置するため */
         }
 
         /* ログアウトボタンを右側に配置 */
@@ -123,11 +110,11 @@
             }
         }
     </style>
-</head>
-<body>
-    <header>
-        管理者トップページ
+    {%endblock%}
 
+    {% block headertitle %}管理者トップページ{% endblock %}
+
+    {% block logoutform %}
         <!-- ログアウトボタンを右側に配置 -->
         <div class="logout-button-container">
             <form method="post" action="{% url 'accounts:logout' %}">
@@ -135,16 +122,25 @@
                 <button type="submit" class="logout-button">ログアウト</button>
             </form>
         </div>
-    </header>
+    {% endblock %}
+    
+    {% block main %}
+<body>
     <div class="container">
-        <div>
-            <a href="{% url 'manager:AdminCreateAccount' %}" class="button">ガイドアカウント作成</a>
+    
+    <!-- 事例の登録ボタン -->
+        <div class="button" onclick="window.location.href='{% url 'manager:AdminCreateAccount' %}';">
+            ガイドアカウント作成
         </div>
-        <div>
-            <a href="{% url 'guide:caselist' %}" class="button">事例の認可・削除</a>
+
+        <!-- マップ閲覧ボタン -->
+        <div class="button" onclick="window.location.href='{% url 'guide:caselist' %}';">
+            事例の認可削除
         </div>
-        <div>
-            <a href="{% url 'manager:guide_account_list' %}" class="button">ガイドアカウント閲覧・削除</a>
+
+        <!-- 事例閲覧・変更ボタン -->
+        <div class="button" onclick="window.location.href='{% url 'manager:guide_account_list' %}';">
+            ガイドアカウント閲覧削除
         </div>
     </div>
 
@@ -165,4 +161,4 @@
         </script>
     {% endif %}
 </body>
-</html>
+{% endblock %}
