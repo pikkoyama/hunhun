@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="theme-color" content="#007bff">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>サインイン</title>
+{% extends "base.html" %}
+{% load static %}
+
+{%block title%}サインイン{%endblock%}
+
+{%block css%}
     <style>
       body {
         font-family: 'Arial', sans-serif;
@@ -111,11 +110,10 @@
         padding-left: 0;        /* 左の余白も消す */
       }
     </style>
-  </head>
+    {%endblock%}
+    {% block headertitle %}ガイドトップページ{% endblock %}
+    {% block main %}
   <body>
-    <div class="top-bar">
-      サインイン
-    </div>
     <div class="container">
       <form method="post" action="{% url 'accounts:Sinin' %}">
         {% csrf_token %}
@@ -149,4 +147,4 @@
       </form>
     </div>
   </body>
-</html>
+  {% endblock %}
