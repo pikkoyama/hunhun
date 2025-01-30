@@ -95,18 +95,17 @@
     </style>
     {%endblock%}
 
-    {% block header %}
-    <header>
-        ガイドトップページ
+
+    {% block headertitle %}ガイドトップページ{% endblock %}
+    {% block logoutform %}
         <div class="logout-button-container">
         <form method="post" action="{% url 'accounts:logout' %}">
             {% csrf_token %}
         <button type="submit" class="logout-button">ログアウト</button>
         </form>
         </div>
-        <!--<a href="{% url 'accounts:logout' %}">ログアウト</a>-->
-    </header>
-    {%endblock%}
+    {% endblock %}
+    
 
     {% block main %}
     <body>
