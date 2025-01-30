@@ -178,7 +178,7 @@
                 alert("サーバーエラーが発生しました。");
             });
         }
-
+        // 本文(main)表示用function
         function toggleAnswer(event) {
             var spanElement = event.target; // クリックされた <span> 要素
             var answerElement = spanElement.nextElementSibling; // 次の要素（.answer）
@@ -208,7 +208,7 @@
         <button>ソート</button>
     </div>
 
-    {% for case in caselist %}
+{% for case in caselist %}
 <div class="comment-container {% if case.authonrization %}authorized{% endif %}">
     <div class="qa">
         <strong>Q. {{ case.case_number }}</strong>
@@ -216,6 +216,15 @@
         <div class="answer">
             {{ case.main }}
         </div>
+
+        {% for comment in comments %}
+        <div class="answer">
+            {{ comment.comment }}
+        </div>
+        {% endfor %}
+
+        <label for="comment">コメント:</label>
+            {{ form.comment }}
         {% if user.is_superuser %}
         <div class="action-buttons">
             <button onclick="toggleAuthorization('{{ case.case_number }}', this)">
