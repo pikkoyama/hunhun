@@ -1,0 +1,122 @@
+<!-- 6_ツアー登録画面 改良版 -->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ツアー登録</title>
+    <style>
+        /* 全体のスタイル */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e9f7ef;
+        }
+
+        /* フォームのスタイル */
+        form {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 26px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin: 12px 0 5px;
+            text-align: left;
+            font-size: 16px;
+            color: #424242;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"], select, input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus, input[type="date"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        option {
+            padding: 10px;
+        }
+
+        /* エラーメッセージやプレースホルダースタイル */
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <form action="/submit" method="POST">
+        <h1>ツアー登録</h1>
+
+        <label for="name">ツアー名</label>
+        <input type="text" id="name" name="name" required><br>
+
+        <label for="tourNumber">ツアー番号</label>
+        <input type="text" id="tourNumber" name="tourNumber" required><br>
+
+        <label for="tourDate">ツアー日</label>
+        <input type="date" id="tourDate" name="tourDate" required><br>
+
+        <label for="prefecture">都道府県</label>
+        <select id="prefecture" name="prefecture" required>
+            <option value="">選択してください</option>
+            <option value="北海道">北海道</option>
+            <option value="青森県">青森県</option>
+            <option value="岩手県">岩手県</option>
+            <!-- その他都道府県省略 -->
+            <option value="沖縄県">沖縄県</option>
+        </select><br>
+
+        <label for="email">メールアドレス</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="phone">電話番号</label>
+        <input type="tel" id="phone" name="phone" required><br>
+
+        <button type="submit">登録</button>
+    </form>
+
+</body>
+</html>
