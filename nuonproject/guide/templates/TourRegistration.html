@@ -51,21 +51,6 @@
             box-sizing: border-box;
         }
 
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #4CAF50;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
         /* エラーメッセージやプレースホルダースタイル */
         input:focus, select:focus {
             border-color: #4CAF50;
@@ -91,6 +76,7 @@
     </style>
 {%endblock%}
 {% block headertitle %}ツアー登録{% endblock %}
+{% block backform %}<button type="button" class="header-button" onclick="location.href='{% url 'guide:toursearch' %}';">戻る</button>{%endblock%}
 {%block main%}
 <body>
     <form method="post">

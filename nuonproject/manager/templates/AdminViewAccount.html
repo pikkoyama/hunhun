@@ -43,7 +43,7 @@
             border: 1px solid #ddd; 
         }
         th { 
-            background-color: #ffb6c1; 
+            background-color:rgb(139, 209, 255); 
             color: white; 
         }
         tr:nth-child(even) { 
@@ -66,9 +66,7 @@
     </style>
     {% endblock %}
     {% block headertitle %}ガイドアカウント閲覧{% endblock %}
-    {% block backform %}
-    <a href="{% url 'manager:AdminTop' %}" class="back-button">戻る</a>
-    {% endblock %}
+    {% block backform %}<button type="button" class="header-button" onclick="location.href='{% url 'manager:AdminTop' %}';">戻る</button>{%endblock%}
     {% block main %}
 <body>
     <div class="table-container">

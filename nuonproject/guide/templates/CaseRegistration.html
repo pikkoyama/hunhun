@@ -20,25 +20,6 @@
             box-sizing: border-box;
         }
 
-        .header-button {
-            background-color: #ffffff;
-            color: #4CAF50;
-            border: none;
-            padding: 12px 24px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 8px;
-            position: absolute;
-            top: 50%;
-            left: 20px;
-            transform: translateY(-50%);
-            transition: background-color 0.3s ease;
-        }
-
-        .header-button:hover {
-            background-color: #e0f7e0;
-        }
-
         .form-container {
             display: flex;
             flex-direction: column;
@@ -50,7 +31,7 @@
             padding: 30px;
             background-color: white;
             border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            {% comment %} box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); {% endcomment %}
         }
 
         h1 {
@@ -138,7 +119,7 @@
     </style>
 {%endblock%}
 {% block headertitle %}事例の登録{% endblock %}
-{% block backform %}<a href="{% url 'guide:guidetop' %}" class="header-button">戻る</a>{%endblock%}
+{% block backform %}<button type="button" class="header-button" onclick="location.href='{% url 'guide:guidetop' %}';">戻る</button>{%endblock%}
 {%block main%}
 <body>
     <div class="form-container">
