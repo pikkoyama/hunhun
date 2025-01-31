@@ -227,15 +227,16 @@
             {{ case.main }}
         </div>
 
-        {% comment %} {% for comment in comments %} {% endcomment %}
+        {% for comment in case.comments.all %}
         <div class="answer2">
-            aaaaa
+            {{ comment.comment }}
         </div>
-        {% comment %} {% endfor %} {% endcomment %}
+        {% endfor %}
 
-        <label for="comment">コメント:</label>
-        <input>
+        <label for="comment">コメント:</label><br><br>
             {{ form.comment }}
+
+            <button type="button">変更</button>
         {% if user.is_superuser %}
         <div class="action-buttons">
             <button onclick="toggleAuthorization('{{ case.case_number }}', this)">
