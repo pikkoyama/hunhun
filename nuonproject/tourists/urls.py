@@ -1,3 +1,4 @@
+<!--urls.py-->
 from django.urls import path
 from . import views
 # from .views import get_pins
@@ -16,6 +17,10 @@ urlpatterns = [
          ),
 
     path('api/pins/', 
+         views.get_pins, 
+         name='get_pins'
+         ),
+    path('api/pins/<str:tour_number>', 
          views.get_pins, 
          name='get_pins'
          ),

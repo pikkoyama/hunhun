@@ -1,3 +1,4 @@
+<!--views-->
 from django.views.generic import TemplateView
 import requests  # requestsライブラリをインポート
 
@@ -18,12 +19,29 @@ from guide.models import Information_pin  # guideアプリからインポート
 import html
 # import requests
 
+from django.http import JsonResponse
+import requests
+import html
+
 def get_pins(request):
-    print('api実行')
+    print('=============================-')
+    print('API実行')
+    tour_number = request.GET.get('tour_number', None) 
+    print(f'取得した tour_number: {tour_number}')  # ログ出力で確認
+    print("リクエストのクエリパラメータ:", request)  # デバッグ用
+
+    # tour_number を取得
+    if not tour_number:
+        return JsonResponse({'error': 'tour_number is required'}, status=400)
+
+
     api_key = 'AIzaSyBZEV4yAriodr076SoPrK5LAoVkuOhRX78'
     geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json'
     translate_url = 'https://translation.googleapis.com/language/translate/v2'
-    pins = Information_pin.objects.all()
+
+    # tour_number に紐づくピンのみ取得（修正）
+    pins = Information_pin.objects.filter(tour_number=tour_number)
+
     data = []
 
     for pin in pins:
@@ -47,16 +65,15 @@ def get_pins(request):
             latitude = location['lat']
             longitude = location['lng']
         else:
-            # ジオコーディングに失敗した場合、nullのままとする
             latitude = None
             longitude = None
 
-
-# さくちゃん 1/20
         # 翻訳処理
         translations = {}
         translations_explanation = {}
+
         for target_lang in ['en', 'zh', 'zh-TW', 'ko']:
+            # 場所の翻訳
             translate_params = {
                 'q': html.escape(pin.place),
                 'source': 'ja',
@@ -72,7 +89,7 @@ def get_pins(request):
                 print(f'Translation failed for {target_lang}: {translate_result}')
                 translations[target_lang] = ''
 
-
+            # 説明の翻訳
             translate_params = {
                 'q': html.escape(pin.explanation),
                 'source': 'ja',

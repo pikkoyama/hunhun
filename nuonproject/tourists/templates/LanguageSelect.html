@@ -1,3 +1,4 @@
+<!--LanguageSelect-->
 <!DOCTYPE html>
 <html lang='ja'>
 <head>
@@ -81,7 +82,17 @@
                     <input type='radio' name='language' value='ko'> 한국어
                 </label>
             </div>
+            <input type="hidden" name="tour_number" id="tourNumberInput">
             <button type='submit' class='btn-next'>次へ</button>
+            <script>
+                // tour_number を取得してフォームにセット
+                function getQueryParam(param) {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get(param);
+                }
+            
+                document.getElementById("tourNumberInput").value = getQueryParam("tour_number");
+            </script>
         </form>
     </div>
 </body>

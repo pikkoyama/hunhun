@@ -1,3 +1,4 @@
+<!--tourmap-->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -204,7 +205,11 @@
         };
 
         // ピンの情報を取得して表示
-        fetch("{% url 'tourists:get_pins' %}")
+        var urlParams = new URLSearchParams(window.location.search);
+        var tour_number = urlParams.get('tour_number') || 'default';
+        var api_url = "{% url 'tourists:get_pins' %}?tour_number="+tour_number;
+        console.log(api_url)
+        fetch(api_url)
             .then(response => {
                 console.log(`api実行`);
                 if (!response.ok) {
