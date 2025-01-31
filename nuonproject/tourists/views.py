@@ -104,7 +104,11 @@ def get_pins(request):
                 print(f'Translation failed for {target_lang}: {translate_result}')
                 translations_explanation[target_lang] = ''
 
+        # 画像のURLを取得
+        image_url = pin.image.url if pin.image else '/media/images/no_image.png'
+
         pin_data = {
+            'information_pin_id': pin.information_pin_id,  # 案内ピン番号を追加
             'place_ja': pin.place,
             'place_en': translations['en'],
             'place_zh': translations['zh'],
@@ -118,6 +122,7 @@ def get_pins(request):
             'address_ja': pin.address,
             'latitude': latitude,
             'longitude': longitude,
+            'image_url': image_url  # 画像URLを追加
         }
 
         print(pin_data)  # デバッグ用：APIレスポンスを確認

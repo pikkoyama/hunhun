@@ -231,10 +231,19 @@
 
                     if (pin.latitude != null && pin.longitude != null) {
                         var marker = L.marker([pin.latitude, pin.longitude]).addTo(map)
-                            .bindPopup('<b>' + pin["place_" + language] + '</b>');  // ピンのポップアップに場所の名前を表示
+                            .bindPopup('<b>' + pin.information_pin_id + '. ' + pin["place_" + language]  + '</b>');  // ピンのポップアップに場所の名前を表示
 
                         var li = document.createElement('li');
-                        li.textContent = (index + 1) + '. ' + pin["place_" + language];  // 一覧の数字の横に場所の名前を表示
+                         li.textContent = pin.information_pin_id + '. ' + pin["place_" + language] ;  // 一覧の数字の横に場所の名前を表示
+
+                        // 画像の追加
+                        var img = document.createElement('img');
+                        img.src = pin.image_url;  // APIから取得した画像URLを設定
+                        img.style.width = "60%";  // 幅を調整
+                        img.style.borderRadius = "10px";  // 角を丸くする
+                        img.style.display = "block";  // 中央寄せのため
+                        img.style.margin = "10px auto";  // 余白を調整し中央寄せ
+                        li.appendChild(img);
 
                         // 説明を折りたたむボタンを作成
                         var toggleButton = document.createElement('button');
