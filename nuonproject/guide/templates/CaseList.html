@@ -236,7 +236,7 @@
         <label for="comment">コメント:</label><br><br>
             {{ form.comment }}
 
-            <button type="button">変更</button>
+            <button type="button" class="change-button" onclick="location.href='{% url 'guide:case_edit' case.case_number %}';">変更</button>
         {% if user.is_superuser %}
         <div class="action-buttons">
             <button onclick="toggleAuthorization('{{ case.case_number }}', this)">

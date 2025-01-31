@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block headertitle %}事例の変更{% endblock %}
+{% block backform %}
+    <button type="button" class="header-button" onclick="location.href='{% url 'guide:toursearch' %}';">戻る</button>
+    {% endblock %}
+{% block main %}
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">変更する</button>
+  </form>
+{% endblock %}
