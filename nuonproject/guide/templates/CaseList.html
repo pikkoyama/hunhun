@@ -100,12 +100,22 @@
             background-color: #f0f0f0;
         }
 
-        .comment-container .qa .answer {
+        .answer{            
+            display: block; /* 縦に並べる */
             display: none;
             margin-top: 10px;
             padding: 10px;
             background-color: #f7f7f7;
             border-left: 4px solid #4CAF50;
+            border-radius: 5px;
+        }
+
+        .answer2{            
+            display: block; /* 縦に並べる */
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f7f7f7;
+            border-left: 4px solid #FFA500;
             border-radius: 5px;
         }
 
@@ -211,19 +221,20 @@
 {% for case in caselist %}
 <div class="comment-container {% if case.authonrization %}authorized{% endif %}">
     <div class="qa">
-        <strong>Q. {{ case.case_number }}</strong>
+        <strong>Q.{{ case.case_number }}</strong>
         <span onclick="toggleAnswer(event)">{{ case.title }}</span>
         <div class="answer">
             {{ case.main }}
         </div>
 
-        {% for comment in comments %}
-        <div class="answer">
-            {{ comment.comment }}
+        {% comment %} {% for comment in comments %} {% endcomment %}
+        <div class="answer2">
+            aaaaa
         </div>
-        {% endfor %}
+        {% comment %} {% endfor %} {% endcomment %}
 
         <label for="comment">コメント:</label>
+        <input>
             {{ form.comment }}
         {% if user.is_superuser %}
         <div class="action-buttons">
