@@ -1,161 +1,173 @@
-<!-- 6_ツアー登録画面1 -->
 {% extends "base.html" %}
 {% load static %}
 
-{%block title%}ツアー登録{%endblock%}
+{% block title %}ツアー登録{% endblock %}
 
-{%block css%}
+{% block css %}
     <style>
-        /* 全体のスタイル */
         body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Arial', sans-serif;
             margin: 0;
-            background-color: #f4f4f9;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        
+        main {
+            display: flex;
+            justify-content: center;  /* 横方向に中央配置 */
+            flex: 1;                  /* mainタグの高さを最大に */
         }
 
-        /* フォームのスタイル */
-        form {
-            background-color: #fff;
-            padding: 20px;
+        .form-container {
+            width: 100%;
+            max-width: 600px;  /* フォームの最大幅 */
+            background-color: white;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            text-align: center;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* 各要素間の広めのスペース */
         }
 
         h1 {
             font-size: 24px;
             margin-bottom: 20px;
             color: #333;
+            text-align: center;
         }
 
         label {
-            display: block;
-            margin: 10px 0 5px;
-            text-align: left;
-            font-size: 16px;
-            color: #424242;
+            font-size: 18px;  /* ラベル文字を大きく */
+            margin-bottom: 10px;  /* ラベルと入力フィールドの間にスペース */
+            font-weight: bold;
         }
 
-        input[type="text"], input[type="email"], input[type="tel"], select {
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            padding: 12px; /* 入力フィールドのパディングを大きく */
+            margin-bottom: 15px;  /* 入力フィールド間の余白を大きく */
+            border: 1px solid #ddd;
+            border-radius: 6px;  /* 丸みを持たせる */
+            font-size: 16px;  /* フォントサイズを大きく */
             width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-            box-sizing: border-box;
         }
 
-        /* エラーメッセージやプレースホルダースタイル */
-        input:focus, select:focus {
-            border-color: #4CAF50;
+        input:focus,
+        select:focus {
+            border-color: #4CAF50;  /* フォーカス時に枠を緑に */
             outline: none;
         }
 
-        option {
-            padding: 10px;
-        }
-
         .messages .error {
-            background-color: #f8d7da; /* 赤背景 */
-            color: #721c24;            /* 赤文字 */
-            border: 1px solid #f5c6cb; /* 赤い枠線 */
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
             padding: 10px;
             margin-bottom: 15px;
-          }
+        }
 
         .messages ul {
-            list-style-type: none;  /* 順不同リストのマーカー（・）を非表示にする */
-            padding-left: 0;        /* 左の余白も消す */
-          }
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .submit-button {
+            padding: 14px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;  /* ボタンを100%幅にして広げる */
+            background-color: #87ceeb;
+        }
+
+        .submit-button:hover {
+            background-color: #add8e6;
+        }
+
+        .back-button {
+            padding: 12px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            background-color: #7f8c8d;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .back-button:hover {
+            background-color: #5e6666;
+        }
+
+        .submit-button {
+            margin-top: auto;  /* フォームの下部に配置 */
+        }
     </style>
-{%endblock%}
+{% endblock %}
+
 {% block headertitle %}ツアー登録{% endblock %}
-{% block backform %}<button type="button" class="header-button" onclick="location.href='{% url 'guide:toursearch' %}';">戻る</button>{%endblock%}
-{%block main%}
+{% block backform %}
+    <button type="button" class="header-button" onclick="location.href='{% url 'guide:toursearch' %}';">戻る</button>
+{% endblock %}
+
+{% block main %}
 <body>
-    <form method="post">
-        {% csrf_token %}
-        <label for="tour_number">ツアー番号 ※8桁入力必須</label>
-        {{form.tour_number}}<br><br>
-
-        <label for="number">社員番号</label>
-        {{form.number}}<br><br>
-
-        <label for="tour_name">ツアー名</label>
-        {{form.tour_name}}<br><br>
-
-        <label for="location">都道府県:</label>
-        <select id="location" name="location" required>
-            <option value="">選択してください</option>
-            <option value="北海道">北海道</option>
-            <option value="青森県">青森県</option>
-            <option value="岩手県">岩手県</option>
-            <option value="宮城県">宮城県</option>
-            <option value="秋田県">秋田県</option>
-            <option value="山形県">山形県</option>
-            <option value="福島県">福島県</option>
-            <option value="茨城県">茨城県</option>
-            <option value="栃木県">栃木県</option>
-            <option value="群馬県">群馬県</option>
-            <option value="埼玉県">埼玉県</option>
-            <option value="千葉県">千葉県</option>
-            <option value="東京都">東京都</option>
-            <option value="神奈川県">神奈川県</option>
-            <option value="新潟県">新潟県</option>
-            <option value="富山県">富山県</option>
-            <option value="石川県">石川県</option>
-            <option value="福井県">福井県</option>
-            <option value="山梨県">山梨県</option>
-            <option value="長野県">長野県</option>
-            <option value="岐阜県">岐阜県</option>
-            <option value="静岡県">静岡県</option>
-            <option value="愛知県">愛知県</option>
-            <option value="三重県">三重県</option>
-            <option value="滋賀県">滋賀県</option>
-            <option value="京都府">京都府</option>
-            <option value="大阪府">大阪府</option>
-            <option value="兵庫県">兵庫県</option>
-            <option value="奈良県">奈良県</option>
-            <option value="和歌山県">和歌山県</option>
-            <option value="鳥取県">鳥取県</option>
-            <option value="島根県">島根県</option>
-            <option value="岡山県">岡山県</option>
-            <option value="広島県">広島県</option>
-            <option value="山口県">山口県</option>
-            <option value="徳島県">徳島県</option>
-            <option value="香川県">香川県</option>
-            <option value="愛媛県">愛媛県</option>
-            <option value="高知県">高知県</option>
-            <option value="福岡県">福岡県</option>
-            <option value="佐賀県">佐賀県</option>
-            <option value="長崎県">長崎県</option>
-            <option value="熊本県">熊本県</option>
-            <option value="大分県">大分県</option>
-            <option value="宮崎県">宮崎県</option>
-            <option value="鹿児島県">鹿児島県</option>
-            <option value="沖縄県">沖縄県</option>
-        </select><br><br>
-
-        <label for="tourDate">ツアー日</label>
-        {{form.tour_date}}<br><br>
-
-        {% if messages %}
-        <div class="messages">
-          <ul>
-            {% for message in messages %}
-              <li class="{{ message.tags }}">{{ message }}</li>
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
+            
+            <label for="tour_number">ツアー番号 ※8桁入力必須</label>
+            {{ form.tour_number }}
+            {% for error in form.tour_number.errors %}
+                <p class="error-message">{{ error }}</p>
             {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
+            
+            <label for="number">社員番号</label>
+            {{ form.number }}
+            {% for error in form.number.errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
 
-        <button type="submit">登録</button>
-    </form>
+            <label for="tour_name">ツアー名</label>
+            {{ form.tour_name }}
+            {% for error in form.tour_name.errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
+
+            <label for="location">都道府県</label>
+            {{ form.location }}
+            {% for error in form.location.errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
+
+            <label for="tour_date">ツアー日</label>
+            {{ form.tour_date }}
+            {% for error in form.tour_date.errors %}
+                <p class="error-message">{{ error }}</p>
+            {% endfor %}
+
+            {% if messages %}
+                <div class="messages">
+                    <ul>
+                        {% for message in messages %}
+                            <li class="{{ message.tags }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <button type="submit" class="submit-button">登録</button>
+        </form>
+    </div>
 </body>
-{%endblock%}
+{% endblock %}
