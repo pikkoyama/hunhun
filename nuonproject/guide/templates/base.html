@@ -65,12 +65,39 @@
                 height: calc(100vh - 56px); /* ヘッダーの高さを差し引いた高さを設定 */
                 overflow-y: auto; /* コンテンツが多い場合はスクロールできるようにする */
             }
+            .home-button {
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                background-color: rgb(133, 133, 133);
+                color: white;
+                padding: 10px 20px;
+                font-size: 16px;
+                border-radius: 8px;
+                text-decoration: none;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+            }
+        
+            .home-button:hover {
+                background-color: rgb(224, 224, 224);
+                color: black;
+                transform: translateY(-52%);
+            }
+            .home-icon {
+                width: 50px; /* 画像の幅を50pxに変更 */
+                height: 50px; /* 高さも50pxに設定 */
+                transition: opacity 0.3s ease, transform 0.3s ease;
+            }
         </style>
         {%block css%}{%endblock%}
         {%block script%}{%endblock%}
     </head>
     <body>
         <header>
+            <a href="{% if user.is_superuser %}{% url 'manager:AdminTop' %}{% else %}{% url 'guide:guidetop' %}{% endif %}" class="home-button">
+                <img src="{% static 'images/メインアイコン.png' %}" alt="ホーム" class="home-icon">
+            </a>            
             {% block headertitle %}{% endblock %}
             <!--<div class="logout-button-container">
             <form method="post" action="{% url 'accounts:logout' %}">
