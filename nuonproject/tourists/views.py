@@ -1,4 +1,3 @@
-<!--views-->
 from django.views.generic import TemplateView
 import requests  # requestsライブラリをインポート
 
