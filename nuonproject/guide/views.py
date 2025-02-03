@@ -40,6 +40,20 @@ class CaseListView(FormView):
         kwargs['user'] = self.request.user  # 現在のログインユーザーをフォームに渡す
         return kwargs
     
+    def comment_view(request, case_id):
+        case = get_object_or_404(Case, id=case_id)  # `case_number` を取得
+        if request.method == 'POST':
+            form = CommentForm(request.POST, user=request.user)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.case_number = case  # `case_number` を自動設定
+                comment.save()
+                return redirect('success_url')  # 成功時のリダイレクト先を指定
+        else:
+            form = CommentForm(user=request.user)
+
+        return render(request, 'template_name.html', {'form': form, 'case': case})
+    
     def form_valid(self, form):
         messages.success(self.request, '事例が登録されました')
         comment = form.save(commit=False)

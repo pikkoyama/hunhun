@@ -86,24 +86,31 @@ class SearchForm(forms.Form):
     keyword = forms.CharField(label='キーワード', max_length=100,required=True)
 
 class CommentForm(forms.ModelForm):
+    # フィールド定義
+    case_number = forms.ModelChoiceField(
+        queryset=Case.objects.all(),
+        widget=forms.HiddenInput,  # 非表示フィールド
+        required=False
+    )
+    number = forms.ModelChoiceField(
+        queryset=CustomUser.objects.all(),
+        label="社員番号",
+        empty_label="社員番号を選択"
+    )
+    comment = forms.CharField(
+        widget=forms.Textarea,
+        label='コメント'
+    )
 
     class Meta:
         model = Comment
-        fields = ['case_number','number', 'comment']  # モデルのフィールドを指定
-
-    # 必要に応じてフィールドのウィジェットやラベルを設定できます
-        case_number = forms.ModelChoiceField(queryset=Case.objects.all(),label='事例番号')
-        number = forms.ModelChoiceField(queryset=CustomUser.objects.all(), label="社員番号", empty_label="社員番号を選択")
-        comment = forms.CharField(widget=forms.Textarea, label='タイトル')
+        fields = ['case_number', 'number', 'comment']
 
     def __init__(self, *args, **kwargs):
-            user = kwargs.pop('user', None)
-            super().__init__(*args, **kwargs)
-            self.fields['number'].initial = CustomUser.objects.get(number=user.number) if user else None  # 社員番号は読み取り専用
-        # ログインユーザーが存在する場合、そのユーザーを初期値として設定
-            if user:
-                self.fields['number'].initial = user.number
-
+        user = kwargs.pop('user', None)  # ビューから渡されるユーザー情報
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['number'].initial = user.number  # 初期値にログインユーザーを設定
 
     def clean_number(self):
         """numberフィールドのバリデーションを修正"""
@@ -126,4 +133,3 @@ class CommentForm(forms.ModelForm):
             return CustomUser.objects.get(number=number)  # 数値のみで検索
         except CustomUser.DoesNotExist:
             raise ValidationError(f"指定された社員番号のユーザーが存在しません。（入力: {number}）")
-  
