@@ -1,9 +1,9 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse
-from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm
+from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm,CommentForm
 from django.views.generic.edit import FormView, CreateView
-from .models import Case, Tour, CustomUser
+from .models import Case, Tour, CustomUser,Comment
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
@@ -359,3 +359,48 @@ def get_pins(request):
         data.append(pin_data)
 
     return JsonResponse(data, safe=False)
+
+from .models import Case, Tour, CustomUser,Comment
+from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm,CommentForm
+
+class CaseListView(FormView):
+
+    template_name = 'Caselist.html'
+    form_class = CommentForm  # 直接定義したフォームクラスを使用
+    success_url = reverse_lazy('guide:caselist')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['caselist'] = Case.objects.all()  # 事例データを取得
+        for case in context['caselist']:
+            case.comments = Comment.objects.filter(case_number=case.case_number)
+        context['comments'] = Comment.objects.all()  # コメントデータを取得
+        return context
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # 現在のログインユーザーをフォームに渡す
+        return kwargs
+    
+    def form_valid(self, form):
+        messages.success(self.request, '事例が登録されました')
+        comment = form.save(commit=False)
+        comment.number = self.request.user  # ユーザーを関連付け
+        case_number = self.request.session.get('current_case_number')  # セッションから取得
+        if not case_number:
+            case_number = self.kwargs.get('case_number')  # URLのパラメータ
+        if not case_number:
+            case_number = self.request.GET.get('case_number')  # クエリパラメータ
+
+    # `case_number` を `Case` モデルから取得して設定
+        case = get_object_or_404(Case, case_number=case_number)
+        comment.case = case  # コメントに事例をセット
+
+        comment.save()
+        return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        """ フォームが無効な場合の処理 """
+        messages.error(self.request, "フォームにエラーがあります")
+        print(form.errors)  # エラー内容を表示
+        return super().form_invalid(form)
