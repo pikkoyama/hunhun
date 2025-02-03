@@ -360,9 +360,6 @@ def get_pins(request):
 
     return JsonResponse(data, safe=False)
 
-from .models import Case, Tour, CustomUser,Comment
-from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm,CommentForm
-
 class CaseListView(FormView):
 
     template_name = 'Caselist.html'
