@@ -90,12 +90,13 @@ class CommentForm(forms.ModelForm):
     case_number = forms.ModelChoiceField(
         queryset=Case.objects.all(),
         widget=forms.HiddenInput,  # 非表示フィールド
-        required=False
+        required=True  # 必須に変更
     )
     number = forms.ModelChoiceField(
         queryset=CustomUser.objects.all(),
         label="社員番号",
-        empty_label="社員番号を選択"
+        empty_label="社員番号を選択",
+        widget=forms.HiddenInput  # 非表示にして変更不可にする
     )
     comment = forms.CharField(
         widget=forms.Textarea,
@@ -110,7 +111,8 @@ class CommentForm(forms.ModelForm):
         user = kwargs.pop('user', None)  # ビューから渡されるユーザー情報
         super().__init__(*args, **kwargs)
         if user:
-            self.fields['number'].initial = user.number  # 初期値にログインユーザーを設定
+            self.fields['number'].initial = user  # 初期値にログインユーザーを設定
+        self.fields['number'].widget.attrs['readonly'] = True  # 社員番号は読み取り専用にする
 
     def clean_number(self):
         """numberフィールドのバリデーションを修正"""
@@ -133,3 +135,7 @@ class CommentForm(forms.ModelForm):
             return CustomUser.objects.get(number=number)  # 数値のみで検索
         except CustomUser.DoesNotExist:
             raise ValidationError(f"指定された社員番号のユーザーが存在しません。（入力: {number}）")
+    def clean_number(self):
+        """numberフィールドのバリデーションを修正"""
+        # ユーザーが何か入力した場合でも、ログインユーザーの社員番号を使用する
+        return self.fields['number'].initial  # 自動的にログインユーザーの社員番号を使う

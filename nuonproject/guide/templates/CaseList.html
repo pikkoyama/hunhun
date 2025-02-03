@@ -1,9 +1,9 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>事例閲覧画面</title>
+{% extends "base.html" %}
+{% load static %}
+
+{%block title%}事例閲覧画面{%endblock%}
+
+{%block css%}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -152,6 +152,8 @@
             background-color: #c0392b;
         }
     </style>
+{% endblock %}
+{%block script%}
     <script>
         function toggleAuthorization(caseId, button) {
             console.log('リクエスト送信中: ', caseId);  // ここで送信するIDを確認
@@ -203,13 +205,13 @@
         }
         
     </script>
-    
-</head>
+{%endblock%}
+{% block headertitle %}事例閲覧{% endblock %}
+{% block backform %}
+    <button type="button" class="header-button" onclick="location.href='{% url 'guide:guidetop' %}';">戻る</button>
+{% endblock %}
+{% block main %}
 <body>
-    <div class="top-bar">
-        事例閲覧画面
-    </div>
-
     <div class="divider"></div>
 
     <div class="search-container">
@@ -218,44 +220,52 @@
         <button>ソート</button>
     </div>
 
-{% for case in caselist %}
-<div class="comment-container {% if case.authonrization %}authorized{% endif %}">
-    <div class="qa">
-        <strong>Q.{{ case.case_number }}</strong>
-        <span onclick="toggleAnswer(event)">{{ case.title }}</span>
-        <div class="answer">
-            {{ case.main }}
-        </div>
+    {% for case in caselist %}
+    <div class="comment-container {% if case.authonrization %}authorized{% endif %}">
+        <div class="qa">
+            <strong>Q.{{ case.case_number }}</strong>
+            <span onclick="toggleAnswer(event)">{{ case.title }}</span>
+            <div class="answer">
+                {{ case.main }}
+            </div>
 
-        {% for comment in case.comments.all %}
-                <div class="answer2">
-                {{ comment.number }}<br>
-                {{ comment.comment }}
-                </div>
-        {% endfor %}
+            {% for comment in case.comments.all %}
+                    <div class="answer2">
+                    {{ comment.number }}<br>
+                    {{ comment.comment }}
+                    </div>
+            {% endfor %}
 
-        <form method="post">
-            {% csrf_token %}
-            <label for="comment">コメント:</label>
-            {{ form.comment }}
-            {{ form.number }}
-            {{ form.case_number }}
-            <button type="submit">投稿</button>
-        </form>
-            {% comment %} <button type="button" class="change-button" onclick="location.href='{% url 'guide:case_edit' case.case_number %}';">変更</button> {% endcomment %}
-        {% if user.is_superuser %}
-        <div class="action-buttons">
-            <button onclick="toggleAuthorization('{{ case.case_number }}', this)">
-                {% if case.authonrization %}認可解除{% else %}認可{% endif %}
-            </button>
-            
+            <form method="post">
+                {% csrf_token %}
+                <label for="comment">コメント:</label>
+                {{ form.comment }}
+                {{ form.number }}
+                <!-- case_number を hidden input としてフォームに追加 -->
+                <input type="hidden" name="case_number" value="{{ case.case_number }}">
+                <button type="submit">投稿</button>
+            </form>
+                {% comment %} <button type="button" class="change-button" onclick="location.href='{% url 'guide:case_edit' case.case_number %}';">変更</button> {% endcomment %}
+            {% if user.is_superuser %}
+            <div class="action-buttons">
+                <button onclick="toggleAuthorization('{{ case.case_number }}', this)">
+                    {% if case.authonrization %}認可解除{% else %}認可{% endif %}
+                </button>
+                
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
-</div>
-{% endfor %}
-<a href="{% if user.is_superuser %}{% url 'manager:AdminTop' %}{% else %}{% url 'guide:guidetop' %}{% endif %}">
-    戻る
-</a>
+    {% endfor %}
+    <!-- エラーメッセージと成功メッセージを表示する部分 -->
+    {% if messages %}
+    <div class="messages">
+      <ul>
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
 </body>
-</html>
+{% endblock %}
