@@ -9,7 +9,7 @@ app_name = 'guide'
 # -----------------------------------------------------/
 # 1/8小山-----------------------------------------------
 urlpatterns = [
-    path('caselist/', views.CaseListView.caselist, name='caselist'),
+    path('caselist/', views.CaseListView.as_view(), name='caselist'),
     path('caseregistration/', views.CaseRegistrationView.as_view(), name='caseregistration'),
     # path('selectpref/', views.SelectPrefView.as_view(), name='selectpref'),
     path('guidancepindelete/', views.GuidancePinDeleteView.as_view(), name='guidancepindelete'),
