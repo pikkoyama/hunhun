@@ -14,7 +14,7 @@ from django.forms import ValidationError
 from django.views.generic.edit import CreateView
 from django import forms 
 from .models import Category
-from guide.models import Case, CustomUser, Tour
+from guide.models import Case, CustomUser, Tour,Comment
 from django.utils import timezone
 
 #########################################################
@@ -85,4 +85,45 @@ class TourRegistrationForm(forms.ModelForm):
 class SearchForm(forms.Form):
     keyword = forms.CharField(label='キーワード', max_length=100,required=True)
 
-      
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ['number', 'comment']  # モデルのフィールドを指定
+
+    # 必要に応じてフィールドのウィジェットやラベルを設定できます
+        case_number = forms.ModelChoiceField(queryset=Case.objects.all(),label='事例番号')
+        number = forms.ModelChoiceField(queryset=CustomUser.objects.all(), label="社員番号", empty_label="社員番号を選択")
+        comment = forms.CharField(widget=forms.Textarea, label='タイトル')
+
+    def __init__(self, *args, **kwargs):
+            user = kwargs.pop('user', None)
+            super().__init__(*args, **kwargs)
+            self.fields['number'].initial = CustomUser.objects.get(number=user.number) if user else None  # 社員番号は読み取り専用
+        # ログインユーザーが存在する場合、そのユーザーを初期値として設定
+            if user:
+                self.fields['number'].initial = user.number
+
+
+    def clean_number(self):
+        """numberフィールドのバリデーションを修正"""
+        number = self.cleaned_data.get('number')
+
+        # デバッグログ
+        print(f"Raw number input: {number}")
+
+        # `iwawa(53167804)` のような場合に `53167804` だけ取得
+        match = re.search(r'\d+', str(number))  # 数字部分のみ抽出
+        if match:
+            number = match.group()
+
+        print(f"Extracted number: {number}")
+
+        if not number:
+            raise ValidationError("社員番号が空です。")
+
+        try:
+            return CustomUser.objects.get(number=number)  # 数値のみで検索
+        except CustomUser.DoesNotExist:
+            raise ValidationError(f"指定された社員番号のユーザーが存在しません。（入力: {number}）")
+  
