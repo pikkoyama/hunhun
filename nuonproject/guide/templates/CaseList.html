@@ -228,15 +228,21 @@
         </div>
 
         {% for comment in case.comments.all %}
-        <div class="answer2">
-            {{ comment.comment }}
-        </div>
+                <div class="answer2">
+                {{ comment.number }}<br>
+                {{ comment.comment }}
+                </div>
         {% endfor %}
 
-        <label for="comment">コメント:</label><br><br>
+        <form method="post">
+            {% csrf_token %}
+            <label for="comment">コメント:</label>
             {{ form.comment }}
-
-            <button type="button" class="change-button" onclick="location.href='{% url 'guide:case_edit' case.case_number %}';">変更</button>
+            {{ form.number }}
+            {{ form.case_number }}
+            <button type="submit">投稿</button>
+        </form>
+            {% comment %} <button type="button" class="change-button" onclick="location.href='{% url 'guide:case_edit' case.case_number %}';">変更</button> {% endcomment %}
         {% if user.is_superuser %}
         <div class="action-buttons">
             <button onclick="toggleAuthorization('{{ case.case_number }}', this)">
