@@ -89,7 +89,7 @@ class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment
-        fields = ['number', 'comment']  # モデルのフィールドを指定
+        fields = ['case_number','number', 'comment']  # モデルのフィールドを指定
 
     # 必要に応じてフィールドのウィジェットやラベルを設定できます
         case_number = forms.ModelChoiceField(queryset=Case.objects.all(),label='事例番号')

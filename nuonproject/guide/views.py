@@ -386,16 +386,6 @@ class CaseListView(FormView):
         messages.success(self.request, '事例が登録されました')
         comment = form.save(commit=False)
         comment.number = self.request.user  # ユーザーを関連付け
-        case_number = self.request.session.get('current_case_number')  # セッションから取得
-        if not case_number:
-            case_number = self.kwargs.get('case_number')  # URLのパラメータ
-        if not case_number:
-            case_number = self.request.GET.get('case_number')  # クエリパラメータ
-
-    # `case_number` を `Case` モデルから取得して設定
-        case = get_object_or_404(Case, case_number=case_number)
-        comment.case = case  # コメントに事例をセット
-
         comment.save()
         return super().form_valid(form)
     
