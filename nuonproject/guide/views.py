@@ -408,6 +408,7 @@ def get_pins(request):
 
     return JsonResponse(data, safe=False)
 
+# 事例変更ビュー
 class CaseUpdateView(UpdateView):
     model = Case
     form_class = CaseForm
