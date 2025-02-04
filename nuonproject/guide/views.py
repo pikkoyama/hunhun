@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse
-from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm
+from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm,TourForm
 from django.views.generic.edit import FormView, CreateView
 from .models import Case, Tour, CustomUser
 from django.urls import reverse_lazy
@@ -410,7 +410,7 @@ class CaseUpdateView(UpdateView):
         case.save()
         return redirect('/guide/caselist/')
 
-class TourUpdateView(UpdateView):
+class TourChangeView(UpdateView):
     model = Tour
     form_class = TourForm
     template_name = 'TourChange.html'
