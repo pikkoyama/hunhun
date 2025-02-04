@@ -1,4 +1,3 @@
-forms.py
 # 作成するフォームのインポート
 # signUp用のフォーム：CustomUser
 # logIn用のフォーム：AuthenticationForm
