@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from django.contrib import messages
+from .forms import CommentForm
 
 # 根岸
 from django.http import JsonResponse
@@ -25,14 +26,49 @@ from django.utils.decorators import method_decorator
 # 小山 1/10--------------------------------
 from django.views.generic.base import TemplateView
 # 事例一覧を表示するビュー
-class CaseListView(TemplateView):
-    # 事例のデータをhtmlに渡す関数
-    def caselist(request):
-        # Caseテーブルのすべてのレコードを取得
-        caselist = Case.objects.all() 
-        # requestでcaselistをCaseList.htmlに渡す
-        return render(request, 'CaseList.html', {'caselist': caselist})
-    
+from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
+from django.views.generic import TemplateView
+from .models import Case, Comment
+from .forms import CommentForm
+
+class CaseListView(FormView):
+    template_name = 'Caselist.html'
+    form_class = CommentForm  # 直接定義したフォームクラスを使用
+    success_url = reverse_lazy('guide:caselist')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['caselist'] = Case.objects.all()  # 事例データを取得
+        for case in context['caselist']:
+            case.comments = Comment.objects.filter(case_number=case.case_number)
+        context['comments'] = Comment.objects.all()  # コメントデータを取得
+        return context
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # 現在のログインユーザーをフォームに渡す
+        return kwargs
+    def comment_view(request, case_id):
+        case = get_object_or_404(Case, id=case_id)  # case_idを使ってCaseオブジェクトを取得
+        if request.method == 'POST':
+            form = CommentForm(request.POST, user=request.user)
+            form.fields['case_number'].initial = case  # ここでcase_numberをフォームにセット
+            if form.is_valid():
+                # フォームが有効ならコメントを保存
+                comment = form.save(commit=False)
+                comment.number = request.user  # コメントを投稿したユーザーをセット
+                comment.save()
+                return redirect('guide:comment_view')  # 成功後、事例一覧にリダイレクト
+        else:
+            form = CommentForm(user=request.user)
+            form.fields['case_number'].initial = case  # 初期値としてcase_numberをセット
+        return render(request, 'comment_form.html', {'form': form, 'case': case})
+    def form_valid(self, form):
+        messages.success(self.request, '事例が登録されました')
+        comment = form.save(commit=False)
+        comment.number = self.request.user  # ユーザーを関連付け
+        comment.save()
+        return super().form_valid(form)
+
     # template_name = "CaseList.html"
 
 # ------------------------------------------/
@@ -181,16 +217,15 @@ class PasswordChangeView(TemplateView):
 class homeView(TemplateView):
     template_name = 'GuideTop.html'
 
-# 根岸 1/20
+# 我妻2/4
 class AuthorizeCaseView(View):
     def post(self, request, *args, **kwargs):
         if not request.user.is_superuser:
             return JsonResponse({"status": "error", "message": "Permission denied"})
 
         try:
-            data = json.loads(request.body)  # JSONを解析
+            data = json.loads(request.body)
             case_id = data.get("case_id")
-            print("受け取ったcase_id:", case_id)
 
             if not case_id:
                 return JsonResponse({"status": "error", "message": "Case ID is missing"})
@@ -204,11 +239,14 @@ class AuthorizeCaseView(View):
                 "authorization_status": case.authonrization
             })
 
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as e:
+            print(f"JSONDecodeError: {e}")
             return JsonResponse({"status": "error", "message": "Invalid JSON format"})
         except Case.DoesNotExist:
             return JsonResponse({"status": "error", "message": "Case not found"})
-        
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            return JsonResponse({"status": "error", "message": "An unexpected error occurred"})
 ################################
 class SearchView(View):
     def search_view(request):
