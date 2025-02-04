@@ -20,7 +20,7 @@ urlpatterns = [
     path('api/pins/', views.get_pins, name='get_pins'),
     # ---------------------------
     path('toursearch/', views.TourSearchView.as_view(), name='toursearch'),
-    #path('tourupdate/', views.TourUpdateView.as_view(), name='tourupdate'),
+    #path('tourchange/', views.TourUpdateView.as_view(), name='tourchange'),
 
     path("Informationpinchange/",views.InformationPinChangeView.as_view(),name="informationpinchange"),
     path("Informationpinregistration/",views.InformationPinRegistrationView.as_view(),name="informationpinregistration"),
