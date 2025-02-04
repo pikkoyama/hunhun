@@ -22,6 +22,11 @@ import html, requests
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
+from django.utils import timezone
+from django.views.generic.edit import UpdateView
+from .models import Case
+from .forms import CaseForm
+
 
 # 小山 1/10--------------------------------
 from django.views.generic.base import TemplateView
@@ -388,3 +393,19 @@ class GuideMapView(View):
 
         return redirect("guide:guidemap")
     
+
+class CaseUpdateView(UpdateView):
+    model = Case
+    form_class = CaseForm
+    template_name = 'CaseUpdate.html'
+
+    def get_object(self, queryset=None):
+        case_number = self.kwargs.get('case_number')
+        return get_object_or_404(Case, case_number=case_number)
+
+    def form_valid(self, form):
+        # 投稿日は変更した日付に更新
+        case = form.save(commit=False)
+        case.post_date = timezone.now()
+        case.save()
+        return redirect('/guide/caselist/')
