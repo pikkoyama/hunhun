@@ -1,4 +1,3 @@
-url.py
 # 小山 11/28-------------------------------------------
 from django.urls import path
 from . import views
