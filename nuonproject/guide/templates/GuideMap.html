@@ -3,248 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Map with Pin Types</title>
+    <title>ガイドマップ</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        /* CSSコード */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            height: 100vh;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-
-        #sidebar {
-            width: 300px;
-            padding: 20px;
-            background: #ffffff;
-            border-right: 1px solid #ccc;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            height: 100%;
-            display: none; /* Initially hidden */
-        }
-
-        #sidebar h2 {
-            margin-bottom: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-        }
-
+        /* 地図のスタイル */
         #map {
-            flex-grow: 1;
-            height: 100%;
+            height: 100vh; /* 画面いっぱいに地図を表示 */
             width: 100%;
         }
 
-        #formContainer {
-            display: none;
+        /* 入力フォームのスタイル */
+        .form-container {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 10px;
+            left: 10px;
             background: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 8px;
-            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none; /* 初期状態では非表示 */
             z-index: 1000;
             width: 300px;
         }
 
-        #formContainer input, #formContainer select {
+        .close-btn {
+            cursor: pointer;
+            background: red;
+            color: white;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+            text-align: right;
+            float: right;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input, select, textarea {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            font-size: 16px;
-            border-radius: 8px;
+            padding: 8px;
+            margin-top: 5px;
             border: 1px solid #ccc;
-            outline: none;
-            box-sizing: border-box;
-            transition: all 0.3s;
+            border-radius: 5px;
         }
 
-        #formContainer input:focus, #formContainer select:focus {
-            border-color: #007aff;
-        }
-
-        #formContainer button {
-            padding: 10px 20px;
-            background-color: #007aff;
+        button {
+            width: 100%;
+            background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        /* 画像プレビューのスタイル */
+        #imagePreview {
+            display: none;
+            margin-top: 10px;
             width: 100%;
-        }
-
-        #formContainer button:hover {
-            background-color: #005bb5;
-        }
-
-        .leaflet-container {
-            transition: all 0.5s ease;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
 <body>
-    <!-- 地図 -->
+
     <div id="map"></div>
-    
-    <!-- ピンの情報フォーム（地図上の左端に表示） -->
-    <div id="formContainer">
-        <h3>ピン情報を入力</h3>
-        <div id="pinTypeSelection">
-            <label for="pinType">ピンの種類:</label>
-            <select id="pinType">
-                <option value="案内ピン">案内ピン</option>
-                <option value="ガイドピン">ガイドピン</option>
+
+    <!-- 入力フォーム（初期状態では非表示） -->
+    <div id="formContainer" class="form-container">
+        <button class="close-btn" onclick="closeForm()">×</button>
+        <form id="pinForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <label>ピンの種類を選択：</label>
+            <select id="pinType" onchange="toggleForm()" name="pin_select">
+                <option value="guide">ガイドピン</option>
+                <option value="info">案内ピン</option>
             </select>
-        </div>
-        <div id="guidePinFields">
-            <label for="type">ガイドピンの種類:</label>
-            <select id="type">
-                <option value="混雑">混雑</option>
-                <option value="観光">観光</option>
-                <option value="交通">交通</option>
-            </select>
-        </div>
-        <div id="infoFields" style="display:none;">
-            <label for="name">名前:</label>
-            <input type="text" id="name">
-            <label for="description">説明:</label>
-            <input type="text" id="description">
-            <label for="address">住所:</label>
-            <input type="text" id="address">
-        </div>
-        <button id="addMarker">追加</button>
-        <button id="cancel">キャンセル</button>
+            
+            <!-- ガイドピンフォーム -->
+            <div id="guidePinForm">
+                <label>種類：</label>
+                <select name="sort_name">
+                    {% for sort in sort_name %}
+                        <option value="{{ sort.id }}">{{ sort }}</option>
+                    {% endfor %}
+                </select>
+                <input type="hidden" name="longitude">
+                <input type="hidden" name="latitude">
+                <button type="submit">ガイドピンを登録</button>
+            </div>
+
+            <!-- 案内ピンフォーム -->
+            <div id="infoPinForm" style="display: none;">
+                <label>ツアー番号：</label>
+                <select name="tour_number">
+                    {% for tour in tour_number %}
+                        <option value="{{ tour.tour_number }}">{{ tour }}</option>
+                    {% endfor %}
+                </select>
+
+                <label>ID：</label>
+                <input type="text" name="id">
+
+                <label>住所：</label>
+                <input type="text" name="address">
+
+                <label>場所：</label>
+                <input type="text" name="place">
+
+                <label>説明：</label>
+                <textarea name="explanation"></textarea>
+
+                <!-- 画像アップロード -->
+                <label>画像アップロード：</label>
+                <input type="file" name="image" id="imageInput" accept="image/*">
+                
+                <!-- 画像プレビュー -->
+                <img id="imagePreview">
+
+                <button type="submit">案内ピンを登録</button>
+            </div>
+        </form>
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        const map = L.map('map').setView([35.6895, 139.6917], 13);
-    
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-    
-        const formContainer = document.getElementById('formContainer');
-        const pinTypeSelect = document.getElementById('pinType');
-        const guidePinFields = document.getElementById('guidePinFields');
-        const infoFields = document.getElementById('infoFields');
-        const typeSelect = document.getElementById('type');
-        const nameInput = document.getElementById('name');
-        const descriptionInput = document.getElementById('description');
-        const addressInput = document.getElementById('address');
-        const addMarkerButton = document.getElementById('addMarker');
-        const cancelButton = document.getElementById('cancel');
-    
-        let currentLatLng = null;
-        let currentMarker = null;
-    
-        const pinColors = {
-            '混雑': 'red',
-            '観光': 'green',
-            '交通': 'blue'
-        };
-    
-        // 地図クリックでフォームを表示
-        map.on('click', (e) => {
-            currentLatLng = e.latlng;
-            formContainer.style.display = 'block';
-            
-            // クリック位置から住所を取得する
-            const lat = currentLatLng.lat;
-            const lng = currentLatLng.lng;
-            
-            fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`)
-                .then(response => response.json())
-                .then(data => {
-                    const address = data.address;
-                    if (address) {
-                        const fullAddress = `${address.road || ''} ${address.suburb || ''} ${address.city || ''} ${address.country || ''}`;
-                        addressInput.value = fullAddress.trim();  // 住所をフォームにセット
-                    }
-                })
-                .catch(err => console.error('住所の取得に失敗しました:', err));
-        });
-    
-        // ピンタイプが変更されたとき
-        pinTypeSelect.addEventListener('change', () => {
-            if (pinTypeSelect.value === '案内ピン') {
-                guidePinFields.style.display = 'none';
-                infoFields.style.display = 'block';
-            } else {
-                guidePinFields.style.display = 'block';
-                infoFields.style.display = 'none';
-            }
-        });
-    
-        // マーカー追加ボタン
-        addMarkerButton.addEventListener('click', () => {
-            if (currentLatLng) {
-                const pinType = pinTypeSelect.value;
-                if (pinType === '案内ピン') {
-                    const name = nameInput.value;
-                    const description = descriptionInput.value;
-                    const address = addressInput.value;
-    
-                    const marker = L.marker([currentLatLng.lat, currentLatLng.lng]).addTo(map);
-    
-                    marker.bindPopup(`<b>名前: ${name}</b><br>説明: ${description}<br>住所: ${address}`).openPopup();
-    
-                    marker.on('click', () => {
-                        showMarkerDetails(marker, '案内ピン', name, description);
-                    });
-                } else {
-                    const type = typeSelect.value;
-    
-                    const marker = L.marker([currentLatLng.lat, currentLatLng.lng], {
-                        icon: L.divIcon({
-                            className: 'custom-marker',
-                            html: `<div style="background-color: ${pinColors[type]}; width: 20px; height: 20px; border-radius: 50%;"></div>`
-                        })
-                    }).addTo(map);
-    
-                    marker.bindPopup(`<b>種類: ${type}</b>`).openPopup();
-    
-                    marker.on('click', () => {
-                        showMarkerDetails(marker, type);
-                    });
-                }
-    
-                formContainer.style.display = 'none';
-                currentLatLng = null;
-            }
-        });
-    
-        // キャンセルボタン
-        cancelButton.addEventListener('click', () => {
-            formContainer.style.display = 'none';
-            currentLatLng = null;
-        });
-    
-        function showMarkerDetails(marker, type, name = '', description = '') {
-            currentMarker = marker;
-            markerType.textContent = type;
-            markerName.textContent = name;
-            markerDetails.style.display = 'block';
+        let map = L.map('map').setView([35.6895, 139.6917], 13); // 東京中心
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        function openForm(lat, lng) {
+            let formContainer = document.getElementById("formContainer");
+            formContainer.style.display = "block";
+
+            document.querySelector("input[name='longitude']").value = lng;
+            document.querySelector("input[name='latitude']").value = lat;
         }
+
+        function closeForm() {
+            document.getElementById("formContainer").style.display = "none";
+        }
+
+        function toggleForm() {
+            let pinType = document.getElementById("pinType").value;
+            document.getElementById("guidePinForm").style.display = (pinType === "guide") ? "block" : "none";
+            document.getElementById("infoPinForm").style.display = (pinType === "info") ? "block" : "none";
+        }
+
+        map.on('click', function(e) {
+            let lat = e.latlng.lat;
+            let lng = e.latlng.lng;
+            L.marker([lat, lng]).addTo(map);
+            openForm(lat, lng);
+        });
+
+        // 画像プレビュー機能
+        document.getElementById("imageInput").addEventListener("change", function(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let imagePreview = document.getElementById("imagePreview");
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = "block";
+                };
+                reader.readAsDataURL(file);
+            }
+        });
     </script>
+
 </body>
 </html>

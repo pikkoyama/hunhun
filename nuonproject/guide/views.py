@@ -336,8 +336,8 @@ class GuideMapView(View):
     def get(self, request):
 
         sort = Sort.objects.all()
-        tour = Tour.objects.filter('tour_number')
-        return render(request, "GuideMap.html", {'sort_name':sort},{'tour_number':tour})
+        tour = Tour.objects.all()
+        return render(request, "GuideMap.html", {'sort_name': sort, 'tour_number': tour})
     
     def post(self, request, **kwargs):
         print("postで呼ばれました")
@@ -367,7 +367,8 @@ class GuideMapView(View):
         
         else:
 
-            information_pin_id = request.POST.get("longitude")
+            information_pin_id = request.POST.get("id")
+            tour_number = Tour.objects.get(tour_number=request.POST.get("tour_number"))
             explanation = request.POST.get("explanation")
             address = request.POST.get("address")
             place = request.POST.get("place")
