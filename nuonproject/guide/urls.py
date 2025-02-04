@@ -17,7 +17,6 @@ urlpatterns = [
     path('guidetop/', views.GuideTopView.as_view(), name='guidetop'),
     # koyama --------------------
     path('guidemap/', views.GuideMapView.as_view(), name='guidemap'),
-    path('api/pins/', views.get_pins, name='get_pins'),
     # ---------------------------
     path('toursearch/', views.TourSearchView.as_view(), name='toursearch'),
     #path('tourchange/', views.TourUpdateView.as_view(), name='tourchange'),
