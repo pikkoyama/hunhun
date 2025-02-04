@@ -184,7 +184,7 @@
                         <label>{{ tour.tour_name }}</label>
                         <div class="button-container">
                             <button type="button" onclick="window.location.href='{% url 'guide:qr_code_view' tour.tour_number %}';">QRコードを表示</button>
-                            <button type="button">変更</button>
+                            <button type="button" onclick="window.location.href='{% url 'guide:tourchange' %}';">変更</button>
                         </div>
                     </div>
                 </div>
