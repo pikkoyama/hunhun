@@ -341,6 +341,7 @@ function deleteCase(caseId, buttonElement) {
                     {{ form.number }}
                     <input type="hidden" name="case_number" value="{{ case.case_number }}">
                     <button type="submit">投稿</button>
+                    <button type="button" onclick="window.location.href='{% url 'guide:case_edit' case.case_number %}';">変更</button>
                 </form>
             </div>
 
