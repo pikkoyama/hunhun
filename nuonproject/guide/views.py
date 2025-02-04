@@ -68,6 +68,16 @@ class CaseListView(FormView):
         comment.number = self.request.user  # ユーザーを関連付け
         comment.save()
         return super().form_valid(form)
+    # 削除処理
+    def delete_case(self, request, case_id):
+        # case_idを使って該当のCaseオブジェクトを取得
+        case = get_object_or_404(Case, id=case_id)
+        
+        # Caseオブジェクトを削除
+        case.delete()
+
+        # 削除成功のレスポンスを返す
+        return JsonResponse({"status": "success"})
 
     # template_name = "CaseList.html"
 

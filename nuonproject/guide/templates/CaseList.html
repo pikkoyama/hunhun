@@ -168,6 +168,20 @@
         .action-buttons button:last-child:hover {
             background-color: #c0392b;
         }
+        /* 既存のスタイルはそのままに、新たなスタイル追加 */
+        .delete-button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
 
     </style>
 {% endblock %}
@@ -242,6 +256,31 @@ function toggleAuthorization(caseNumber, buttonElement) {
         alert("エラーが発生しました");
     });
 }
+function deleteCase(caseId) {
+    if (confirm("本当に削除しますか？")) {
+        fetch(`/caselist/delete/${caseId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,  // CSRFトークン
+            },
+            body: JSON.stringify({ case_id: caseId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                alert("事例が削除されました。");
+                window.location.reload();  // ページをリロードして削除された事例を反映
+            } else {
+                alert("削除に失敗しました。");
+            }
+        })
+        .catch(error => {
+            console.error("削除処理に失敗しました:", error);
+            alert("削除に失敗しました。");
+        });
+    }
+}
 </script>
 {% endblock %}
 
@@ -303,6 +342,7 @@ function toggleAuthorization(caseNumber, buttonElement) {
                 <button onclick="toggleAuthorization('{{ case.case_number }}', this)">
                     {% if case.authonrization %}認可解除{% else %}認可{% endif %}
                 </button>
+                <button class="delete-button" onclick="deleteCase('{{ case.id }}')">削除</button>  <!-- 削除ボタン追加 -->
             </div>
             {% endif %}
         </div>
