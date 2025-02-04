@@ -412,7 +412,7 @@ def get_pins(request):
 class CaseUpdateView(UpdateView):
     model = Case
     form_class = CaseForm
-    template_name = 'CaseUpdate.html'
+    template_name = 'CaseChange.html'
 
     def get_object(self, queryset=None):
         case_number = self.kwargs.get('case_number')
