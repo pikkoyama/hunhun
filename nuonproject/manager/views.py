@@ -66,6 +66,7 @@ def guide_account_list(request):
 @login_required
 def delete_guide_account(request, guide_id):
     """ガイドアカウントを削除するビュー"""
+    messages.success(request, 'アカウントが削除されました。')
     guide = get_object_or_404(CustomUser, number=guide_id)
     guide.delete()
     return redirect('manager:guide_account_list')
