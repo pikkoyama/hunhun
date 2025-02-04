@@ -20,7 +20,7 @@ urlpatterns = [
     path('guidemap/', views.GuideMapView.as_view(), name='guidemap'),
     # ---------------------------
     path('toursearch/', views.TourSearchView.as_view(), name='toursearch'),
-    # path('tourchange/', views.TourChangeView.as_view(), name='tourchange'),
+    path('tourchange/', views.TourChangeView.as_view(), name='tourchange'),
 
     path("Informationpinchange/",views.InformationPinChangeView.as_view(),name="informationpinchange"),
     path("Informationpinregistration/",views.InformationPinRegistrationView.as_view(),name="informationpinregistration"),

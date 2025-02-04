@@ -144,3 +144,8 @@ class CaseForm(forms.ModelForm):
     class Meta:
         model = Case
         fields = ['title', 'category', 'main']  # 編集できるフィールドを指定
+
+class TourForm(forms.ModelForm):
+    class Meta:
+        model = Tour
+        fields = ['tour_number', 'tour_name','tour_date',"location"]  # 編集できるフィールドを指定
