@@ -1,9 +1,10 @@
+<!-- 我妻2/4 -->
 {% extends "base.html" %}
 {% load static %}
 
-{%block title%}事例閲覧画面{%endblock%}
+{% block title %}事例閲覧画面{% endblock %}
 
-{%block css%}
+{% block css %}
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,15 +13,6 @@
             padding: 0;
             background-color: #f4f4f9;
             color: #333;
-        }
-
-        .top-bar {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            font-size: 18px;
-            text-align: center;
-            font-weight: bold;
         }
 
         .divider {
@@ -51,7 +43,7 @@
             padding: 0 15px;
             font-size: 14px;
             color: white;
-            background-color: #4CAF50;
+            background-color: #87ceeb;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -59,11 +51,17 @@
         }
 
         .search-container button:hover {
-            background-color: #45a049;
+            background-color: #add8e6;
+        }
+
+        /* 認可されている場合のスタイル */
+        .comment-container.authorized {
+            background-color: #d4f7c7; /* 薄緑色 */
+            border-left: 4px solid #4CAF50; /* 緑色の左線 */
         }
 
         .comment-container {
-            background-color: white;
+            background-color: white; /* デフォルトの白背景 */
             border: 1px solid #ddd;
             border-radius: 10px;
             padding: 20px;
@@ -71,12 +69,6 @@
             width: 80%;
             max-width: 800px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 認可された事例に適用するスタイル */
-        .comment-container.authorized {
-            background-color: #e0ffe0; /* 背景色を薄い緑に変更 */
-            border-color: #4CAF50; /* 境界線色を緑に */
         }
 
         .comment-container .qa strong {
@@ -100,23 +92,48 @@
             background-color: #f0f0f0;
         }
 
-        .answer{            
-            display: block; /* 縦に並べる */
-            display: none;
+        .answer, .answer2 {
+            display: none; /* 初期状態で非表示 */
             margin-top: 10px;
             padding: 10px;
             background-color: #f7f7f7;
-            border-left: 4px solid #4CAF50;
+            border-left: 4px solid #ffc107;
             border-radius: 5px;
         }
+        .comment-form{
+            display: none; /* 初期状態で非表示 */
+        }
 
-        .answer2{            
-            display: block; /* 縦に並べる */
-            margin-top: 10px;
+        .answer2 {
+            border-left-color: #FFA500;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            height: 120px;
+            font-size: 14px;
             padding: 10px;
-            background-color: #f7f7f7;
-            border-left: 4px solid #FFA500;
+            border: 1px solid #ccc;
             border-radius: 5px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+
+        .comment-form button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color:rgb(0, 0, 0);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .comment-form button:hover {
+            background-color:rgb(54, 54, 54);
         }
 
         .action-buttons {
@@ -151,65 +168,135 @@
         .action-buttons button:last-child:hover {
             background-color: #c0392b;
         }
+        /* 既存のスタイルはそのままに、新たなスタイル追加 */
+        .delete-button {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+
     </style>
 {% endblock %}
-{%block script%}
-    <script>
-        function toggleAuthorization(caseId, button) {
-            console.log('リクエスト送信中: ', caseId);  // ここで送信するIDを確認
-        
-            fetch("/guide/authorize_case/", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRFToken": "{{ csrf_token }}",  // CSRFトークンを正しくセット
-                },
-                body: JSON.stringify({ case_id: caseId }),  // case_idをJSON形式で送信
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('サーバーレスポンス: ', data);  // サーバーレスポンスを表示
-        
-                if (data.status === "success") {
-                    const container = button.closest(".comment-container");
-                    if (data.authorization_status) {
-                        // 認可された場合
-                        container.classList.add("authorized");
-                        button.textContent = "認可解除";  // ボタンテキストを変更
-                    } else {
-                        // 認可解除された場合
-                        container.classList.remove("authorized");
-                        button.textContent = "認可";  // ボタンテキストを戻す
-                    }
-                } else {
-                    alert("認可に失敗しました: " + (data.message || "不明なエラー"));
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("サーバーエラーが発生しました。");
-            });
+
+{% block script %}
+<script>
+// コメントの表示/非表示の切り替え
+function toggleAnswer(event) {
+    const spanElement = event.target; // クリックされた <span> 要素
+    const answerElement = spanElement.closest('.qa').querySelector('.answer'); // `answer`部分を取得
+    const answer2Elements = spanElement.closest('.qa').querySelectorAll('.answer2'); // すべての`answer2`部分を取得
+    const commentFormElement = spanElement.closest('.qa').querySelector('.comment-form'); // コメントフォーム部分を取得
+
+    // `answer` の表示/非表示を切り替え
+    if (answerElement) {
+        if (answerElement.style.display === "none" || answerElement.style.display === "") {
+            answerElement.style.display = "block";  // `answer` を表示
+        } else {
+            answerElement.style.display = "none";  // `answer` を非表示
         }
-        // 本文(main)表示用function
-        function toggleAnswer(event) {
-            var spanElement = event.target; // クリックされた <span> 要素
-            var answerElement = spanElement.nextElementSibling; // 次の要素（.answer）
-        
-            if (answerElement && answerElement.classList.contains("answer")) {
-                if (answerElement.style.display === "none" || answerElement.style.display === "") {
-                    answerElement.style.display = "block";
-                } else {
-                    answerElement.style.display = "none";
-                }
+    }
+
+    // `answer2` の表示/非表示を切り替え
+    answer2Elements.forEach(answer2 => {
+        if (answer2.style.display === "none" || answer2.style.display === "") {
+            answer2.style.display = "block";  // コメントを表示
+        } else {
+            answer2.style.display = "none";  // コメントを非表示
+        }
+    });
+
+    // コメントフォームの表示/非表示を切り替え
+    if (commentFormElement) {
+        if (commentFormElement.style.display === "none" || commentFormElement.style.display === "") {
+            commentFormElement.style.display = "block";  // コメントフォームを表示
+        } else {
+            commentFormElement.style.display = "none";  // コメントフォームを非表示
+        }
+    }
+}
+
+
+// 認可の状態をトグルする（管理者用）
+function toggleAuthorization(caseNumber, buttonElement) {
+    // ボタンの状態をチェック
+    const currentStatus = buttonElement.textContent.trim();
+
+    // リクエストを送信
+    fetch(`../authorize_case/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value, // CSRFトークンを含める
+        },
+        body: JSON.stringify({
+            case_id: caseNumber,  // case_idをリクエストボディに含める
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === "success") {
+            // サーバーから返ってきた認可ステータスをもとにボタンのラベルを更新
+            const newStatus = data.authorization_status ? "認可解除" : "認可";
+            buttonElement.textContent = newStatus;
+        } else {
+            // エラーメッセージを表示
+            alert(data.message || "認可のトグルに失敗しました");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("エラーが発生しました");
+    });
+}
+function deleteCase(caseId, buttonElement) {
+    console.log('caseId:', caseId);  // caseIdが正しく渡されているか確認
+
+    if (!caseId) {
+        alert('IDが見つかりません');
+        return;
+    }
+    // 削除処理の前に確認メッセージを表示する
+    if (confirm('本当に削除しますか？')) {
+        // 非同期リクエストで削除処理を送信
+        fetch(`/caselist/delete/${caseId}/`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value // CSRFトークン
+            },
+        })
+        .then(response => {
+            console.log(response);  // レスポンスをコンソールで確認
+            if (response.ok) {
+                // 削除成功なら、削除ボタンを非表示にする
+                buttonElement.closest('.comment-container').remove(); // ボタンが含まれている親要素を削除
+            } else {
+                alert('削除に失敗しました');
             }
-        }
-        
-    </script>
-{%endblock%}
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('エラーが発生しました');
+        });
+    }
+}
+</script>
+{% endblock %}
+
 {% block headertitle %}事例閲覧{% endblock %}
+
 {% block backform %}
     <button type="button" class="header-button" onclick="location.href='{% url 'guide:guidetop' %}';">戻る</button>
 {% endblock %}
+
 {% block main %}
 <body>
     <div class="divider"></div>
@@ -224,39 +311,52 @@
     <div class="comment-container {% if case.authonrization %}authorized{% endif %}">
         <div class="qa">
             <strong>Q.{{ case.case_number }}</strong>
-            <span onclick="toggleAnswer(event)">{{ case.title }}</span>
-            <div class="answer">
+            <span onclick="toggleAnswer(event)">
+                {{ case.title }}
+            </span>
+
+            <!-- case.main の内容を表示 -->
+            <div class="answer" style="display: none;">
                 {{ case.main }}
             </div>
 
-            {% for comment in case.comments.all %}
-                    <div class="answer2">
-                    {{ comment.number }}<br>
-                    {{ comment.comment }}
+            <!-- コメントの内容を表示 -->
+            <div class="answers">
+                {% for comment in case.comments.all %}
+                    <div class="answer2" style="display: none;">
+                        {{ comment.number }}<br>
+                        {{ comment.comment }}
                     </div>
-            {% endfor %}
+                {% empty %}
+                    <div class="answer2" style="text-align: center; color: #999;">コメントはまだありません。</div>
+                {% endfor %}
+            </div>
 
-            <form method="post">
-                {% csrf_token %}
-                <label for="comment">コメント:</label>
-                {{ form.comment }}
-                {{ form.number }}
-                <!-- case_number を hidden input としてフォームに追加 -->
-                <input type="hidden" name="case_number" value="{{ case.case_number }}">
-                <button type="submit">投稿</button>
-            </form>
-                {% comment %} <button type="button" class="change-button" onclick="location.href='{% url 'guide:case_edit' case.case_number %}';">変更</button> {% endcomment %}
+            <!-- コメント投稿フォーム -->
+            <div class="comment-form">
+                <form method="post">
+                    {% csrf_token %}
+                    <label for="comment">コメント:</label>
+                    {{ form.comment }}
+                    {{ form.number }}
+                    <input type="hidden" name="case_number" value="{{ case.case_number }}">
+                    <button type="submit">投稿</button>
+                </form>
+            </div>
+
             {% if user.is_superuser %}
             <div class="action-buttons">
                 <button onclick="toggleAuthorization('{{ case.case_number }}', this)">
                     {% if case.authonrization %}認可解除{% else %}認可{% endif %}
                 </button>
-                
+                <button onclick="deleteCase('1', this)">削除</button>
+
             </div>
             {% endif %}
         </div>
     </div>
     {% endfor %}
+
     <!-- エラーメッセージと成功メッセージを表示する部分 -->
     {% if messages %}
     <div class="messages">

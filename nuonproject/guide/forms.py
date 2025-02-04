@@ -1,3 +1,4 @@
+forms.py
 # 作成するフォームのインポート
 # signUp用のフォーム：CustomUser
 # logIn用のフォーム：AuthenticationForm
@@ -139,9 +140,3 @@ class CommentForm(forms.ModelForm):
         """numberフィールドのバリデーションを修正"""
         # ユーザーが何か入力した場合でも、ログインユーザーの社員番号を使用する
         return self.fields['number'].initial  # 自動的にログインユーザーの社員番号を使う
-    
-# ねぎし
-class CaseForm(forms.ModelForm):
-    class Meta:
-        model = Case
-        fields = ['title', 'category', 'main']  # 編集できるフィールドを指定

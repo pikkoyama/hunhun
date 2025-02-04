@@ -1,3 +1,4 @@
+url.py
 # 小山 11/28-------------------------------------------
 from django.urls import path
 from . import views
@@ -11,15 +12,16 @@ app_name = 'guide'
 urlpatterns = [
     path('caselist/', views.CaseListView.as_view(), name='caselist'),
     path('caselist/<int:case_id>/', CaseListView.comment_view, name='comment_view'),
+    path('delete/<int:case_id>/', CaseListView.delete_case, name='delete_case'),
     path('caseregistration/', views.CaseRegistrationView.as_view(), name='caseregistration'),
     # path('selectpref/', views.SelectPrefView.as_view(), name='selectpref'),
     path('guidancepindelete/', views.GuidancePinDeleteView.as_view(), name='guidancepindelete'),
     path('guidetop/', views.GuideTopView.as_view(), name='guidetop'),
     # koyama --------------------
     path('guidemap/', views.GuideMapView.as_view(), name='guidemap'),
-    path('api/pins/', views.get_pins, name='get_pins'),
     # ---------------------------
     path('toursearch/', views.TourSearchView.as_view(), name='toursearch'),
+    # path('tourchange/', views.TourChangeView.as_view(), name='tourchange'),
 
     path("Informationpinchange/",views.InformationPinChangeView.as_view(),name="informationpinchange"),
     path("Informationpinregistration/",views.InformationPinRegistrationView.as_view(),name="informationpinregistration"),

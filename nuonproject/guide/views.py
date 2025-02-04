@@ -1,13 +1,16 @@
+views.py
+
 from django.conf import settings
 from django.shortcuts import render
 from django.urls import reverse
-from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm,CommentForm
+from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm
 from django.views.generic.edit import FormView, CreateView
-from .models import Case, Tour, CustomUser,Comment
+from .models import Case, Tour, CustomUser
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from django.contrib import messages
+from .forms import CommentForm
 
 # 根岸
 from django.http import JsonResponse
@@ -15,24 +18,26 @@ from django.views import View
 import json
 
 from django.http import JsonResponse
-from guide.models import Information_pin  # guideアプリからインポート
-import html
+from guide.models import Information_pin, GuidePin, Sort  # guideアプリからインポート
+import html, requests
 
-from django.utils import timezone
-from django.views.generic.edit import UpdateView
-from .models import Case
-from .forms import CaseForm
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 # 小山 1/10--------------------------------
 from django.views.generic.base import TemplateView
 # 事例一覧を表示するビュー
-class CaseListView(FormView):
+from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
+from django.views.generic import TemplateView
+from .models import Case, Comment
+from .forms import CommentForm
 
+class CaseListView(FormView):
     template_name = 'Caselist.html'
     form_class = CommentForm  # 直接定義したフォームクラスを使用
     success_url = reverse_lazy('guide:caselist')
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['caselist'] = Case.objects.all()  # 事例データを取得
@@ -40,19 +45,15 @@ class CaseListView(FormView):
             case.comments = Comment.objects.filter(case_number=case.case_number)
         context['comments'] = Comment.objects.all()  # コメントデータを取得
         return context
-    
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user  # 現在のログインユーザーをフォームに渡す
         return kwargs
-    
     def comment_view(request, case_id):
         case = get_object_or_404(Case, id=case_id)  # case_idを使ってCaseオブジェクトを取得
-
         if request.method == 'POST':
             form = CommentForm(request.POST, user=request.user)
             form.fields['case_number'].initial = case  # ここでcase_numberをフォームにセット
-
             if form.is_valid():
                 # フォームが有効ならコメントを保存
                 comment = form.save(commit=False)
@@ -62,21 +63,24 @@ class CaseListView(FormView):
         else:
             form = CommentForm(user=request.user)
             form.fields['case_number'].initial = case  # 初期値としてcase_numberをセット
-
         return render(request, 'comment_form.html', {'form': form, 'case': case})
-    
     def form_valid(self, form):
         messages.success(self.request, '事例が登録されました')
         comment = form.save(commit=False)
         comment.number = self.request.user  # ユーザーを関連付け
         comment.save()
         return super().form_valid(form)
-    
-    def form_invalid(self, form):
-        """ フォームが無効な場合の処理 """
-        messages.error(self.request, "フォームにエラーがあります")
-        print(form.errors)  # エラー内容を表示
-        return super().form_invalid(form)
+    # 削除処理
+    def delete_case(self, request, case_id):
+        # case_idを使って該当のCaseオブジェクトを取得
+        case = get_object_or_404(Case, id=case_id)
+        
+        # Caseオブジェクトを削除
+        case.delete()
+
+        # 削除成功のレスポンスを返す
+        return JsonResponse({"status": "success"})
+
     # template_name = "CaseList.html"
 
 # ------------------------------------------/
@@ -225,16 +229,15 @@ class PasswordChangeView(TemplateView):
 class homeView(TemplateView):
     template_name = 'GuideTop.html'
 
-# 根岸 1/20
+# 我妻2/4
 class AuthorizeCaseView(View):
     def post(self, request, *args, **kwargs):
         if not request.user.is_superuser:
             return JsonResponse({"status": "error", "message": "Permission denied"})
 
         try:
-            data = json.loads(request.body)  # JSONを解析
+            data = json.loads(request.body)
             case_id = data.get("case_id")
-            print("受け取ったcase_id:", case_id)
 
             if not case_id:
                 return JsonResponse({"status": "error", "message": "Case ID is missing"})
@@ -248,11 +251,14 @@ class AuthorizeCaseView(View):
                 "authorization_status": case.authonrization
             })
 
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as e:
+            print(f"JSONDecodeError: {e}")
             return JsonResponse({"status": "error", "message": "Invalid JSON format"})
         except Case.DoesNotExist:
             return JsonResponse({"status": "error", "message": "Case not found"})
-        
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            return JsonResponse({"status": "error", "message": "An unexpected error occurred"})
 ################################
 class SearchView(View):
     def search_view(request):
@@ -317,110 +323,70 @@ class QRCodePageView(TemplateView):
         return context
 
 # --------koyama---------------------------------------------------------
-def get_pins(request):
-    print('api実行')
-    api_key = 'AIzaSyBZEV4yAriodr076SoPrK5LAoVkuOhRX78'
-    geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json'
-    translate_url = 'https://translation.googleapis.com/language/translate/v2'
-    pins = Information_pin.objects.all()
-    data = []
+# Google Maps API設定
+GOOGLE_MAPS_API_KEY = 'AIzaSyBZEV4yAriodr076SoPrK5LAoVkuOhRX78'
+GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
 
-    for pin in pins:
-        print('========================================================================-')
-        print('pin:', pin)
+class GuideMapView(View):
+    # template_name = "GuideMap.html"
 
-        # ジオコーディング
-        geocode_params = {
-            'address': pin.address,
-            'key': api_key
-        }
-        geocode_response = requests.get(geocode_url, params=geocode_params)
-        geocode_result = geocode_response.json()
+    def get(self, request):
 
-        # レスポンスをログに記録
-        print('Geocode API Response:', geocode_result)
+        sort = Sort.objects.all()
+        tour = Tour.objects.filter('tour_number')
+        return render(request, "GuideMap.html", {'sort_name':sort},{'tour_number':tour})
+    
+    def post(self, request, **kwargs):
+        print("postで呼ばれました")
 
-        # ジオコーディング結果がOKか確認
-        if geocode_result['status'] == 'OK' and 'geometry' in geocode_result['results'][0]:
-            location = geocode_result['results'][0]['geometry']['location']
-            latitude = location['lat']
-            longitude = location['lng']
+        pin_select = request.POST.get("pin_select")
+        tour_number = kwargs.get('tour_number')
+
+        if pin_select == "guide":
+
+            sort_name = Sort.objects.get(id=request.POST.get("sort_name"))
+            longitude = request.POST.get("longitude")
+            latitude = request.POST.get("latitude")
+
+            print(longitude)
+            print(latitude)
+            print(sort_name)
+            print(pin_select)
+        
+            GuidePin.objects.create(
+
+            number = self.request.user,
+            sort = sort_name,
+            longitude = longitude,
+            latitude = latitude
+
+        )
+        
         else:
-            # ジオコーディングに失敗した場合、nullのままとする
-            latitude = None
-            longitude = None
 
+            information_pin_id = request.POST.get("longitude")
+            explanation = request.POST.get("explanation")
+            address = request.POST.get("address")
+            place = request.POST.get("place")
+            image = request.POST.get("image")
 
-# さくちゃん 1/20
-        # 翻訳処理
-        translations = {}
-        translations_explanation = {}
-        for target_lang in ['en', 'zh', 'zh-TW', 'ko']:
-            translate_params = {
-                'q': html.escape(pin.place),
-                'source': 'ja',
-                'target': target_lang,
-                'key': api_key
-            }
-            translate_response = requests.get(translate_url, params=translate_params)
-            translate_result = translate_response.json()
-            print(f'Translation API Response for {target_lang}:', translate_result)  # 追加
-            if 'data' in translate_result and 'translations' in translate_result['data']:
-                translations[target_lang] = html.unescape(translate_result['data']['translations'][0].get('translatedText', ''))
-            else:
-                print(f'Translation failed for {target_lang}: {translate_result}')
-                translations[target_lang] = ''
+            print(information_pin_id)
+            print(explanation)
+            print(address)
+            print(place)
+            print(image)
 
+        
+            Information_pin.objects.create(
+                information_pin_id = information_pin_id,
+                tour_number = tour_number,
+                explanation = explanation,
+                address = address,
+                place = place,
+                image = image
+        )
 
-            translate_params = {
-                'q': html.escape(pin.explanation),
-                'source': 'ja',
-                'target': target_lang,
-                'key': api_key
-            }
-            translate_response = requests.get(translate_url, params=translate_params)
-            translate_result = translate_response.json()
-            print(f'Translation API Response for {target_lang}:', translate_result)  # 追加
-            if 'data' in translate_result and 'translations' in translate_result['data']:
-                translations_explanation[target_lang] = html.unescape(translate_result['data']['translations'][0].get('translatedText', ''))
-            else:
-                print(f'Translation failed for {target_lang}: {translate_result}')
-                translations_explanation[target_lang] = ''
+        
 
-        pin_data = {
-            'place_ja': pin.place,
-            'place_en': translations['en'],
-            'place_zh': translations['zh'],
-            'place_zh-TW': translations['zh-TW'],
-            'place_ko': translations['ko'],
-            'explanation_ja': pin.explanation,
-            'explanation_en': translations_explanation['en'],
-            'explanation_zh': translations_explanation['zh'],
-            'explanation_zh-TW': translations_explanation['zh-TW'],
-            'explanation_ko': translations_explanation['ko'],
-            'address_ja': pin.address,
-            'latitude': latitude,
-            'longitude': longitude,
-        }
-
-        print(pin_data)  # デバッグ用：APIレスポンスを確認
-        data.append(pin_data)
-
-    return JsonResponse(data, safe=False)
-
-# 事例変更ビュー
-class CaseUpdateView(UpdateView):
-    model = Case
-    form_class = CaseForm
-    template_name = 'CaseChange.html'
-
-    def get_object(self, queryset=None):
-        case_number = self.kwargs.get('case_number')
-        return get_object_or_404(Case, case_number=case_number)
-
-    def form_valid(self, form):
-        # 投稿日は変更した日付に更新
-        case = form.save(commit=False)
-        case.post_date = timezone.now()
-        case.save()
-        return redirect('/guide/caselist/')
+        return redirect("guide:guidemap")
+    
