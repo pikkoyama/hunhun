@@ -10,7 +10,7 @@ app_name = 'guide'
 # 1/8小山-----------------------------------------------
 urlpatterns = [
     path('caselist/', views.CaseListView.as_view(), name='caselist'),
-    path('caselist/<int:case_id>/', CaseListView.comment_view, name='comment_view'),
+    #path('caselist/<int:case_id>/', CaseListView.comment_view, name='comment_view'),
     path('caseregistration/', views.CaseRegistrationView.as_view(), name='caseregistration'),
     # path('selectpref/', views.SelectPrefView.as_view(), name='selectpref'),
     path('guidancepindelete/', views.GuidancePinDeleteView.as_view(), name='guidancepindelete'),
@@ -19,7 +19,7 @@ urlpatterns = [
     path('guidemap/', views.GuideMapView.as_view(), name='guidemap'),
     # ---------------------------
     path('toursearch/', views.TourSearchView.as_view(), name='toursearch'),
-    #path('tourchange/', views.TourUpdateView.as_view(), name='tourchange'),
+    path('tourchange/', views.TourChangeView.as_view(), name='tourchange'),
 
     path("Informationpinchange/",views.InformationPinChangeView.as_view(),name="informationpinchange"),
     path("Informationpinregistration/",views.InformationPinRegistrationView.as_view(),name="informationpinregistration"),
