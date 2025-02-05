@@ -354,9 +354,17 @@ class GuideMapView(View):
 
     def get(self, request):
 
+        # HTMLに表示したいデータベースからの情報を取得
         sort = Sort.objects.all()
         tour = Tour.objects.all()
-        return render(request, "GuideMap.html", {'sort_name': sort, 'tour_number': tour})
+        guide_pins = GuidePin.objects.all()
+        info_pins = Information_pin.objects.all()
+
+        # HTMLに情報を送る
+        return render(request, "GuideMap.html", {'sort_name': sort, 
+                                                 'tour_number': tour,
+                                                 'guide_pins': guide_pins,
+                                                 'info_pins': info_pins })
     
     def post(self, request, **kwargs):
         print("postで呼ばれました")
