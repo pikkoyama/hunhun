@@ -325,7 +325,13 @@ function deleteCase(caseId, buttonElement) {
                 {% for comment in case.comments.all %}
                     <div class="answer2" style="display: none;">
                         {{ comment.number }}<br>
-                        {{ comment.comment }}
+                        {{ comment.comment }}<br>
+                        {% comment %} {% if comment.author == request.user %} {% endcomment %}
+                            <form method="post" action="{% url 'guide:delete_comment' comment.id %}">
+                                {% csrf_token %}
+                                <button type="submit" style="color: red;">削除</button>
+                            </form>
+                        {% comment %} {% endif %} {% endcomment %}
                     </div>
                 {% empty %}
                     <div class="answer2" style="text-align: center; color: #999;">コメントはまだありません。</div>

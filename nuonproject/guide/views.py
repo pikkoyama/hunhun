@@ -11,7 +11,7 @@ from django.contrib import messages
 from .forms import CommentForm
 
 # 根岸
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.views import View
 import json
 
@@ -83,6 +83,15 @@ class CaseListView(FormView):
 
         # 削除成功のレスポンスを返す
         return JsonResponse({"status": "success"})
+    
+    def delete_comment(request, comment_id):
+        comment = get_object_or_404(Comment, id=comment_id)
+
+        if comment.number != request.user:
+            return redirect('guide:caselist')
+
+        comment.delete()
+        return redirect('guide:caselist')  # 適切なリダイレクト先に変更
 
     # template_name = "CaseList.html"
 
