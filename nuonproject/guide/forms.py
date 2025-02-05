@@ -26,7 +26,7 @@ class CaseRegistrationForm(forms.ModelForm):
         model = Case
         fields = ['case_number', 'number', 'title', 'category', 'main', 'post_date']  # モデルのフィールドを指定
 
-    # 必要に応じてフィールドのウィジェットやラベルを設定できます
+    # 必要に応じてフィールドのウィジェットやラベルを設定できます1
    case_number = forms.CharField(max_length=30, label='事例番号')
    number = forms.CharField(max_length=8,label="社員番号")
    title = forms.CharField(max_length=30, label='タイトル')
