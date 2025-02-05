@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ツアー登録</title>
+    <title>ツアー変更</title>
     <style>
         /* 全体のスタイル */
         body {
@@ -87,17 +87,17 @@
 </head>
 <body>
 
-    <form action="/submit" method="POST">
-        <h1>ツアー登録</h1>
-
+    <form method="POST">
+        <h1>ツアー変更</h1>
+        {% csrf_token %}
         <label for="name">ツアー名</label>
-        <input type="text" id="name" name="name" required><br>
+        {{ form.tour_name }}
 
         <label for="tourNumber">ツアー番号</label>
-        <input type="text" id="tourNumber" name="tourNumber" required><br>
+        {{ form.tour_number }}
 
         <label for="tourDate">ツアー日</label>
-        <input type="date" id="tourDate" name="tourDate" required><br>
+        {{ form.tour_date }}
 
         <label for="prefecture">都道府県</label>
         <select id="prefecture" name="prefecture" required>
@@ -108,12 +108,6 @@
             <!-- その他都道府県省略 -->
             <option value="沖縄県">沖縄県</option>
         </select><br>
-
-        <label for="email">メールアドレス</label>
-        <input type="email" id="email" name="email" required><br>
-
-        <label for="phone">電話番号</label>
-        <input type="tel" id="phone" name="phone" required><br>
 
         <button type="submit">登録</button>
     </form>
