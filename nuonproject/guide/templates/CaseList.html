@@ -337,9 +337,12 @@ function deleteComment(comment_id, buttonElement) {
     <div class="divider"></div>
 
     <div class="search-container">
-        <input type="text" placeholder="検索...">
-        <button>検索</button>
-        <button>ソート</button>
+        <form method="get" action="{% url 'guide:caselist/titlesearch' %}">
+            {% csrf_token %}
+            <input type="text" name="b" value="{{ request.GET.b }}" placeholder="検索...">
+            <button>検索</button>
+        </form>
+            <button>ソート</button>
     </div>
 
     {% for case in caselist %}

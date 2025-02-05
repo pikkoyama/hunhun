@@ -34,6 +34,7 @@ urlpatterns = [
     path('delete_comment/', views.DeleteCommentView.as_view(), name='delete_comment'),
     path('toursearch/namesearch/',views.TourNameListView.as_view(), name='toursearch/namesearch'),
     path('toursearch/numbersearch/',views.TourNumberListView.as_view(), name='toursearch/numbersearch'),
+    path('caselist/titlesearch/',views.CaseTitleListView.as_view(), name='caselist/titlesearch'),
 
 ]
 # ---------------------------------------------------------

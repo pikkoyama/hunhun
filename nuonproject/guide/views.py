@@ -320,18 +320,18 @@ class TourNumberListView(ListView):
              return Tour.objects.filter(tour_number__icontains=query)  # 部分一致検索
          return Tour.objects.all()  # 全件表示
      
-class CaseNameListView(ListView):
+class CaseTitleListView(ListView):
      model = Case  # 表示対象のモデル
-     template_name = 'TourSearch.html'  # 使用するテンプレート
-     context_object_name = 'tourlist'  # テンプレート内で使う変数名
+     template_name = 'CaseList.html'  # 使用するテンプレート
+     context_object_name = 'caselist'  # テンプレート内で使う変数名
 
      def get_queryset(self):
          """
          検索キーワードに基づいて商品をフィルタリング
          """
-         query = self.request.GET.get('a', '')  # クエリパラメータを取得
+         query = self.request.GET.get('b', '')  # クエリパラメータを取得
          if query:
-             return Case.objects.filter(case__icontains=query)  # 部分一致検索
+             return Case.objects.filter(title__icontains=query)  # 部分一致検索
          return Case.objects.all()  # 全件表示
     
 # ねぎし
