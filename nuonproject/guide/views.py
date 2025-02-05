@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm,TourForm
 from django.views.generic.edit import FormView, CreateView
+from django.views.generic import ListView
 from .models import Case, Tour, CustomUser
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
@@ -291,25 +292,47 @@ class AuthorizeCaseView(View):
             print(f"Unexpected error: {e}")
             return JsonResponse({"status": "error", "message": "An unexpected error occurred"})
 ################################
-class SearchView(View):
-    def search_view(request):
-        """
-        同じ画面で検索フォームと結果を表示するビュー関数。
-        """
-        posts = None  # 検索結果を格納する変数
-        
-        # POSTリクエストの場合、検索処理を実行
-        if request.method == 'POST':
-            form = SearchForm(request.POST)  # POSTデータをフォームにバインド
-            if form.is_valid():
-                keyword = form.cleaned_data['keyword']  # キーワードを取得
-                # 部分一致でデータをフィルタリング
-                posts = Tour.objects.filter(content__icontains=keyword)
-        else:
-            form = SearchForm()  # 初回アクセス時は空のフォームを表示
+class TourNameListView(ListView):
+     model = Tour  # 表示対象のモデル
+     template_name = 'TourSearch.html'  # 使用するテンプレート
+     context_object_name = 'tourlist'  # テンプレート内で使う変数名
 
-        # 検索フォームと結果を同じテンプレートに渡してレンダリング
-        return render(request, 'search.html', {'form': form, 'posts': posts})
+     def get_queryset(self):
+         """
+         検索キーワードに基づいて商品をフィルタリング
+         """
+         query = self.request.GET.get('q', '')  # クエリパラメータを取得
+         if query:
+             return Tour.objects.filter(tour_name__icontains=query)  # 部分一致検索
+         return Tour.objects.all()  # 全件表示
+     
+class TourNumberListView(ListView):
+     model = Tour  # 表示対象のモデル
+     template_name = 'TourSearch.html'  # 使用するテンプレート
+     context_object_name = 'tourlist'  # テンプレート内で使う変数名
+
+     def get_queryset(self):
+         """
+         検索キーワードに基づいて商品をフィルタリング
+         """
+         query = self.request.GET.get('a', '')  # クエリパラメータを取得
+         if query:
+             return Tour.objects.filter(tour_number__icontains=query)  # 部分一致検索
+         return Tour.objects.all()  # 全件表示
+     
+class CaseNameListView(ListView):
+     model = Case  # 表示対象のモデル
+     template_name = 'TourSearch.html'  # 使用するテンプレート
+     context_object_name = 'tourlist'  # テンプレート内で使う変数名
+
+     def get_queryset(self):
+         """
+         検索キーワードに基づいて商品をフィルタリング
+         """
+         query = self.request.GET.get('a', '')  # クエリパラメータを取得
+         if query:
+             return Case.objects.filter(case__icontains=query)  # 部分一致検索
+         return Case.objects.all()  # 全件表示
     
 # ねぎし
 from django.http import HttpResponse
