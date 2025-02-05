@@ -22,19 +22,19 @@ from django.utils import timezone
 ###事例登録のフォームを定義
 class CaseRegistrationForm(forms.ModelForm):
 
-   class Meta:
+    class Meta:
         model = Case
         fields = ['case_number', 'number', 'title', 'category', 'main', 'post_date']  # モデルのフィールドを指定
 
     # 必要に応じてフィールドのウィジェットやラベルを設定できます1
-   case_number = forms.CharField(max_length=30, label='事例番号')
-   number = forms.CharField(max_length=8,label="社員番号")
-   title = forms.CharField(max_length=30, label='タイトル')
-   category = forms.ModelChoiceField(queryset=Category.objects.all(), label='カテゴリ', empty_label="カテゴリを選択")
-   main = forms.CharField(widget=forms.Textarea, label='本文')
-   post_date = forms.DateField(initial=timezone.now, widget=forms.DateInput(attrs={'type': 'date'}), label="投稿日")
+    case_number = forms.CharField(max_length=20, label='事例番号')
+    number = forms.CharField(max_length=8,label="社員番号")
+    title = forms.CharField(max_length=30, label='タイトル')
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), label='カテゴリ', empty_label="カテゴリを選択")
+    main = forms.CharField(widget=forms.Textarea, label='本文')
+    post_date = forms.DateField(initial=timezone.now, widget=forms.DateInput(attrs={'type': 'date'}), label="投稿日")
 
-   def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         # 'user' を kwargs から取得
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
@@ -42,7 +42,23 @@ class CaseRegistrationForm(forms.ModelForm):
 
         # ログインユーザーが存在する場合、そのユーザーを初期値として設定
         if user:
-            self.fields['number'].initial = user  # ユーザーのインスタンスを初期値として設定
+            self.fields['number'].initial = user.number  # ユーザーのインスタンスを初期値として設定
+    def clean_number(self):
+        """社員番号から対応するCustomUserインスタンスを取得"""
+        number = self.cleaned_data.get('number')
+        print(f"{number}")
+        
+        try:
+            return CustomUser.objects.get(number=number)  # 社員番号からインスタンスを取得
+        except CustomUser.DoesNotExist:
+            raise ValidationError("指定された社員番号のユーザーが存在しません。")
+        
+    def clean_tour_number(self):
+        data = self.cleaned_data['tour_number']
+        # 正規表現で8桁の数字のみ許可
+        if not re.fullmatch(r'\d{8}', data):
+            raise ValidationError('ツアー番号は8桁の数字で入力してください。')
+        return data
 # ツアー登録用フォーム
 class TourRegistrationForm(forms.ModelForm):
 # koyama 

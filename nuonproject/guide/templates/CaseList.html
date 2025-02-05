@@ -256,38 +256,40 @@ function toggleAuthorization(caseNumber, buttonElement) {
         alert("エラーが発生しました");
     });
 }
-function deleteCase(caseId, buttonElement) {
-    console.log('caseId:', caseId);  // caseIdが正しく渡されているか確認
+function deleteCase(caseNumber, buttonElement) {
+    console.log('caseNumber:', caseNumber);  // caseNumberが正しく渡されているか確認
 
-    if (!caseId) {
+    if (!caseNumber) {
         alert('IDが見つかりません');
         return;
     }
-    // 削除処理の前に確認メッセージを表示する
+
     if (confirm('本当に削除しますか？')) {
-        // 非同期リクエストで削除処理を送信
-        fetch(`/caselist/delete/${caseId}/`, {
-            method: 'DELETE',
+        fetch(`../delete/`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value // CSRFトークン
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value, // CSRFトークンを含める
             },
+            body: JSON.stringify({
+                case_id: caseNumber,  // case_idをリクエストボディに含める
+            }),
         })
         .then(response => {
-            console.log(response);  // レスポンスをコンソールで確認
             if (response.ok) {
-                // 削除成功なら、削除ボタンを非表示にする
-                buttonElement.closest('.comment-container').remove(); // ボタンが含まれている親要素を削除
+                alert('削除成功しました');
+                buttonElement.closest('.comment-container').remove();  // ボタンの親要素を削除
             } else {
                 alert('削除に失敗しました');
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('削除リクエストでエラーが発生:', error);
             alert('エラーが発生しました');
         });
     }
 }
+
 </script>
 {% endblock %}
 
@@ -356,7 +358,7 @@ function deleteCase(caseId, buttonElement) {
                 <button onclick="toggleAuthorization('{{ case.case_number }}', this)">
                     {% if case.authonrization %}認可解除{% else %}認可{% endif %}
                 </button>
-                <button onclick="deleteCase('1', this)">削除</button>
+                <button onclick="deleteCase('{{case.case_number}}', this)">削除</button>
 
             </div>
             {% endif %}
