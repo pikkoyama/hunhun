@@ -73,15 +73,6 @@ class CaseListView(FormView):
         comment.number = self.request.user  # ユーザーを関連付け
         comment.save()
         return super().form_valid(form)
-    
-    def delete_comment(request, comment_id):
-        comment = get_object_or_404(Comment, id=comment_id)
-
-        if comment.number != request.user:
-            return redirect('guide:caselist')
-
-        comment.delete()
-        return redirect('guide:caselist')  # 適切なリダイレクト先に変更
 
 class DeleteCaseView(View):
     def post(self, request, *args, **kwargs):
@@ -101,6 +92,25 @@ class DeleteCaseView(View):
         except Exception as e:
             return JsonResponse({"status": "error", "message": str(e)})
 
+class DeleteCommentView(View):
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return JsonResponse({"status": "error", "message": "Permission denied"})
+
+        try:
+            data = json.loads(request.body)
+            comment_id = data.get("id")
+            print(comment_id)
+
+            if not comment_id:
+                return JsonResponse({"status": "error", "message": "Case ID is missing"})
+
+            comment = Comment.objects.get(id=comment_id)
+            print(comment)
+            comment.delete()
+            return JsonResponse({"status": "success"})
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)})
 
     # template_name = "CaseList.html"
 

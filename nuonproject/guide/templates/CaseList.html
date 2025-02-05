@@ -290,6 +290,39 @@ function deleteCase(caseNumber, buttonElement) {
     }
 }
 
+function deleteComment(comment_id, buttonElement) {
+    if (!comment_id) {
+        alert('IDが見つかりません');
+        return;
+    }
+
+    if (confirm('本当に削除しますか？')) {
+        fetch(`../delete_comment/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value, // CSRFトークンを含める
+            },
+            body: JSON.stringify({
+                id : comment_id,  // case_idをリクエストボディに含める
+            }),
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('削除成功しました');
+                buttonElement.closest('.answer2').remove();  // ボタンの親要素を削除
+            } else {
+                alert('削除に失敗しました');
+            }
+        })
+        .catch(error => {
+            console.error('削除リクエストでエラーが発生:', error);
+            alert('エラーが発生しました');
+        });
+    }
+}
+
+
 </script>
 {% endblock %}
 
@@ -328,12 +361,9 @@ function deleteCase(caseNumber, buttonElement) {
                     <div class="answer2" style="display: none;">
                         {{ comment.number }}<br>
                         {{ comment.comment }}<br>
-                        {% comment %} {% if comment.author == request.user %} {% endcomment %}
-                            <form method="post" action="{% url 'guide:delete_comment' comment.id %}">
-                                {% csrf_token %}
-                                <button type="submit" style="color: red;">削除</button>
-                            </form>
-                        {% comment %} {% endif %} {% endcomment %}
+                        {% if comment.number == user %}
+                            <button onclick="deleteComment('{{comment.id}}', this)">削除</button>
+                        {% endif %}
                     </div>
                 {% empty %}
                     <div class="answer2" style="text-align: center; color: #999;">コメントはまだありません。</div>

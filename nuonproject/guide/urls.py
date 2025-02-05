@@ -31,7 +31,7 @@ urlpatterns = [
     path('authorize_case/', AuthorizeCaseView.as_view(), name='authorize_case'),
     path('tour/<str:tour_number>/qr/', QRCodeView.as_view(), name='qr_code_view'),
     path('case/<str:case_number>/edit/', views.CaseUpdateView.as_view(), name='case_edit'),
-    path('delete_comment/<int:comment_id>/', views.CaseListView.delete_comment, name='delete_comment'),
+    path('delete_comment/', views.DeleteCommentView.as_view(), name='delete_comment'),
 
 ]
 # ---------------------------------------------------------
