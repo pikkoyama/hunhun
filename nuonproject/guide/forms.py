@@ -28,7 +28,7 @@ class CaseRegistrationForm(forms.ModelForm):
 
     # 必要に応じてフィールドのウィジェットやラベルを設定できます
    case_number = forms.CharField(max_length=30, label='事例番号')
-   number = forms.ModelChoiceField(queryset=CustomUser.objects.all(), label="社員番号", empty_label="社員番号を選択")
+   number = forms.CharField(max_length=8,label="社員番号")
    title = forms.CharField(max_length=30, label='タイトル')
    category = forms.ModelChoiceField(queryset=Category.objects.all(), label='カテゴリ', empty_label="カテゴリを選択")
    main = forms.CharField(widget=forms.Textarea, label='本文')
@@ -38,6 +38,7 @@ class CaseRegistrationForm(forms.ModelForm):
         # 'user' を kwargs から取得
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+        self.fields['number'].widget.attrs['readonly'] = True
 
         # ログインユーザーが存在する場合、そのユーザーを初期値として設定
         if user:
