@@ -150,32 +150,22 @@
         <!-- 検索セクション -->
         <div class="search-section">
             <div class="search-group">
-                <form method="post" action="/search-by-name/">
+                <form method="get" action="{% url 'guide:toursearch/namesearch' %}">
                     {% csrf_token %}
                     <label for="tour-name">ツアー名で検索:</label>
-                    <input type="text" placeholder="検索...">
-                    <button type="submit">検索</button>
-                </form>
-            </div>
-            <div class="search-group">
-                <form method="post" action="/search-by-number/">
-                    {% csrf_token %}
-                    <label for="tour-number">番号で検索:</label>
-                    <input type="text" placeholder="検索...">
+                    <input type="text" name="q" value="{{ request.GET.q }}" placeholder="検索...">
                     <button type="submit">検索</button>
                 </form>
             </div>
 
-            {% if posts %}
-                <h2>検索結果:</h2>
-                <ul>
-                    {% for post in posts %}
-                        <li>{{ post.title }}: {{ post.content }}</li>
-                    {% endfor %}
-                </ul>
-            {% elif posts is not None %}
-                <p>一致する投稿がありません。</p>
-            {% endif %}
+            <div class="search-group">
+                <form method="get" action="{% url 'guide:toursearch/numbersearch' %}">
+                    {% csrf_token %}
+                    <label for="tour-name">番号で検索:</label>
+                    <input type="text" name="a" value="{{ request.GET.a }}" placeholder="検索...">
+                    <button type="submit">検索</button>
+                </form>
+            </div>
 
             {% for tour in tourlist %}
                 <div class="results">
