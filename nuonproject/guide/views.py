@@ -416,12 +416,13 @@ class TourChangeView(UpdateView):
     model = Tour
     form_class = TourForm
     template_name = 'TourChange.html'
+    success_url = reverse_lazy('guide:toursearch')
 
     def get_object(self, queryset=None):
         tour_number = self.kwargs.get('tour_number')
-        return get_object_or_404(Case, tour_number=tour_number)
+        return get_object_or_404(Tour, tour_number=tour_number)
     def form_valid(self, form):
         # 投稿日は変更した日付に更新
         tour = form.save(commit=False)
         tour.save()
-        return redirect('/guide/tourseach/')
+        return redirect('/guide/toursearch/')

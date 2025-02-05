@@ -52,7 +52,7 @@ class TourRegistrationForm(forms.ModelForm):
     tour_number = forms.CharField(max_length=8, label='ツアー番号')
     tour_name = forms.CharField(max_length=30, label='ツアー名')
     number = forms.CharField(max_length=8,label="社員番号")
-    location = forms.CharField(max_length=30, label='場所')
+    location = forms.CharField(max_length=4, label='場所')
     tour_date = forms.DateTimeField(initial=timezone.now, widget=forms.DateInput(attrs={'type': 'date'}), label="ツアー日")
 
 
