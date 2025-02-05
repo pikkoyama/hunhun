@@ -1,13 +1,61 @@
 {% extends 'base.html' %}
 
 {% block headertitle %}事例の変更{% endblock %}
+
 {% block backform %}
     <button type="button" class="header-button" onclick="location.href='{% url 'guide:toursearch' %}';">戻る</button>
-    {% endblock %}
+{% endblock %}
+
 {% block main %}
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">変更する</button>
-  </form>
+  <div class="container mt-4">
+    <div class="card shadow p-4">
+      <h2 class="text-center mb-4">事例の変更</h2>
+      <form method="POST">
+        {% csrf_token %}
+        
+        {% for field in form %}
+          <div class="form-group mb-3">
+            <label class="form-label font-weight-bold">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}
+              <small class="form-text text-muted">{{ field.help_text }}</small>
+            {% endif %}
+          </div>
+        {% endfor %}
+        
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-lg">変更する</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <style>
+    .container {
+      max-width: 600px;
+    }
+    .card {
+      border-radius: 10px;
+      background-color: #ffffff;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 5px;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+  </style>
 {% endblock %}
