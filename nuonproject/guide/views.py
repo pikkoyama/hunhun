@@ -330,6 +330,7 @@ class QRCodePageView(TemplateView):
 GOOGLE_MAPS_API_KEY = 'AIzaSyBZEV4yAriodr076SoPrK5LAoVkuOhRX78'
 GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
 
+# 小山
 class GuideMapView(View):
     # template_name = "GuideMap.html"
 
