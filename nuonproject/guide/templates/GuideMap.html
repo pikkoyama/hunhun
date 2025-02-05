@@ -8,98 +8,139 @@
     <style>
         /* 地図のスタイル */
         #map {
-            height: 100vh; /* 画面いっぱいに地図を表示 */
+            height: 100vh;
             width: 100%;
         }
 
-        /* 入力フォームのスタイル */
-        .form-container {
+        /* 検索フォーム（中央上部） */
+        .search-container {
             position: absolute;
             top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .search-container input {
+            width: 250px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .search-container button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        /* ピン登録フォーム（左上） */
+        .form-container {
+            position: absolute;
+            top: 50px;
             left: 10px;
             background: white;
             padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: none; /* 初期状態では非表示 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: none;
             z-index: 1000;
-            width: 300px;
+            width: 320px;
         }
 
-        .close-btn {
-            cursor: pointer;
-            background: red;
-            color: white;
-            padding: 5px;
-            border: none;
-            border-radius: 5px;
-            text-align: right;
-            float: right;
+        .form-container h3 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            text-align: center;
+            font-weight: bold;
         }
 
-        label {
+        .form-container label {
+            font-size: 14px;
             font-weight: bold;
             display: block;
             margin-top: 10px;
         }
 
-        input, select, textarea {
+        .form-container input, 
+        .form-container select, 
+        .form-container textarea {
             width: 100%;
-            padding: 8px;
+            padding: 5px;
             margin-top: 5px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 4px;
+            font-size: 14px;
         }
 
-        button {
+        .form-container textarea {
+            resize: none;
+            height: 60px;
+        }
+
+        .form-container button {
             width: 100%;
-            background-color: #28a745;
+            background: #007bff;
             color: white;
             border: none;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 5px;
+            padding: 8px;
+            border-radius: 4px;
             cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #218838;
-        }
-
-        /* 画像プレビューのスタイル */
-        #imagePreview {
-            display: none;
             margin-top: 10px;
-            width: 100%;
-            max-height: 150px;
-            object-fit: cover;
-            border-radius: 5px;
-            border: 1px solid #ccc;
+        }
+
+        .close-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+            position: absolute;
+            top: 5px;
+            right: 5px;
         }
     </style>
 </head>
 <body>
 
+    <!-- 地図 -->
     <div id="map"></div>
 
-    <!-- 入力フォーム（初期状態では非表示） -->
+    <!-- 住所検索フォーム（中央上部） -->
+    <div class="search-container">
+        <input type="text" id="searchAddress" placeholder="住所を入力">
+        <button id="searchButton">検索</button>
+    </div>
+
+    <!-- ピン登録フォーム（左上） -->
     <div id="formContainer" class="form-container">
         <button class="close-btn" onclick="closeForm()">×</button>
+        <h3>ピンの登録</h3>
         <form id="pinForm" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            
-            <label>ピンの種類を選択：</label>
+            <label>ピンの種類：</label>
             <select id="pinType" onchange="toggleForm()" name="pin_select">
                 <option value="guide">ガイドピン</option>
                 <option value="info">案内ピン</option>
             </select>
-            
+
             <!-- ガイドピンフォーム -->
             <div id="guidePinForm">
                 <label>種類：</label>
                 <select name="sort_name">
                     {% for sort in sort_name %}
-                        <option value="{{ sort.id }}">{{ sort }}</option>
+                        <option value="{{sort.id}}">{{ sort }}</option>
                     {% endfor %}
                 </select>
                 <input type="hidden" name="longitude">
@@ -112,29 +153,17 @@
                 <label>ツアー番号：</label>
                 <select name="tour_number">
                     {% for tour in tour_number %}
-                        <option value="{{ tour.tour_number }}">{{ tour }}</option>
+                        <option value="{{tour.tour_number}}">{{ tour }}</option>
                     {% endfor %}
                 </select>
-
-                <label>ID：</label>
-                <input type="text" name="id">
-
-                <label>住所：</label>
-                <input type="text" name="address">
-
                 <label>場所：</label>
                 <input type="text" name="place">
-
+                <label>住所：</label>
+                <input type="text" name="address">
                 <label>説明：</label>
                 <textarea name="explanation"></textarea>
-
-                <!-- 画像アップロード -->
-                <label>画像アップロード：</label>
-                <input type="file" name="image" id="imageInput" accept="image/*">
-                
-                <!-- 画像プレビュー -->
-                <img id="imagePreview">
-
+                <label>画像：</label>
+                <input type="file" name="image">
                 <button type="submit">案内ピンを登録</button>
             </div>
         </form>
@@ -142,66 +171,77 @@
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        let map = L.map('map').setView([35.6895, 139.6917], 13); // 東京中心
+        let map = L.map('map').setView([35.6895, 139.6917], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    
-        let currentMarker = null; // 現在表示しているピン
-        let apiKey = 'AIzaSyBZEV4yAriodr076SoPrK5LAoVkuOhRX78'; 
-    
-        function openForm(lat, lng) {
-            let formContainer = document.getElementById("formContainer");
-            formContainer.style.display = "block";
-    
+
+        let currentMarker = null;
+        let apiKey = 'AIzaSyBZEV4yAriodr076SoPrK5LAoVkuOhRX78'; // Google Maps APIキーを設定
+
+        // 検索ボタンのイベントリスナー
+        document.getElementById("searchButton").addEventListener("click", searchLocation);
+
+        function searchLocation() {
+            let address = document.getElementById("searchAddress").value;
+            if (!address) {
+                alert("住所を入力してください");
+                return;
+            }
+
+            let url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "OK") {
+                        let location = data.results[0].geometry.location;
+                        let lat = location.lat;
+                        let lng = location.lng;
+
+                        if (currentMarker) {
+                            map.removeLayer(currentMarker);
+                        }
+
+                        currentMarker = L.marker([lat, lng]).addTo(map);
+                        map.setView([lat, lng], 15);
+                        document.querySelector("input[name='address']").value = data.results[0].formatted_address;
+                    } else {
+                        alert("住所が見つかりませんでした");
+                    }
+                })
+                .catch(error => {
+                    console.error("エラー:", error);
+                    alert("住所の検索に失敗しました");
+                });
+        }
+
+        map.on('click', function(e) {
+            let lat = e.latlng.lat;
+            let lng = e.latlng.lng;
+
+            if (currentMarker) {
+                map.removeLayer(currentMarker);
+            }
+            currentMarker = L.marker([lat, lng]).addTo(map);
+
             document.querySelector("input[name='longitude']").value = lng;
             document.querySelector("input[name='latitude']").value = lat;
-    
-            // 住所を取得
-            fetchAddress(lat, lng);
+            openForm();
+        });
+
+        function openForm() {
+            document.getElementById("formContainer").style.display = "block";
         }
-    
+
         function closeForm() {
             document.getElementById("formContainer").style.display = "none";
         }
-    
+
         function toggleForm() {
             let pinType = document.getElementById("pinType").value;
             document.getElementById("guidePinForm").style.display = (pinType === "guide") ? "block" : "none";
             document.getElementById("infoPinForm").style.display = (pinType === "info") ? "block" : "none";
         }
-    
-        map.on('click', function(e) {
-            let lat = e.latlng.lat;
-            let lng = e.latlng.lng;
-    
-            // 既存のピンを削除
-            if (currentMarker) {
-                map.removeLayer(currentMarker);
-            }
-    
-            // 新しいピンを追加
-            currentMarker = L.marker([lat, lng]).addTo(map);
-    
-            openForm(lat, lng);
-        });
-    
-        function fetchAddress(lat, lng) {
-            let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
-    
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "OK" && data.results.length > 0) {
-                        let address = data.results[0].formatted_address;
-                        document.querySelector("input[name='address']").value = address;
-                    } else {
-                        console.error("住所の取得に失敗しました:", data);
-                    }
-                })
-                .catch(error => console.error("エラー:", error));
-        }
     </script>
-    
-    
 
 </body>
 </html>

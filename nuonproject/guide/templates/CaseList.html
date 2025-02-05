@@ -310,7 +310,7 @@ function deleteCase(caseNumber, buttonElement) {
     </div>
 
     {% for case in caselist %}
-    <div class="comment-container {% if case.authonrization %}authorized{% endif %}">
+    <div class="comment-container {% if case.authorization %}authorized{% endif %}">
         <div class="qa">
             <strong>Q.{{ case.case_number }}</strong>
             <span onclick="toggleAnswer(event)">
@@ -356,7 +356,7 @@ function deleteCase(caseNumber, buttonElement) {
             {% if user.is_superuser %}
             <div class="action-buttons">
                 <button onclick="toggleAuthorization('{{ case.case_number }}', this)">
-                    {% if case.authonrization %}認可解除{% else %}認可{% endif %}
+                    {% if case.authorization %}認可解除{% else %}認可{% endif %}
                 </button>
                 <button onclick="deleteCase('{{case.case_number}}', this)">削除</button>
 

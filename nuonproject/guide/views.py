@@ -264,12 +264,12 @@ class AuthorizeCaseView(View):
                 return JsonResponse({"status": "error", "message": "Case ID is missing"})
 
             case = Case.objects.get(case_number=case_id)
-            case.authonrization = not case.authonrization
+            case.authorization = not case.authorization
             case.save()
 
             return JsonResponse({
                 "status": "success",
-                "authorization_status": case.authonrization
+                "authorization_status": case.authorization
             })
 
         except json.JSONDecodeError as e:

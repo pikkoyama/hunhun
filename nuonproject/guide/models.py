@@ -72,7 +72,6 @@ class Tour(models.Model):
 
 # 案内ピンモデル
 class Information_pin(models.Model):
-    information_pin_id = models.IntegerField(verbose_name="案内ピン番号",default=0, primary_key=True)
     tour_number = models.ForeignKey(Tour, related_name='information_pin',verbose_name="ツアー番号", on_delete=models.CASCADE)
     explanation = models.CharField(verbose_name="説明",max_length=700)
     address = models.CharField(verbose_name="住所", max_length=50)
@@ -103,7 +102,7 @@ class Case(models.Model):
      category = models.ForeignKey(Category,verbose_name="カテゴリ",on_delete=models.CASCADE)
      main = models.CharField(verbose_name="本文",max_length=300)
      post_date = models.DateField(verbose_name="投稿日",default=timezone.now)
-     authonrization = models.BooleanField(verbose_name="認可済",max_length=20,default=False)
+     authorization = models.BooleanField(verbose_name="認可済",max_length=20,default=False)
 
      class Meta:
         verbose_name_plural = '事例'
