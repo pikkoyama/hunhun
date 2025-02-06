@@ -28,13 +28,18 @@
         /* フォームのスタイル */
         .form-container {
             width: 100%;
-            max-width: 600px;  /* フォームの最大幅 */
-            background-color: white;
-            border-radius: 8px;
+            max-width: 900px;  /* フォームの最大幅 */
             padding: 40px;
             display: flex;
             flex-direction: column;
             gap: 20px; /* 各要素間の広めのスペース */
+            background-color: rgba(0, 0, 0, 0.05); /* 薄いグレーの背景色 */
+            border-radius: 3px;
+            margin: 0 auto; /* 中央揃え */
+        }
+        form {
+            width: 80%;
+            margin: 0 auto; /* 中央揃え */
         }
 
         h1 {
@@ -45,9 +50,20 @@
         }
 
         label {
-            font-size: 18px;  /* ラベル文字を大きく */
-            margin-bottom: 10px;  /* ラベルと入力フィールドの間にスペース */
+            margin-top: 10px;
+            font-size: 18px;
+            margin-bottom: 10px;  /* ラベルと入力フィールドの間のスペース */
             font-weight: bold;
+        }
+        
+        select {
+            
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            width: 100%;
         }
 
         input[type="text"],
@@ -113,7 +129,7 @@
         }
 
         .submit-button {
-            margin-top: auto;  /* フォームの下部に配置 */
+            margin-top: 20px; /* フォームの下部に配置 */
         }
 
         /* エラーメッセージやプレースホルダースタイル */
@@ -142,7 +158,8 @@
             <input type="text" name="tour_number" value="{{ form.tour_number.value }}" class="form-control" readonly>
 
             <label for="tourDate">ツアー日</label>
-            {{ form.tour_date }}
+            <input type="date" name="tour_date" value="{{ form.tour_date.value|date:'Y-m-d' }}" class="form-control" required>
+
 
             <label for="location">都道府県</label>
             <select id="location" name="location" required>

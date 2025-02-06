@@ -16,6 +16,13 @@
             min-height: 100vh;
             box-sizing: border-box;
         }
+        p.notice {
+            color: red;             /* 赤文字 */
+            font-size: 12px;        /* 少し小さめのフォント */
+            margin-top: 10px;       /* 上部に少し余白 */
+            margin-bottom: 10px;    /* 下部にも少し余白 */
+            line-height: 1.5;       /* 行間を少し広げる */
+        }
        
         main {
             display: flex;
@@ -51,9 +58,6 @@
             border-radius: 6px; /* 少し丸みを持たせる */
             font-size: 16px; /* フォントサイズを大きく */
             width: 100%;
-        }
-        input:invalid {
-            border-color: red;
         }
        
         .button-container {
@@ -110,15 +114,6 @@
             background-color: #d4ac0d;
         }
        
-        .back-button {
-            background-color: #7f8c8d;
-            margin-top: 10px;
-        }
-       
-        .back-button:hover {
-            background-color: #5e6666;
-        }
-       
         .error-message {
             color: red;
             font-size: 12px;
@@ -168,6 +163,8 @@
                 <button type="button" class="random-button" onclick="generateRandomPassword()">ランダム生成</button>
                 <button type="button" class="toggle-password-button" onclick="togglePasswordVisibility()">表示</button>
             </div>
+            <p class="notice">※セキュリティのため、パスワードは運営側でも確認できません。
+                忘れないようにメモするか、安全な場所に保管してください。</p>
             {% for error in form.password.errors %}
                 <p class="error-message">{{ error }}</p>
             {% endfor %}
