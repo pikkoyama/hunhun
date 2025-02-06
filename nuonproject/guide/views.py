@@ -545,3 +545,39 @@ class CaseSortListView(ListView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()  # カテゴリリストを追加
         return context
+     
+from django.urls import reverse_lazy
+from django.views.generic.edit import UpdateView
+from .models import Information_pin
+from .forms import InformationPinForm
+
+# 案内ピンを変更するビュー
+class InformationPinUpdateView(UpdateView):
+    model = Information_pin
+    form_class = InformationPinForm
+    template_name = 'guide/InformationPinChange.html'
+    context_object_name = 'form'
+    
+    # 編集が完了したら遷移するURL
+    def get_success_url(self):
+        return reverse_lazy('guide:pinlist')  # ピン一覧ページへリダイレクト
+
+    def get_object(self, queryset=None):
+        # 変更する情報ピンを取得（URLからIDを取得）
+        return super().get_object(queryset=queryset)
+    
+
+# 案内ピンを削除するビュー
+from django.http import JsonResponse
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+from django.shortcuts import get_object_or_404
+from .models import Information_pin
+
+@method_decorator(csrf_exempt, name='dispatch')  # CSRFトークンのチェックを無効化
+class DeletePinView(View):
+    def delete(self, request, pin_id, *args, **kwargs):
+        pin = get_object_or_404(Information_pin, id=pin_id)
+        pin.delete()
+        return JsonResponse({'message': 'ピンが削除されました'}, status=200)

@@ -3,6 +3,7 @@ from django.urls import path
 from . import views
 from django.urls import path
 from .views import AuthorizeCaseView, QRCodeView,CaseListView
+from .views import DeletePinView
 
 app_name = 'guide'
 
@@ -38,6 +39,9 @@ urlpatterns = [
     path('toursearch/numbersearch/',views.TourNumberListView.as_view(), name='toursearch/numbersearch'),
     path('caselist/titlesearch/',views.CaseTitleListView.as_view(), name='caselist/titlesearch'),
     path('caselist/sortesearch/',views.CaseSortListView.as_view(), name='caselist/sortsearch'),
+    path('tour/<int:tour_id>/pin/<int:pk>/edit/', views.InformationPinUpdateView.as_view(), name='edit_information_pin'),
+    path('delete_pin/<int:pin_id>/', DeletePinView.as_view(), name='delete_pin'),
+
 
 ]
 # ---------------------------------------------------------

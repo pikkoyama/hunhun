@@ -166,3 +166,12 @@ class TourForm(forms.ModelForm):
     class Meta:
         model = Tour
         fields = ['tour_number', 'tour_name','tour_date',"location"]  # 編集できるフィールドを指定
+
+
+from django import forms
+from .models import Information_pin
+
+class InformationPinForm(forms.ModelForm):
+    class Meta:
+        model = Information_pin
+        fields = ['place', 'explanation', 'image']
