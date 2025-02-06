@@ -13,25 +13,29 @@
             color: #333;
             display: flex;
             flex-direction: column;
+            justify-content: center;  /* 縦方向に中央配置 */
+            align-items: center;      /* 横方向に中央配置 */
             min-height: 100vh;
             box-sizing: border-box;
-        }
-        
-        main {
-            display: flex;
-            justify-content: center;  /* 横方向に中央配置 */
-            flex: 1;                  /* mainタグの高さを最大に */
         }
 
         .form-container {
             width: 100%;
-            max-width: 600px;  /* フォームの最大幅 */
+            max-width: 900px;  /* フォームの最大幅 */
             background-color: white;
             border-radius: 8px;
             padding: 40px;
             display: flex;
             flex-direction: column;
             gap: 20px; /* 各要素間の広めのスペース */
+            background-color: rgba(0, 0, 0, 0.05); /* 薄いグレーの背景色 */
+            border-radius: 3px;
+            margin: 0 auto; /* 中央揃え */
+        }
+
+        form {
+            width: 80%;
+            margin: 0 auto; /* 中央揃え */
         }
 
         h1 {
@@ -87,7 +91,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             width: 100%;  /* ボタンを100%幅にして広げる */
-            background-color: #87ceeb;
+            background-color: #87ceeb;6
         }
 
         .submit-button:hover {

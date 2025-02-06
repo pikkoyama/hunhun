@@ -182,6 +182,68 @@
         .delete-button:hover {
             background-color: #c0392b;
         }
+        /* メッセージのスタイル */
+        .alert-message {
+            background-color: #aee1f2; /* 薄水色に設定 */
+            color: black;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            position: fixed;
+            bottom: 0; /* 画面下部に配置 */
+            left: 0;   /* 画面の左端から開始 */
+            width: 100%; /* 画面全体の幅に合わせる */
+            display: none;  /* 初期状態では非表示 */
+            opacity: 0;
+            animation: fadeInOut 6s forwards; /* フェードイン・フェードアウト */
+        }
+        
+
+        /* フェードイン・フェードアウトアニメーション */
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+                bottom: -50px; /* 初期位置を画面外に設定 */
+            }
+            10% {
+                opacity: 1;
+                bottom: 0;  /* 画面の下に表示 */
+            }
+            80% {
+                opacity: 1;
+                bottom: 0;  /* メッセージは下部に固定 */
+            }
+            100% {
+                opacity: 0;
+                bottom: -50px;  /* メッセージが下にフェードアウト */
+            }
+        }
+        .comment-container .answer {
+            display: none;
+            background-color: #f4f4f9; /* 明るいグレー背景 */
+            color: #333; /* 通常の文字色 */
+            padding: 20px;
+            border-left: 5px solid #87ceeb; /* 左側に青い線を加えて視覚的に強調 */
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1); /* 薄いシャドウで立体感を演出 */
+            margin-top: 15px;
+            font-size: 16px;
+            line-height: 1.6;
+            transition: transform 0.3s ease;
+        }
+        
+        /* ホバー時に少し膨らむエフェクト */
+        .comment-container .answer:hover {
+            transform: scale(1.02); /* 少し膨らむエフェクト */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* シャドウを強めて浮き上がる感じ */
+        }
+        
+        /* 応答内容がある場合のスタイル */
+        .comment-container .answer p {
+            margin: 0;
+            padding: 0;
+        }
 
     </style>
 {% endblock %}
@@ -399,15 +461,21 @@ function deleteComment(comment_id, buttonElement) {
     </div>
     {% endfor %}
 
-    <!-- エラーメッセージと成功メッセージを表示する部分 -->
+    <!-- フラッシュメッセージの表示 -->
     {% if messages %}
-    <div class="messages">
-      <ul>
-        {% for message in messages %}
-          <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-      </ul>
-    </div>
+        <div class="alert-message" id="alertMessage">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+
+        <script>
+            // ページが読み込まれたときにメッセージを表示
+            window.onload = function() {
+                var message = document.getElementById("alertMessage");
+                message.style.display = "block";  // メッセージを表示
+            };
+        </script>
     {% endif %}
 </body>
 {% endblock %}
