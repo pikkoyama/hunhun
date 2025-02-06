@@ -231,10 +231,10 @@
 
                     if (pin.latitude != null && pin.longitude != null) {
                         var marker = L.marker([pin.latitude, pin.longitude]).addTo(map)
-                            .bindPopup('<b>' + pin.information_pin_id + '. ' + pin["place_" + language]  + '</b>');  // ピンのポップアップに場所の名前を表示
+                            .bindPopup('<b>' + pin.id + '. ' + pin["place_" + language]  + '</b>');  // ピンのポップアップに場所の名前を表示
 
                         var li = document.createElement('li');
-                         li.textContent = pin.information_pin_id + '. ' + pin["place_" + language] ;  // 一覧の数字の横に場所の名前を表示
+                         li.textContent = pin.id + '. ' + pin["place_" + language] ;  // 一覧の数字の横に場所の名前を表示
 
                         // 画像の追加
                         var img = document.createElement('img');
