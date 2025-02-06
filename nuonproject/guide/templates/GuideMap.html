@@ -129,6 +129,7 @@
         <h3>ピンの登録</h3>
         <form id="pinForm" method="post" enctype="multipart/form-data">
             {% csrf_token %}
+            <input type="hidden" name="tour_number" value="{{ request.GET.tour_number}}">
             <label>ピンの種類：</label>
             <select id="pinType" onchange="toggleForm()" name="pin_select">
                 <option value="guide">ガイドピン</option>
@@ -151,10 +152,7 @@
             <!-- 案内ピンフォーム -->
             <div id="infoPinForm" style="display: none;">
                 <label>ツアー番号：</label>
-                <select name="tour_number">
-                    {% for tour in tour_number %}
-                        <option value="{{tour.tour_number}}">{{ tour }}</option>
-                    {% endfor %}
+                <input name="select_tour_number" value="{{select_tour_number}}" readonly>
                 </select>
                 <label>場所：</label>
                 <input type="text" name="place">
@@ -171,16 +169,19 @@
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
+        //　初期位置の設定
         let map = L.map('map').setView([35.6895, 139.6917], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
+        // 空のピンを生成
         let currentMarker = null;
         let apiKey = 'AIzaSyBZEV4yAriodr076SoPrK5LAoVkuOhRX78'; // Google Maps APIキーを設定
 
         // 検索ボタンのイベントリスナー
         document.getElementById("searchButton").addEventListener("click", searchLocation);
-
+        // 検索する関数
         function searchLocation() {
+            // 入力された文字列を受け取る
             let address = document.getElementById("searchAddress").value;
             if (!address) {
                 alert("住所を入力してください");
@@ -188,7 +189,7 @@
             }
 
             let url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
-
+            // urlにとぶ
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
@@ -196,11 +197,12 @@
                         let location = data.results[0].geometry.location;
                         let lat = location.lat;
                         let lng = location.lng;
-
+                        
+                        // もしピンが刺されているならピンを削除
                         if (currentMarker) {
                             map.removeLayer(currentMarker);
                         }
-
+                        // 検索結果の位置にピンを指す
                         currentMarker = L.marker([lat, lng]).addTo(map);
                         map.setView([lat, lng], 15);
                         document.querySelector("input[name='address']").value = data.results[0].formatted_address;
@@ -213,6 +215,41 @@
                     alert("住所の検索に失敗しました");
                 });
         }
+
+        // **登録済みのガイドピンを表示**
+        let guidePins = [
+            {% for pin in guide_pins %}
+                {
+                    lat: {{ pin.latitude }},
+                    lng: {{ pin.longitude }},
+                    sort: "{{ pin.sort }}"
+                },
+            {% endfor %}
+            ];
+
+            guidePins.forEach(pin => {
+            L.marker([pin.lat, pin.lng])
+                .addTo(map)
+                .bindPopup(`<b>ガイドピン</b><br>種類: ${pin.sort}`);
+            });
+        
+        let infoPins = {{ info_pins|safe }};
+
+        infoPins.forEach(pin => {
+            let address = pin.address;
+            fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "OK") {
+                        let location = data.results[0].geometry.location;
+                        L.marker([location.lat, location.lng])
+                            .addTo(map)
+                            .bindPopup(`案内ピン: ${pin.explanation}`);
+                    }
+                })
+                .catch(error => console.error("ジオコーディングエラー:", error));
+        });
+
 
         map.on('click', function(e) {
             let lat = e.latlng.lat;

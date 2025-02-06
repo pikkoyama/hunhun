@@ -378,32 +378,75 @@ class QRCodePageView(TemplateView):
 
 # --------koyama---------------------------------------------------------
 # Google Maps API設定
-GOOGLE_MAPS_API_KEY = 'AIzaSyBZEV4yAriodr076SoPrK5LAoVkuOhRX78'
-GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
+# GOOGLE_MAPS_API_KEY = 'AIzaSyBZEV4yAriodr076SoPrK5LAoVkuOhRX78'
+# GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
 
 # 小山
 class GuideMapView(View):
     # template_name = "GuideMap.html"
 
-    def get(self, request):
+    def get(self, request, **kwargs):
 
         # HTMLに表示したいデータベースからの情報を取得
         sort = Sort.objects.all()
-        tour = Tour.objects.all()
+        tours = Tour.objects.all()
         guide_pins = GuidePin.objects.all()
-        info_pins = Information_pin.objects.all()
+        # info_pins = Information_pin.objects.all()
+
+        # 前のページからツアー番号をgetで取得
+        tour_number = request.GET.get('tour_number', None)
+        
+        api_key = 'AIzaSyBZEV4yAriodr076SoPrK5LAoVkuOhRX78'
+        geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json'
+
+        print(f"取得した tour_number: {tour_number}")  # デバッグ用ログ
+        if not tour_number:
+            return JsonResponse({'error': 'tour_number is required'}, status=400)
+
+        # 指定ツアーの案内ピン取得
+        info_pins = Information_pin.objects.filter(tour_number=tour_number)
+        data = []
+
+        for pin in info_pins:
+            geocode_params = {'address': pin.address, 'key': api_key}
+            geocode_response = requests.get(geocode_url, params=geocode_params)
+            geocode_result = geocode_response.json()
+
+            if geocode_result['status'] == 'OK' and 'geometry' in geocode_result['results'][0]:
+                location = geocode_result['results'][0]['geometry']['location']
+                latitude = location['lat']
+                longitude = location['lng']
+            else:
+                latitude = None
+                longitude = None
+
+            pin_data = {
+                'id': pin.id,
+                'place': pin.place,
+                'explanation': pin.explanation,
+                'address': pin.address,
+                'latitude': latitude,
+                'longitude': longitude,
+                'image_url': pin.image.url if pin.image else '/media/images/no_image.png'
+            }
+            print(pin_data)
+            data.append(pin_data)
 
         # HTMLに情報を送る
         return render(request, "GuideMap.html", {'sort_name': sort, 
-                                                 'tour_number': tour,
+                                                 'tours': tours,
                                                  'guide_pins': guide_pins,
-                                                 'info_pins': info_pins })
+                                                 'tour_number':tour_number,
+                                                 'info_pins': json.dumps(data, ensure_ascii=False),
+                                                 'select_tour_number':tour_number })
     
     def post(self, request, **kwargs):
         print("postで呼ばれました")
 
         pin_select = request.POST.get("pin_select")
-        tour_number = kwargs.get('tour_number')
+        print(pin_select)
+        print("-----------------------------")
+        # tour_number = kwargs.get('tour_number')
 
         if pin_select == "guide":
 
@@ -427,32 +470,29 @@ class GuideMapView(View):
         
         else:
 
-            information_pin_id = request.POST.get("id")
             tour_number = Tour.objects.get(tour_number=request.POST.get("tour_number"))
             explanation = request.POST.get("explanation")
             address = request.POST.get("address")
             place = request.POST.get("place")
             image = request.POST.get("image")
 
-            print(information_pin_id)
             print(explanation)
             print(address)
             print(place)
             print(image)
 
-        
             Information_pin.objects.create(
-                information_pin_id = information_pin_id,
                 tour_number = tour_number,
                 explanation = explanation,
                 address = address,
                 place = place,
                 image = image
         )
-
-        
-
-        return redirect("guide:guidemap")
+            
+        tour_number = self.request.POST.get("tour_number")
+        redirect_url = reverse("guide:guidemap")
+        redirect_url_tour_number = f"{redirect_url}?tour_number={tour_number}"
+        return redirect(redirect_url_tour_number)
     
 
 class CaseUpdateView(UpdateView):

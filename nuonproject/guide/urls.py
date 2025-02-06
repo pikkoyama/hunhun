@@ -18,6 +18,8 @@ urlpatterns = [
     path('guidetop/', views.GuideTopView.as_view(), name='guidetop'),
     # koyama --------------------
     path('guidemap/', views.GuideMapView.as_view(), name='guidemap'),
+    path('guidemap/<str:tour_number>/', views.GuideMapView.as_view(), name='guidemap'),
+    
     # ---------------------------
     path('toursearch/', views.TourSearchView.as_view(), name='toursearch'),
     path('tour/<str:tour_number>/edit/', views.TourChangeView.as_view(), name='tourchange'),
