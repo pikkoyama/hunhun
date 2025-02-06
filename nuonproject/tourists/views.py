@@ -108,7 +108,7 @@ def get_pins(request):
         image_url = pin.image.url if pin.image else '/media/images/no_image.png'
 
         pin_data = {
-            'information_pin_id': pin.information_pin_id,  # 案内ピン番号を追加
+            'id': pin.id,  # 案内ピン番号を追加
             'place_ja': pin.place,
             'place_en': translations['en'],
             'place_zh': translations['zh'],
