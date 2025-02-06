@@ -81,7 +81,7 @@ class Information_pin(models.Model):
 
     # モデルが参照されたときの設定
     class Meta:
-        verbose_name_plural = "説明"
+        verbose_name_plural = "案内ピン"
     def __str__(self) -> str:
         return f"{self.place[:10]}:{self.explanation[:10]}"
         
