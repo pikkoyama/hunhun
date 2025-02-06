@@ -1,9 +1,13 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ガイドマップ</title>
+{% extends 'base.html' %}
+
+{% block headertitle %}ガイドマップ{% endblock %}
+
+{% block backform %}
+    <button type="button" class="header-button" onclick="location.href='{% url 'guide:toursearch' %}';">戻る</button>
+{% endblock %}
+
+
+{% block main %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         /* 地図のスタイル */
@@ -281,4 +285,4 @@
     </script>
 
 </body>
-</html>
+{% endblock %}
