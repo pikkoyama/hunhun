@@ -405,7 +405,7 @@ function deleteComment(comment_id, buttonElement) {
             <input type="text" name="b" value="{{ request.GET.b }}" placeholder="検索...">
             <button>検索</button>
         </form>
-        {% comment %} <form method="get" action="{% url 'guide:caselist/sortsearch' %}">
+        <form method="get" action="{% url 'guide:caselist/sortsearch' %}">
             <label for="category">カテゴリー：</label><br>
             <select id="category" name="category">
                 <option value="">指定なし</option>
@@ -416,7 +416,7 @@ function deleteComment(comment_id, buttonElement) {
                 {% endfor %}
             </select>
             <button>ソート</button>
-        </form> {% endcomment %}
+        </form>
     </div>
 
     {% for case in caselist %}
@@ -433,8 +433,8 @@ function deleteComment(comment_id, buttonElement) {
             </div>
 
             <!-- コメントの内容を表示 -->
-            <div class="answers">
-                {% for comment in case.comments.all %}
+            {% comment %} <div class="answers">
+        {% for comment in case.comment_set.all %}
                     <div class="answer2" style="display: none;">
                         {{ comment.number }}<br>
                         {{ comment.comment }}<br>
@@ -445,17 +445,17 @@ function deleteComment(comment_id, buttonElement) {
                 {% empty %}
                     <div class="answer2" style="text-align: center; color: #999;">コメントはまだありません。</div>
                 {% endfor %}
-            </div>
+            </div> {% endcomment %}
 
             <!-- コメント投稿フォーム -->
             <div class="comment-form">
                 <form method="post">
                     {% csrf_token %}
-                    <label for="comment">コメント:</label>
+                    {% comment %} <label for="comment">コメント:</label>
                     {{ form.comment }}
                     {{ form.number }}
                     <input type="hidden" name="case_number" value="{{ case.case_number }}">
-                    <button type="submit">投稿</button>
+                    <button type="submit">投稿</button> {% endcomment %}
                     <button type="button" onclick="window.location.href='{% url 'guide:case_edit' case.case_number %}';">変更</button>
                 </form>
             </div>
