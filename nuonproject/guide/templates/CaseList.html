@@ -401,10 +401,22 @@ function deleteComment(comment_id, buttonElement) {
     <div class="search-container">
         <form method="get" action="{% url 'guide:caselist/titlesearch' %}">
             {% csrf_token %}
+            <label for="location">タイトル：</label><br>
             <input type="text" name="b" value="{{ request.GET.b }}" placeholder="検索...">
             <button>検索</button>
         </form>
+        <form method="get" action="{% url 'guide:caselist/sortsearch' %}">
+            <label for="category">カテゴリー：</label><br>
+            <select id="category" name="category">
+                <option value="">指定なし</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}"{% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
+                    {{ category.category_name }}
+                    </option>
+                {% endfor %}
+            </select>
             <button>ソート</button>
+        </form>
     </div>
 
     {% for case in caselist %}
