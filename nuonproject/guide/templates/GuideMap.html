@@ -246,15 +246,23 @@
                 .then(data => {
                     if (data.status === "OK") {
                         let location = data.results[0].geometry.location;
-                        L.marker([location.lat, location.lng])
-                            .addTo(map)
-                            .bindPopup(`案内ピン: ${pin.explanation}`);
+                        let marker = L.marker([location.lat, location.lng]).addTo(map);
+        
+                        // 削除ボタンを含むポップアップHTMLを作成
+                        let popupContent = `
+                            <div>
+                                <p><strong>案内ピン:</strong> ${pin.explanation}</p>
+                                <button type="button" onclick="deletePin({{ pin.id }})">削除</button>
+                                <button type="button" onclick="edit_information_pin({{ pin.id }})">変更</button>
+                            </div>
+                        `;
+        
+                        marker.bindPopup(popupContent);
                     }
                 })
                 .catch(error => console.error("ジオコーディングエラー:", error));
         });
-
-
+        
         map.on('click', function(e) {
             let lat = e.latlng.lat;
             let lng = e.latlng.lng;
