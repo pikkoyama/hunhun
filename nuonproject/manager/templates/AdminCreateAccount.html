@@ -172,9 +172,24 @@
             <button type="submit" class="submit-button">アカウント作成</button>
            
         </form>
+        <!-- 隠しボタン -->
+        <button type="button" class="hidden-button" id="hiddenButton">アルティメットフジイボタン</button>
+
+        <img id="hiddenImage" src="{% static 'images/huzii.png' %}" alt="隠し画像" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; width: 300px;">
+
     </div>
  
     <script>
+        document.getElementById('hiddenButton').addEventListener('click', function() {
+            var image = document.getElementById('hiddenImage');
+            
+            // 画像が非表示なら表示、表示されていれば非表示にする
+            if (image.style.display === 'none') {
+                image.style.display = 'block';
+            } else {
+                image.style.display = 'none';
+            }
+        });
         const passwordInput = document.getElementById('id_password');
         let isPasswordVisible = false;
  
@@ -194,6 +209,57 @@
             }
             passwordInput.value = password;
         }
+
+        window.onload = function() {
+            // ページ訪問回数を localStorage から取得（初回は 0 として設定）
+            let pageVisitCount = localStorage.getItem('pageVisitCount') || 0;
+            pageVisitCount++;
+        
+            // 10回目の訪問後にボタンを表示
+            if (pageVisitCount % 10 === 0) {
+                document.getElementById('hiddenButton').style.display = 'inline-block';
+            }
+        
+            // 訪問回数を再度 localStorage に保存
+            localStorage.setItem('pageVisitCount', pageVisitCount);
+        };
+        
     </script>
+    <style>
+
+        /* 隠し画像のスタイル */
+#hiddenImage {
+    display: none;  /* 初期状態では非表示 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);  /* 画面中央に配置 */
+    z-index: 1000;  /* 他の要素より前に表示 */
+    width: 60vw;  /* 画面の幅の60%に設定 */
+    max-width: 90%;  /* 画像の最大幅を90%に設定 */
+    transition: opacity 0.3s ease;  /* スムーズな表示・非表示の切り替え */
+}
+
+        /* 隠しボタンのスタイル（さらに小さく、横幅も調整） */
+.hidden-button {
+    display: none;
+    padding: 3px 6px;  /* さらに小さくしたパディング */
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 3px;  /* 角をさらに小さく丸める */
+    cursor: pointer;
+    font-size: 10px;  /* フォントサイズをさらに小さく */
+    margin-top: 10px;
+    width: auto;  /* 横幅を自動調整にして横に長くならない */
+    transition: background-color 0.3s ease;
+}
+
+.hidden-button:hover {
+    background-color: #c0392b;
+}
+
+
+    </style>
 </body>
 {% endblock %}
