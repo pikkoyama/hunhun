@@ -496,10 +496,10 @@ class GuideMapView(View):
         return redirect(redirect_url_tour_number)
     
 
-class CaseUpdateView(UpdateView):
+class CaseChangeView(UpdateView):
     model = Case
     form_class = CaseForm
-    template_name = 'CaseUpdate.html'
+    template_name = 'CaseChange.html'
 
     def get_object(self, queryset=None):
         case_number = self.kwargs.get('case_number')
