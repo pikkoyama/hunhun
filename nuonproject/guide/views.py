@@ -4,7 +4,7 @@ from django.urls import reverse
 from .forms import CaseRegistrationForm, TourRegistrationForm,SearchForm,TourForm
 from django.views.generic.edit import FormView, CreateView
 from django.views.generic import ListView
-from .models import Case, Tour, CustomUser
+from .models import Case, Tour, CustomUser,Category
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
@@ -45,6 +45,7 @@ class CaseListView(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['caselist'] = Case.objects.all()  # 事例データを取得
+        context['categories'] = Category.objects.all()  # カテゴリリストを追加
         for case in context['caselist']:
             case.comments = Comment.objects.filter(case_number=case.case_number)
         context['comments'] = Comment.objects.all()  # コメントデータを取得
@@ -525,3 +526,22 @@ class TourChangeView(UpdateView):
         tour = form.save(commit=False)
         tour.save()
         return redirect('/guide/toursearch/')
+    
+class CaseSortListView(ListView):
+     model = Case  # 表示対象のモデル
+     template_name = 'CaseList.html'  # 使用するテンプレート
+     context_object_name = 'caselist'  # テンプレート内で使う変数名
+
+     def get_queryset(self):
+         """
+         検索キーワードに基づいて商品をフィルタリング
+         """
+         category_id = self.request.GET.get('category', '')  # 選択したカテゴリID
+         if category_id:
+                return Case.objects.filter(category_id=category_id)
+         return Case.objects.all()  # 全件表示
+     
+     def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()  # カテゴリリストを追加
+        return context

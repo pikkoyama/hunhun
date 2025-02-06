@@ -37,6 +37,7 @@ urlpatterns = [
     path('toursearch/namesearch/',views.TourNameListView.as_view(), name='toursearch/namesearch'),
     path('toursearch/numbersearch/',views.TourNumberListView.as_view(), name='toursearch/numbersearch'),
     path('caselist/titlesearch/',views.CaseTitleListView.as_view(), name='caselist/titlesearch'),
+    path('caselist/sortesearch/',views.CaseSortListView.as_view(), name='caselist/sortsearch'),
 
 ]
 # ---------------------------------------------------------
