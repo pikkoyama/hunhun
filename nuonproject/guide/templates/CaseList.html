@@ -405,7 +405,7 @@ function deleteComment(comment_id, buttonElement) {
             <input type="text" name="b" value="{{ request.GET.b }}" placeholder="検索...">
             <button>検索</button>
         </form>
-        <form method="get" action="{% url 'guide:caselist/sortsearch' %}">
+        {% comment %} <form method="get" action="{% url 'guide:caselist/sortsearch' %}">
             <label for="category">カテゴリー：</label><br>
             <select id="category" name="category">
                 <option value="">指定なし</option>
@@ -416,7 +416,7 @@ function deleteComment(comment_id, buttonElement) {
                 {% endfor %}
             </select>
             <button>ソート</button>
-        </form>
+        </form> {% endcomment %}
     </div>
 
     {% for case in caselist %}
