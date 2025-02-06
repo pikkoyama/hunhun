@@ -1,152 +1,82 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends 'base.html' %}
 
-{%block title%}案内ピン変更{%endblock%}
+{% block headertitle %}案内ピンの変更{% endblock %}
 
-{%block css%}
-<!-- 14_案内ピン変更画面 1-->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f9;
-        }
+{% block backform %}
+    <button type="button" class="header-button" onclick="location.href='{% url 'guide:pinlist' %}';">戻る</button>
+{% endblock %}
 
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 600px;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        label {
-            display: block;
-            margin: 10px 0 5px;
-            text-align: left;
-            font-size: 14px;
-            color: #555;
-        }
-
-        input[type="text"], input[type="file"], textarea {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-
-        .file-upload-container {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        #image-preview {
-            width: 160px;
-            height: 160px;
-            margin-right: 15px;
-            background-color: #f0f0f0;
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            object-fit: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: #aaa;
-        }
-
-        #image-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        textarea {
-            resize: vertical;
-            height: 200px;
-            width: 100%;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #4CAF50;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        input:focus, textarea:focus {
-            border-color: #4CAF50;
-            outline: none;
-        }
-
-        .error {
-            color: red;
-            font-size: 12px;
-        }
-    
-    </style>
-{%endblock%}
-{% block headertitle %}案内ピン変更{% endblock %}
-{%block main%}
-<body>
-
-    <form action="/update_pin" method="POST" enctype="multipart/form-data">
-        <!-- 画像プレビュー -->
-        <div id="image-preview">
-            画像を選択してください
+{% block main %}
+  <div class="container mt-5">
+    <div class="card shadow-sm p-4">
+      <h2 class="text-center mb-4 text-primary">案内ピンの変更</h2>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+          <label class="form-label fw-bold">場所</label>
+          {{ form.place }}
         </div>
-        <label for="image">画像:</label>
-        <!-- ファイル選択ボタン -->
-        <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(event)">
-        
-        <br>
-        
-        <label for="address">住所:</label>
-        <input type="text" id="address" name="address" required value="現在の住所"><br>
 
-        <label for="description">説明 (100文字以上700文字以内):</label>
-        <textarea id="description" name="description" required minlength="100" maxlength="700">現在の説明</textarea><br>
+        <div class="mb-3">
+          <label class="form-label fw-bold">説明</label>
+          {{ form.explanation }}
+        </div>
 
-        <button type="submit">変更</button>
-    </form>
+        <div class="mb-3">
+          <label class="form-label fw-bold">画像</label>
+          <div class="mb-2">
+            {% if form.instance.image %}
+              <img src="{{ form.instance.image.url }}" alt="現在の画像" class="img-thumbnail" style="max-width: 200px;">
+            {% endif %}
+          </div>
+          {{ form.image }}
+        </div>
 
-    <script>
-        // 画像のプレビューを表示するための関数
-        function previewImage(event) {
-            const reader = new FileReader();
-            const imagePreview = document.getElementById('image-preview');
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-lg">変更する</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-            reader.onload = function() {
-                imagePreview.style.backgroundImage = 'url(' + reader.result + ')';
-                imagePreview.textContent = '';  // "画像を選択してください" のテキストを消す
-            }
+  <style>
+    .container {
+      max-width: 600px;
+    }
 
-            reader.readAsDataURL(event.target.files[0]);
-        }
-    </script>
+    .card {
+      border-radius: 10px;
+      background-color: #ffffff;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-</body>
-{%endblock%}
+    .form-label {
+      font-size: 16px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .btn-primary {
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .img-thumbnail {
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      padding: 5px;
+    }
+  </style>
+{% endblock %}
