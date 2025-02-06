@@ -170,7 +170,9 @@
             {% for tour in tourlist %}
                 <div class="results">
                     <div class="result-item">
-                        <strong><a href={% url 'guide:guidemap' %}>{{ tour.tour_number }}</a></strong>
+                        <button type="button" class="tour-button" onclick="window.location.href='{% url 'guide:guidemap' %}';">
+                            {{ tour.tour_number }}
+                        </button>
                         <label>{{ tour.tour_name }}</label>
                         <div class="button-container">
                             <button type="button" onclick="window.location.href='{% url 'guide:qr_code_view' tour.tour_number %}';">QRコードを表示</button>
