@@ -103,5 +103,9 @@ urlpatterns = [
     path('tour/delete/<str:tour_number>/',
           views.TourDeleteView.as_view(), 
           name='delete_tour'),
+          
+    path('delete-guide-pin/',
+         views.DeleteGuidePinView.as_view(),
+         name='delete-guide-pin'),
 
 ]

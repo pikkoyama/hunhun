@@ -240,7 +240,8 @@
                 {
                     lat: {{ pin.latitude }},
                     lng: {{ pin.longitude }},
-                    sort: "{{ pin.sort }}"
+                    sort: "{{ pin.sort }}",
+                    id: {{ pin.id }}
                 },
             {% endfor %}
             ];
@@ -251,19 +252,29 @@
                 '交通': 'blue'
             };
         
-            // ガイドピンを地図に追加
             guidePins.forEach(pin => {
                 // カテゴリごとに色を変更するため、sortに基づいて色を選択
                 const pinColor = pinColors[pin.sort] || 'gray';  // カテゴリが見つからない場合はデフォルトの色（gray）
-        
-                L.marker([pin.lat, pin.lng], {
+
+                // ピンを地図に追加
+                const marker = L.marker([pin.lat, pin.lng], {
                     icon: L.divIcon({
                         className: 'custom-marker',
                         html: `<div style="background-color: ${pinColor}; width: 20px; height: 20px; border-radius: 50%;"></div>`
                     })
-                })
-                .addTo(map)
-                .bindPopup(`<b>ガイドピン</b><br>種類: ${pin.sort}`);
+                }).addTo(map);
+
+                // ポップアップのHTMLを作成し、削除ボタンを追加
+                const popupContent = `
+                    <div>
+                        <b>ガイドピン</b><br>
+                        <strong>種類:</strong> ${pin.sort}<br>
+                        <button type="button" onclick="deleteGuidePin(${pin.id}, this)">削除</button>
+                    </div>
+                `;
+                
+                // マーカーにポップアップをバインド
+                marker.bindPopup(popupContent);
             });
         
         
@@ -349,7 +360,46 @@
                 });
             }
         }
+        function deleteGuidePin(pinId, button) {
+            console.log("渡された pinId:", pinId);
+            if (!pinId) {
+                alert("無効なピンIDです");
+                return;
+            }
+            if (confirm("本当にこのピンを削除しますか？")) {
+                // サーバーに削除リクエストを送信
+                fetch('../delete-guide-pin/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken') // CSRFトークンを設定
+                    },
+                    body: JSON.stringify({
+                        id: pinId,
+                    }),
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("ピンが削除されました");
         
+                        // ポップアップを削除済みに変更
+                        button.closest(".leaflet-popup-content").innerHTML = "<p>削除済み</p>";
+                        map.eachLayer(layer => {
+                            if (layer instanceof L.Marker && layer.getPopup()?.getContent().includes(`deleteGuidePin(${pinId}`)) {
+                                map.removeLayer(layer); // マーカーを削除
+                            }
+                        });
+                    } else {
+                        alert("削除に失敗しました");
+                    }
+                })
+                .catch(error => {
+                    console.error("エラー:", error);
+                    alert("エラーが発生しました");
+                });
+            }
+        }
+
         
         map.on('click', function(e) {
             let lat = e.latlng.lat;

@@ -598,3 +598,29 @@ class TourDeleteView(View):
         tour.delete()
         messages.success(request, 'ツアーが削除されました。')
         return redirect('guide:toursearch')  # 削除後、ツアー検索ページへリダイレクト
+
+class DeleteGuidePinView(View):
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return JsonResponse({"status": "error", "message": "Permission denied"})
+
+        try:
+            data = json.loads(request.body)  # リクエストのボディからデータを取得
+            pin_id = data.get("id")
+
+            if not pin_id:
+                return JsonResponse({"status": "error", "message": "必要なパラメータが不足しています"})
+
+            # ピンを取得
+            pin = GuidePin.objects.get(id=pin_id)
+            pin.delete()  # ピンを削除
+
+            return JsonResponse({'message': 'ガイドピンが削除されました'}, status=200)
+
+        except GuidePin.DoesNotExist:
+            return JsonResponse({'error': '指定されたピンが存在しません'}, status=404)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': 'リクエストのパースに失敗しました'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': f'予期しないエラー: {str(e)}'}, status=500)
+
