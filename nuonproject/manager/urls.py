@@ -5,37 +5,37 @@ from . import views
 app_name = 'manager'
 
 urlpatterns = [
-
+    # トップページ画面(管理者専用)
     path(
         "admintop/",
         views.AdminTopView.as_view(),
         name="AdminTop"
     ),
-
+    # 
     path(
         "adminview/",
         views.AdminViewView.as_view(),
         name="AdminViewAccount"
     ),
-
+    # アカウント作成URL
     path(
         "admincreate/",
         views.AdminCreateView.as_view(),
         name="AdminCreateAccount"
     ),
-
+    # 
     path(
         "adminsuccess/",
         views.AdminSuccessView.as_view(),
         name="AdminTransmissionComp"
     ),
-
+    # 事例削除URL
     path(
         "casedelete/",
         views.CaseDeleteView.as_view(),
         name="CaseDelete"
     ),
-
+    #アカウント削除URL
     path(
         "accountdelete/",
         views.AccountDeleteView.as_view(),
