@@ -137,6 +137,33 @@
             color: red;
             font-size: 12px;
         }
+        .delete-button {
+            background-color: #ff4d4d; /* 鮮やかな赤 */
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px; /* 角を丸く */
+            cursor: pointer;
+            transition: all 0.3s ease; /* スムーズなアニメーション */
+            box-shadow: 0 4px 8px rgba(255, 77, 77, 0.2); /* 影をつける */
+            display: inline-block;
+            text-align: center;
+            width: 100%; /* 幅いっぱい */
+            max-width: 200px; /* 最大幅を設定 */
+        }
+        
+        .delete-button:hover {
+            background-color: #e60000; /* ホバー時に少し暗く */
+            box-shadow: 0 6px 12px rgba(230, 0, 0, 0.3);
+        }
+        
+        .delete-button:active {
+            transform: scale(0.95); /* 押した時に少し縮む */
+            box-shadow: 0 2px 4px rgba(230, 0, 0, 0.5);
+        }
+        
     </style>
 {% endblock %}
 
@@ -216,6 +243,13 @@
 
             <button type="submit" class="submit-button">変更</button>
         </form>
+
+        {% if tour.number.number|stringformat:"s" == request.user.number|stringformat:"s" %}
+            <form method="POST" action="{% url 'guide:delete_tour' tour_number=tour.tour_number %}">
+                {% csrf_token %}
+                <button type="submit" class="delete-button" onclick="return confirm('本当に削除しますか？');">削除</button>
+            </form>
+        {% endif %}
     </div>
 </body>
 {% endblock %}

@@ -28,7 +28,7 @@ class CustomUser(AbstractUser):
     class Meta:
         verbose_name_plural = "カスタムユーザー"
     def __str__(self):
-        return f"{self.username}({self.number})"
+        return f"{self.username}{self.number}"
        
 
 # 種類モデル

@@ -100,4 +100,8 @@ urlpatterns = [
          DeletePinView.as_view(),
          name='delete_pin'),
 
+    path('tour/delete/<str:tour_number>/',
+          views.TourDeleteView.as_view(), 
+          name='delete_tour'),
+
 ]
