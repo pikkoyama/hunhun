@@ -585,19 +585,14 @@ from django.views import View
 from .models import Tour
 
 class TourDeleteView(View):
+    # URLパラメータで指定されたツアー番号でツアーを削除
     def post(self, request, tour_number):
-        # ツアーを取得（存在しない場合は404エラー）
         tour = get_object_or_404(Tour, tour_number=tour_number)
-
-        # ツアーの社員番号とログインユーザーの社員番号を比較
-        if tour.number != request.user.number:
-            messages.error(request, "このツアーを削除する権限がありません。")
-            return redirect('guide:toursearch')  # 権限がない場合、ツアー検索ページへリダイレクト
-
-        # ツアーを削除
         tour.delete()
         messages.success(request, 'ツアーが削除されました。')
-        return redirect('guide:toursearch')  # 削除後、ツアー検索ページへリダイレクト
+        
+        # ツアー削除後にツアー検索ページへリダイレクト
+        return redirect('guide:toursearch')
 
 class DeleteGuidePinView(View):
     def post(self, request, *args, **kwargs):
