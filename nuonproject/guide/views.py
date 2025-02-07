@@ -187,9 +187,6 @@ class GuideTopView(TemplateView):
 
     template_name = 'GuideTop.html'
 
-class GuideMapView(TemplateView):
-    template_name='GuideMap.html'
-
 # koyama　1/20
 class TourSearchView(TemplateView):
     #  とりあえずツアー一覧表示
@@ -209,7 +206,7 @@ class TourRegistrationView(FormView):
     template_name = "TourRegistration.html"
     
     form_class = TourRegistrationForm  # 直接定義したフォームクラスを使用
-    success_url = reverse_lazy('guide:guidemap')
+    success_url = reverse_lazy('guide:toursearch')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -227,6 +224,8 @@ class TourRegistrationView(FormView):
         # debug
         print(f"1{tour.user}---------------------------")
         print(f"2{tour.number}---------------------------")
+
+        print(f"登録されたツアー番号: {tour.tour_number}")
 
         # 保存
         tour.save()
