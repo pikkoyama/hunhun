@@ -1,8 +1,9 @@
 <!--LanguageSelect-->
 <!DOCTYPE html>
-<html lang='ja'>
+<html lang="ja">
 <head>
-    <meta charset='UTF-8'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>言語選択画面</title>
     <style>
         body {
@@ -21,39 +22,53 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            width: 90%; /* スマホ画面幅に適応 */
+            max-width: 400px; /* PCでは大きくなりすぎないように */
         }
         h1 {
-            font-size: 24px;
+            font-size: 20px;
             color: #333;
         }
         h3 {
-            font-size: 18px;
+            font-size: 16px;
             color: #666;
         }
         .radio-group {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             margin: 20px 0;
         }
         label {
-            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 10px;
             font-size: 16px;
             color: #333;
+            background-color: #f8f8f8;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        label:hover {
+            background-color: #e0e0e0;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2); /* タッチしやすくする */
         }
         .btn-next {
             background-color: #28a745; 
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 12px;
             text-align: center;
-            text-decoration: none;
-            display: inline-block;
             font-size: 16px;
-            margin: 20px 0;
             cursor: pointer;
-            border-radius: 12px;
+            border-radius: 8px;
             transition: background-color 0.3s ease;
+            width: 100%; /* スマホ対応でボタン幅を最大に */
         }
         .btn-next:hover {
             background-color: #218838;
@@ -61,36 +76,35 @@
     </style>
 </head>
 <body>
-    <div class='container'>
+    <div class="container">
         <h1>案内言語の選択</h1>
         <h3>Please select the guidance language.</h3>
-        <form method='get' action='{% url 'tourists:Tourmap' %}'>
-            <div class='radio-group'>
+        <form method="get" action="{% url 'tourists:Tourmap' %}">
+            <div class="radio-group">
                 <label>
-                    <input type='radio' name='language' value='ja'> 日本語
+                    <input type="radio" name="language" value="ja"> 日本語
                 </label>
                 <label>
-                    <input type='radio' name='language' value='en'> English
+                    <input type="radio" name="language" value="en"> English
                 </label>
                 <label>
-                    <input type='radio' name='language' value='zh'> 中文（簡体字）
+                    <input type="radio" name="language" value="zh"> 中文（簡体字）
                 </label>
                 <label>
-                    <input type='radio' name='language' value='zh-TW'> 中文（繁體字）
+                    <input type="radio" name="language" value="zh-TW"> 中文（繁體字）
                 </label>
                 <label>
-                    <input type='radio' name='language' value='ko'> 한국어
+                    <input type="radio" name="language" value="ko"> 한국어
                 </label>
             </div>
             <input type="hidden" name="tour_number" id="tourNumberInput">
-            <button type='submit' class='btn-next'>次へ</button>
+            <button type="submit" class="btn-next">次へ</button>
             <script>
                 // tour_number を取得してフォームにセット
                 function getQueryParam(param) {
                     const urlParams = new URLSearchParams(window.location.search);
                     return urlParams.get(param);
                 }
-            
                 document.getElementById("tourNumberInput").value = getQueryParam("tour_number");
             </script>
         </form>

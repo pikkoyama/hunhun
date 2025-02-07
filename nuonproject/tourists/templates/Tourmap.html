@@ -3,6 +3,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ツアー客用マップ画面</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sidebar-v2@0.4.0/css/leaflet-sidebar.min.css" />
@@ -41,7 +42,7 @@
         }
 
         #map {
-            height: 600px;
+            height: 100vh;
             width: 100%;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
@@ -66,6 +67,9 @@
             background: #e0f2f1;
             padding: 10px;
             border-radius: 5px;
+            max-width: 100%;
+            overflow-y: auto; /* スクロール可能にする */
+            max-height: 80vh; /* 画面いっぱいになりすぎないように */
         }
 
         #pin-list {
@@ -83,10 +87,16 @@
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
+            padding: 12px;
+            font-size: 16px;
+        }
+        .btn {
+            padding: 12px;
+            width: 100%;
         }
 
         #pin-list li:hover {
-            background: #004d40;
+            background:rgb(150, 225, 211);
             transform: scale(1.05);
         }
 
@@ -128,6 +138,23 @@
             border-radius: 5px;
             text-align: center;
         }
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+                padding: 10px;
+            }
+            #map {
+                height: 90vh; /* 少し余裕を持たせる */
+            }
+            .sidebar-content {
+                max-width: 100%;
+            }
+            #pin-list li {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+        
     </style>
 </head>
 <body>
