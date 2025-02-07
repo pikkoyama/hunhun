@@ -273,8 +273,7 @@
                         let popupContent = `
                             <div>
                                 <p><strong>案内ピン:</strong> ${pin.explanation}</p>
-                                <button type="button" onclick="deletePin({{ pin.id }})">削除</button>
-                                <button type="button" class="edit-btn" onclick="goToEditPage({{ pin.id }})">変更</button>
+                                <button type="button" onclick="deletePin(${pin.id},this)">削除</button>
                             </div>
                         `;
         
@@ -283,11 +282,6 @@
                 })
                 .catch(error => console.error("ジオコーディングエラー:", error));
         });
-
-        function goToEditPage(pinId) {
-            // pinIdを用いて編集ページに遷移
-            window.location.href = `/guide/pin/${pinId}/edit/`;
-        }
 
                 // CSRFトークンを取得する関数
         function getCookie(name) {
@@ -308,18 +302,29 @@
 
 
         function deletePin(pinId, button) {
+            console.log("渡された pinId:", pinId);
+            if (!pinId) {
+                alert("無効なピンIDです");
+                return;
+            }
+            
             if (confirm("本当にこのピンを削除しますか？")) {
-                fetch(`/delete_pin/${pinId}/`, {
-                    method: 'DELETE',
+                fetch(`../delete_pin/`, {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken') // CSRFトークン
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
                     },
+                    body: JSON.stringify({
+                        id: pinId,
+                    }),
                 })
                 .then(response => {
                     if (response.ok) {
                         alert("ピンが削除されました");
-                        button.closest(".leaflet-popup-content").innerHTML = "<p>削除済み</p>"; // ポップアップ内の内容を変更
+        
+                        // ポップアップを削除済みに変更
+                        button.closest(".leaflet-popup-content").innerHTML = "<p>削除済み</p>";
                         map.eachLayer(layer => {
                             if (layer instanceof L.Marker && layer.getPopup()?.getContent().includes(`deletePin(${pinId}`)) {
                                 map.removeLayer(layer); // マーカーを削除
