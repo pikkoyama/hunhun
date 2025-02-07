@@ -35,6 +35,17 @@
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 position: relative;  /* ログアウトボタンを右側に配置するため */
             }
+
+            .user{
+                padding: 12px 170px;
+                font-size: 15px;
+                border-radius: 8px;
+                position: absolute;
+                top: 10px;
+                right: 20px; /* 左側に配置 */
+                transition: background-color 0.3s ease, transform 0.3s ease;
+            }
+
             .header-button {
                 background-color:rgb(133, 133, 133);
                 color:rgb(255, 255, 255);
@@ -92,6 +103,9 @@
                 <img src="{% static 'images/メインアイコン.png' %}" alt="ホーム" class="home-icon">
             </a>            
             {% block headertitle %}{% endblock %}
+            {% if request.resolver_match.url_name != 'Sinin' and request.user.is_authenticated %}
+            <label class="user">ユーザー：{{ request.user.username }}</label>
+            {% endif %}
             <!--<div class="logout-button-container">
             <form method="post" action="{% url 'accounts:logout' %}">
                 {% csrf_token %}
