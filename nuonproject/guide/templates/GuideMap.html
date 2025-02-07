@@ -231,11 +231,27 @@
             {% endfor %}
             ];
 
+            const pinColors = {
+                '混雑': 'red',
+                '見どころ': 'green',
+                '交通': 'blue'
+            };
+        
+            // ガイドピンを地図に追加
             guidePins.forEach(pin => {
-            L.marker([pin.lat, pin.lng])
+                // カテゴリごとに色を変更するため、sortに基づいて色を選択
+                const pinColor = pinColors[pin.sort] || 'gray';  // カテゴリが見つからない場合はデフォルトの色（gray）
+        
+                L.marker([pin.lat, pin.lng], {
+                    icon: L.divIcon({
+                        className: 'custom-marker',
+                        html: `<div style="background-color: ${pinColor}; width: 20px; height: 20px; border-radius: 50%;"></div>`
+                    })
+                })
                 .addTo(map)
                 .bindPopup(`<b>ガイドピン</b><br>種類: ${pin.sort}`);
             });
+        
         
         let infoPins = {{ info_pins|safe }};
 
