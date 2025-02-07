@@ -530,7 +530,7 @@ class TourChangeView(UpdateView):
         tour_number = self.kwargs.get('tour_number')
         return get_object_or_404(Tour, tour_number=tour_number)
     def form_valid(self, form):
-        # 投稿日は変更した日付に更新
+        # 投稿日は変更した日付に更新1
         tour = form.save(commit=False)
         tour.save()
         return redirect('/guide/toursearch/')

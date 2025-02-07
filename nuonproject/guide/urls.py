@@ -95,7 +95,7 @@ urlpatterns = [
     path("Informationpinregistration/",
          views.InformationPinRegistrationView.as_view(),
          name="informationpinregistration"),
-    # ガイドピン削除URL
+    # ガイドピン削除URL1
     path('delete_pin/',
          DeletePinView.as_view(),
          name='delete_pin'),
