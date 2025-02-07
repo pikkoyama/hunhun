@@ -474,7 +474,7 @@ class GuideMapView(View):
             explanation = request.POST.get("explanation")
             address = request.POST.get("address")
             place = request.POST.get("place")
-            image = request.POST.get("image")
+            image = request.FILES.get("image")
 
             print(explanation)
             print(address)
