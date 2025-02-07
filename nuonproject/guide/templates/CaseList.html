@@ -308,6 +308,8 @@ function toggleAuthorization(caseNumber, buttonElement) {
             // サーバーから返ってきた認可ステータスをもとにボタンのラベルを更新
             const newStatus = data.authorization_status ? "認可解除" : "認可";
             buttonElement.textContent = newStatus;
+            // 画面をリロード
+            location.reload();
         } else {
             // エラーメッセージを表示
             alert(data.message || "認可のトグルに失敗しました");
