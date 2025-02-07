@@ -95,18 +95,18 @@ urlpatterns = [
     path('guidancepindelete/',
          views.GuidancePinDeleteView.as_view(),
          name='guidancepindelete'),
-    # ガイドピン変更URL
-    path("Informationpinchange/",
-         views.InformationPinChangeView.as_view(),
-         name="informationpinchange"),
+    # # ガイドピン変更URL
+    # path("Informationpinchange/",
+    #      views.InformationPinChangeView.as_view(),
+    #      name="informationpinchange"),
     # ガイドピン登録URL
     path("Informationpinregistration/",
          views.InformationPinRegistrationView.as_view(),
          name="informationpinregistration"),
-    # # ピン変更URL
-    # path('tour/<int:tour_id>/pin/<int:pk>/edit/',
-    #      views.InformationPinUpdateView.as_view(),
-    #      name='edit_information_pin'),
+    # ピン変更URL
+    path('tour/<int:tour_id>/pin/<int:pk>/edit/',
+         views.InformationPinUpdateView.as_view(),
+         name='edit_information_pin'),
     # ガイドピン削除URL
     path('delete_pin/<int:pin_id>/',
          DeletePinView.as_view(),
