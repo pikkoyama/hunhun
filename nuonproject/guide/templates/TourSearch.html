@@ -1,16 +1,15 @@
-<!-- 5 ツアー検索画面 -->
 {% extends "base.html" %}
 {% load static %}
 
-{%block title%}ツアー検索・登録画面{%endblock%}
+{% block title %}ツアー検索・登録画面{% endblock %}
 
-{%block css%}
+{% block css %}
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f7f6;
+            background-color: #eef5f3;
             color: #333;
             display: flex;
             flex-direction: column;
@@ -20,82 +19,95 @@
 
         .container {
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            padding-left: 30px;  /* 左側に余白を追加 */
-            padding-top: 30px;   /* 上側に余白を追加 */
+            justify-content: center;
+            padding: 30px;
+            gap: 40px;
         }
 
         .search-section {
             flex: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
+            max-width: 700px;
         }
 
         .search-group {
             display: flex;
             align-items: center;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
-        .search-group label {
-            margin-right: 10px;
-        }
-
         .search-group input {
-            padding: 8px;
-            margin-right: 10px;
+            flex: 1;
+            padding: 10px;
             font-size: 16px;
-            border-radius: 4px;
-            border: 1px solid #ddd;
+            border-radius: 6px;
+            border: 1px solid #ccc;
         }
 
         .search-group button {
-            padding: 8px 16px;
-            background-color: rgb(91, 91, 91);
+            padding: 10px 16px;
+            background-color: #87ceeb;
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 6px;
+            font-size: 16px;
         }
 
         .search-group button:hover {
-            background-color: rgb(70, 70, 70);
+            background-color: #add8e6;
         }
 
         .results {
             margin-top: 20px;
-            width: 100%;
         }
 
         .result-item {
-            display: grid;
-            grid-template-columns: 50px 1fr auto;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            gap: 30px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            transition: transform 0.2s ease;
+            cursor: pointer;
         }
 
-        .result-item button {
-            padding: 5px 10px;
-            background-color:rgb(91, 91, 91);
-            color: white;
+        .result-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button-container button {
+            padding: 8px 14px;
             border: none;
             cursor: pointer;
-            border-radius: 4px;
-        }
-        /* ボタンを横並びにするためのコンテナ */
-        .result-item .button-container {
-            display: flex; /* 横並びにする */
-            gap: 10px; /* ボタン間の間隔 */
+            border-radius: 6px;
+            font-size: 14px;
         }
 
-        .result-item button:hover {
-            background-color:rgb(70, 70, 70);
+        .qr-button {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .qr-button:hover {
+            background-color: #e68900;
+        }
+
+        .change-button {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .change-button:hover {
+            background-color: #1976D2;
         }
 
         .register-section {
@@ -103,89 +115,68 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-        /* ツアーの登録文字列 */
-        .register-text {
-            font-size: 20px; /* 文字を小さく */
-            margin-bottom: 10px; /* ボタンと文字の間に少し余白を追加 */
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .register-button {
             padding: 12px 24px;
-            background-color: #ffc107;
-            color: black;
+            background-color: #4CAF50;
+            color: white;
             border: none;
             cursor: pointer;
             border-radius: 8px;
-            width: 200px; /* 横幅を200pxに設定 */
-            margin-top: 20px; /* ボタンの上に少し余白を追加 */
-            margin-left: 20px; /* 左側に20pxの余白を追加 */
+            font-size: 18px;
+            margin-top: 10px;
         }
 
         .register-button:hover {
-            background-color: #e0a800;
-        }
-
-        .divider {
-            border-top: 2px solid #000000;
-            width: 100%;
-            margin: 20px 0;
-        }
-
-        .top-bar {
-            background-color: #4CAF50;
-            padding: 10px;
-            color: white;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
+            background-color: #45a049;
         }
     </style>
-{%endblock%}
+{% endblock %}
+
 {% block headertitle %}ツアー検索画面{% endblock %}
-{% block backform %}<button type="button" class="header-button" onclick="location.href='{% url 'guide:guidetop' %}';">戻る</button>{%endblock%}
-{%block main%}
-<body>
+{% block backform %}<button type="button" class="header-button" onclick="location.href='{% url 'guide:guidetop' %}';">戻る</button>{% endblock %}
+
+{% block main %}
     <div class="container">
-        <!-- 検索セクション -->
         <div class="search-section">
             <div class="search-group">
                 <form method="get" action="{% url 'guide:toursearch/namesearch' %}">
                     {% csrf_token %}
-                    <label for="tour-name">ツアー名で検索:</label>
-                    <input type="text" name="q" value="{{ request.GET.q }}" placeholder="検索...">
+                    <input type="text" name="q" value="{{ request.GET.q }}" placeholder="ツアー名で検索">
                     <button type="submit">検索</button>
                 </form>
             </div>
-
+            
             <div class="search-group">
                 <form method="get" action="{% url 'guide:toursearch/numbersearch' %}">
                     {% csrf_token %}
-                    <label for="tour-name">番号で検索:</label>
-                    <input type="text" name="a" value="{{ request.GET.a }}" placeholder="検索...">
+                    <input type="text" name="a" value="{{ request.GET.a }}" placeholder="番号で検索">
                     <button type="submit">検索</button>
                 </form>
             </div>
 
             {% for tour in tourlist %}
                 <div class="results">
-                    <div class="result-item">
-                        <strong><a href={% url 'guide:guidemap' %}?tour_number={{tour.tour_number}}>{{ tour.tour_number }}</a></strong>
-                        <label>{{ tour.tour_name }}</label>
+                    <div class="result-item" onclick="location.href='{% url 'guide:guidemap' %}?tour_number={{ tour.tour_number }}'">
+                        <strong>{{ tour.tour_number }}</strong>
+                        <span>{{ tour.tour_name }}</span>
                         <div class="button-container">
-                            <button type="button" onclick="window.location.href='{% url 'guide:qr_code_view' tour.tour_number %}';">QRコードを表示</button>
-                            <button type="button" onclick="window.location.href='{% url 'guide:tourchange' tour.tour_number %}';">変更</button>
+                            <button type="button" class="qr-button" onclick="event.stopPropagation(); window.location.href='{% url 'guide:qr_code_view' tour.tour_number %}';">QRコード</button>
+                            <button type="button" class="change-button" onclick="event.stopPropagation(); window.location.href='{% url 'guide:tourchange' tour.tour_number %}';">変更</button>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
 
-        <!-- ツアー登録セクション -->
         <div class="register-section">
-            <p class="register-text">ツアーの登録はこちら↓↓</p>
+            <p>ツアーの登録はこちら</p>
             <button class="register-button" onclick="window.location.href='{% url 'guide:tourregistration' %}';">登録</button>
         </div>
     </div>
-</body>
-{%endblock%}
+{% endblock %}
