@@ -20,15 +20,22 @@ from django.utils import timezone
 #########################################################
 # 1/14 小山
 ###事例登録のフォームを定義
-class CaseRegistrationForm(forms.ModelForm):
+import string
+import random
+from django import forms
+from django.core.exceptions import ValidationError
+from .models import Case, CustomUser, Category
+from django.utils import timezone
 
+class CaseRegistrationForm(forms.ModelForm):
+    
     class Meta:
         model = Case
         fields = ['case_number', 'number', 'title', 'category', 'main', 'post_date']  # モデルのフィールドを指定
-
-    # 必要に応じてフィールドのウィジェットやラベルを設定できます1
-    case_number = forms.CharField(max_length=20, label='事例番号')
-    number = forms.CharField(max_length=8,label="社員番号")
+    
+    # 必要に応じてフィールドのウィジェットやラベルを設定
+    case_number = forms.CharField(max_length=8, label='事例番号')  # 8桁に制限
+    number = forms.CharField(max_length=8, label="社員番号")
     title = forms.CharField(max_length=30, label='タイトル')
     category = forms.ModelChoiceField(queryset=Category.objects.all(), label='カテゴリ', empty_label="カテゴリを選択")
     main = forms.CharField(widget=forms.Textarea, label='本文')
@@ -38,11 +45,17 @@ class CaseRegistrationForm(forms.ModelForm):
         # 'user' を kwargs から取得
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        self.fields['number'].widget.attrs['readonly'] = True
 
-        # ログインユーザーが存在する場合、そのユーザーを初期値として設定
+        # ランダムな8桁の数字を生成して事例番号として設定
+        case_number = ''.join(random.choices('0123456789', k=8))  # 数字のみで8桁
+        self.fields['case_number'].initial = case_number  # 事例番号の初期値として設定
+        self.fields['case_number'].widget.attrs['readonly'] = True  # 事例番号をreadonlyに設定
+
+        # 社員番号の初期値をユーザーの番号に設定
+        self.fields['number'].widget.attrs['readonly'] = True  # 社員番号をreadonlyに設定
         if user:
             self.fields['number'].initial = user.number  # ユーザーのインスタンスを初期値として設定
+    
     def clean_number(self):
         """社員番号から対応するCustomUserインスタンスを取得"""
         number = self.cleaned_data.get('number')

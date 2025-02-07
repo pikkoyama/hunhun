@@ -136,10 +136,19 @@ class CaseRegistrationView(FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user  # 現在のログインユーザーをフォームに渡す
+
+        import random
+
+        # ランダムな8桁の数字を生成
+        case_number = ''.join(random.choices('0123456789', k=8))  # 数字だけを8桁生成
+        kwargs['initial'] = {'case_number': case_number}  # 初期値としてランダム事例番号を設定
+
+
         return kwargs
 
     def form_valid(self, form):
         messages.success(self.request, '事例が登録されました')
+        
         # フォームが有効な場合の処理
         case = form.save(commit=False)
         case.user = self.request.user  # ユーザーを関連付け
