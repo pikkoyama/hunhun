@@ -178,7 +178,16 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         //　初期位置の設定
-        let map = L.map('map').setView([35.0116, 135.7681], 13);
+        let map = L.map('map').setView([35.0116, 135.7681], 8);
+        // sessionStorage に保存された位置を取得
+        let savedLat = sessionStorage.getItem("mapLat");
+        let savedLng = sessionStorage.getItem("mapLng");
+
+        // 位置情報があれば、その位置を使う
+        if (savedLat && savedLng) {
+            map.setView([parseFloat(savedLat), parseFloat(savedLng)], 15);
+        }
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
         // 空のピンを生成
@@ -388,6 +397,12 @@
                 })
                 .catch(error => console.error("エラー:", error));
         }
+        // セッションに座標を保存
+        document.getElementById("pinForm").addEventListener("submit", function() {
+            let center = map.getCenter(); // 現在の地図の中心を取得
+            sessionStorage.setItem("mapLat", center.lat);
+            sessionStorage.setItem("mapLng", center.lng);
+        });
     </script>
 
 </body>
