@@ -391,7 +391,7 @@ function deleteComment(comment_id, buttonElement) {
 {% block headertitle %}事例閲覧{% endblock %}
 
 {% block backform %}
-    <button type="button" class="header-button" onclick="location.href='{% url 'guide:guidetop' %}';">戻る</button>
+<button type="button" class="header-button" onclick="location.href='{% if request.user.is_superuser %}{% url 'manager:AdminTop' %}{% else %}{% url 'guide:guidetop' %}{% endif %}';">戻る</button>
 {% endblock %}
 
 {% block main %}
