@@ -180,16 +180,7 @@
     </div>
  
     <script>
-        document.getElementById('hiddenButton').addEventListener('click', function() {
-            var image = document.getElementById('hiddenImage');
-            
-            // 画像が非表示なら表示、表示されていれば非表示にする
-            if (image.style.display === 'none') {
-                image.style.display = 'block';
-            } else {
-                image.style.display = 'none';
-            }
-        });
+   
         const passwordInput = document.getElementById('id_password');
         let isPasswordVisible = false;
  
@@ -210,19 +201,6 @@
             passwordInput.value = password;
         }
 
-        window.onload = function() {
-            // ページ訪問回数を localStorage から取得（初回は 0 として設定）
-            let pageVisitCount = localStorage.getItem('pageVisitCount') || 0;
-            pageVisitCount++;
-        
-            // 10回目の訪問後にボタンを表示
-            if (pageVisitCount % 10 === 0) {
-                document.getElementById('hiddenButton').style.display = 'inline-block';
-            }
-        
-            // 訪問回数を再度 localStorage に保存
-            localStorage.setItem('pageVisitCount', pageVisitCount);
-        };
         
     </script>
     <style>
