@@ -5,7 +5,7 @@ from guide.models import CustomUser
 from .forms import AccountCreationForm
 from django.contrib import messages
 
-# 清原 1/8--------------------------------
+#  1/8--------------------------------
 from django.views.generic.base import TemplateView
 from django.shortcuts import render, redirect
 
@@ -14,10 +14,10 @@ class AdminTopView(TemplateView):
     template_name = 'AdminTop.html'
 
 class AdminViewView(TemplateView):
-    # さくちゃんTV
+    
     template_name = "AdminViewAccount.html"
 
-# 1/15 あづまーと-------------------
+# 1/15 -------------------
 class AdminCreateView(CreateView):
     model = CustomUser
     form_class = AccountCreationForm
@@ -38,21 +38,21 @@ class AdminCreateView(CreateView):
 # --------------------------------
 
 class AdminSuccessView(TemplateView):
-    # さくちゃんTV
+    
     template_name = "AdminTransmissionComp.html"
 
 class CaseDeleteView(TemplateView):
-    # さくちゃんTV
+    
     template_name = "CaseDelete.html"
 
 class AccountDeleteView(TemplateView):
-    # さくちゃんTV
+    
     template_name = "AccountDelete.html"
 
 class admin_dashboardView(TemplateView):
     template_name = "AdminTop.html"
 
-# ねぎし
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from guide.models import CustomUser

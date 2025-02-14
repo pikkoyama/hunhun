@@ -41,9 +41,14 @@ urlpatterns = [
         views.AccountDeleteView.as_view(),
         name="AccountDelete"
     ),
-# 根岸
-    path('guides/', views.guide_account_list, name='guide_account_list'),
-    path('guides/delete/<int:guide_id>/', views.delete_guide_account, name='delete_guide_account')
+    path('guides/', 
+         views.guide_account_list, 
+         name='guide_account_list'
+    ),
+    path('guides/delete/<int:guide_id>/',
+          views.delete_guide_account, 
+          name='delete_guide_account'
+    )
 
     
 ]

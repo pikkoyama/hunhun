@@ -1,4 +1,4 @@
-# 1/15 あづまーと--------------------------------------
+# 1/15 --------------------------------------
 from django import forms
 from django.core.exceptions import ValidationError
 import re
