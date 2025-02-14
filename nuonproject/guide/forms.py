@@ -18,7 +18,7 @@ from guide.models import Case, CustomUser, Tour,Comment
 from django.utils import timezone
 
 #########################################################
-# 1/14 小山
+# 1/14 
 ###事例登録のフォームを定義
 import string
 import random

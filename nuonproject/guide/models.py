@@ -3,8 +3,8 @@ from django.contrib.auth.models import AbstractUser
 import random
 from django.utils import timezone
 
-# 1/8小山---------------------------
-# 1/21小山--------------------------
+# 1/8---------------------------
+# 1/21--------------------------
 
 # カスタムユーザー用
 # 社員番号の採番乱数関数

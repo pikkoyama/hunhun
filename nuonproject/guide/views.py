@@ -11,7 +11,6 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from .forms import CommentForm
 
-# 根岸
 from django.http import HttpResponseForbidden, JsonResponse
 from django.views import View
 import json
@@ -29,7 +28,7 @@ from .models import Case
 from .forms import CaseForm
 
 
-# 小山 1/10--------------------------------
+#  1/10--------------------------------
 from django.views.generic.base import TemplateView
 # 事例一覧を表示するビュー
 from django.shortcuts import render, get_object_or_404
@@ -196,7 +195,7 @@ class GuideTopView(TemplateView):
 
     template_name = 'GuideTop.html'
 
-# koyama　1/20
+# 　1/20
 class TourSearchView(TemplateView):
     #  とりあえずツアー一覧表示
      template_name = 'TourSearch.html'
@@ -256,21 +255,21 @@ class TourRegistrationView(FormView):
     #     return super().form_invalid(form)
 
 class InformationPinChangeView(TemplateView):
-    # あづーま
+    
     template_name = "InformationPinChange.html"
 
 class InformationPinRegistrationView(TemplateView):
-    # あづーま
+    
     template_name = "InformationPinRegistration.html"
 
 class PasswordChangeView(TemplateView):
-    # あづーま
+    
     template_name = "PasswordChange.html"
 
 class homeView(TemplateView):
     template_name = 'GuideTop.html'
 
-# 我妻2/4
+
 class AuthorizeCaseView(View):
     def post(self, request, *args, **kwargs):
         if not request.user.is_superuser:
@@ -343,7 +342,7 @@ class CaseTitleListView(ListView):
              return Case.objects.filter(title__icontains=query)  # 部分一致検索
          return Case.objects.all()  # 全件表示
     
-# ねぎし
+
 from django.http import HttpResponse
 
 from io import BytesIO
@@ -385,12 +384,12 @@ class QRCodePageView(TemplateView):
         context["tour_name"] = tour.tour_name
         return context
 
-# --------koyama---------------------------------------------------------
+# -----------------------------------------------------------------
 # Google Maps API設定
 # GOOGLE_MAPS_API_KEY = 'AIzaSyBZEV4yAriodr076SoPrK5LAoVkuOhRX78'
 # GEOCODE_URL = "https://maps.googleapis.com/maps/api/geocode/json"
 
-# 小山
+
 class GuideMapView(View):
     # template_name = "GuideMap.html"
 

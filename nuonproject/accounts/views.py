@@ -12,7 +12,7 @@ from django.contrib.auth.views import LoginView
 from django.views.generic.base import TemplateView
 import os
 
-# 小山 1/7--------１------------------------
+# 1/7--------１------------------------
 
 
 class ChangePasswordView(TemplateView):
@@ -108,15 +108,15 @@ class PasswordResetConfirmView(TemplateView):
 })
 
 class PasswordDoneView(TemplateView):
-    # ねぎしマサキンTV
+    
     template_name = "PasswordDone.html"
 
 class PasswordEmailView(TemplateView):
-    # ねぎしマサキンTV
+    
     template_name = "PasswordEmail.html"
 
 class PasswordResetDoneView(TemplateView):
-    # あづーま
+    
     template_name = "password_reset_done.html"
 
 class SinInView(LoginView):
@@ -156,7 +156,6 @@ class CustomLogoutView(LogoutView):
     next_page = reverse_lazy('accounts:Sinin')
 # def admin_dashboard(request):
 #     return render(request, 'manager/AdminTop.html')
-# あーずま
 
 # def home(request):
 #     return render(request, 'guide/GuideTop.html')
